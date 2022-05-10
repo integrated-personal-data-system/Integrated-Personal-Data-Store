@@ -1,7 +1,7 @@
 # Aries-storage
 
 ## Introduction
-This is an architecture for a database designed to store verifyable credentials and other miscellanious information associated with an Aries wallet. It is intended to run on the cloud, and can serve several users while still guaranteeing that only the user can access their data.
+This is an architecture for a database designed to store verifyable credentials and other miscellanious information associated with an Aries wallet. It is intended to run on the cloud, and can serve several users while still guaranteeing that only the user can access their data. Data would be stored in triple format (turtle, xml, or similar).
 
 ## Input format
 The server would receive PUT, POST, and GET requests from the agent. Before anything else, it would check that the agent is authorized to use the data it is trying to access (the details will vary depending on the chain provider; in Sovrin's case, you would use the policy oracle). All requests would have a path parameter with the rdfs:label property of the class they are using to represent the data. The ontology would be either stored locally on the machine with the server or queried from a separate database. 
