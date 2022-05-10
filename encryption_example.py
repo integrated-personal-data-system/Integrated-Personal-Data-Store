@@ -1,8 +1,9 @@
 from Crypto.Cipher import AES, PKCS1_OAEP
 from Crypto.Util.Padding import pad
-from Crypto.Protocol.KDF import PBKDF2
-from Crypto.Hash import SHA512
+from hashlib import sha3_256
 from Crypto.PublicKey import RSA
+from Crypto.Util.number import bytes_to_long
+import json
 from typing import Tuple
 import os
 
@@ -21,7 +22,7 @@ def encrypt(pt: bytes,clientSeed: bytes, serverSeed: bytes)->Tuple[bytes,bytes,b
     """
     assert len(clientSeed) == 16 #You don't necessarily need to use 16, this is just an example.
     assert len(serverSeed) == 16
-    k = PBKDF2(clientSeed,serverSeed,AES.key_size[0] + 16,count=10**6,hmac_hash_module=SHA512)
+    k = sha3_256(clientSeed + serverSeed).digest()
     key = k[:16]
     nonce = k[16:]
     cipher = AES.new(key,AES.MODE_GCM,nonce=nonce)
@@ -43,11 +44,15 @@ def store(filename: str, data: bytes, gmac: bytes, key: bytes, nonce: bytes, cli
         client_pubkey: the client's public key.
     """
     assert client_pubkey.size_in_bits() >= 1024
+    assert client_pubkey.size_in_bits() <= 4096
     k = key + nonce
     cipher = PKCS1_OAEP.new(client_pubkey)
-    output = data + gmac + cipher.encrypt(k)
+    k = cipher.encrypt(k)
     with open(filename,"wb") as f:
-        f.write(output) #You may need to get a bit clever with how you distribute the information in files to update the information instead of just appending or overwriting everything. Don't forget that the agent can always decrypt the data and tell you where to put what they want!
+        f.write(str(len(data)).encode("utf-8") + b'\n')
+        f.write(data)
+        f.write(gmac)
+        f.write(k)
 
 if __name__ == "__main__":
     #pretend this was generated on the agent and sent to the server.
@@ -58,4 +63,4 @@ if __name__ == "__main__":
         os.urandom(16)
     )
     print(ct)
-    store("./output.aes",ct[0],ct[1],ct[2],ct[3],client_pkey)
+    store("./output.json",ct[0],ct[1],ct[2],ct[3],client_pkey)
