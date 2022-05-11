@@ -2,8 +2,6 @@ from Crypto.Cipher import AES, PKCS1_OAEP
 from Crypto.Util.Padding import pad
 from hashlib import sha3_256
 from Crypto.PublicKey import RSA
-from Crypto.Util.number import bytes_to_long
-import json
 from typing import Tuple
 import os
 
