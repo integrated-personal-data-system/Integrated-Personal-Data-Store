@@ -19,3 +19,21 @@ services:
         ipv4_address: 10.9.0.3
     ports:
       - 3030:3030
+
+  node:
+    image: node
+    container_name: middeware
+    user: "node"
+    working_dir: /home/node/pds-middleware
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./pds-middleware:/home/node/pds-middleware
+    networks:
+      net-10.9.0.0:
+        ipv4_address: 10.9.0.2
+    expose:
+      - "8080"
+    command: "npm start"
+    ports:
+      - 8080:8080
