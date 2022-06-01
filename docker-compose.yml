@@ -7,15 +7,15 @@ networks:
         - subnet: 10.9.0.0/24
 
 services:
-  pds:
-    image: stain/jena-fuseki
-    container_name: aries-pds
+  fuseki:
+    build: ./triple-store/
+    container_name: triple-store
     environment:
       - ADMIN_PASSWORD=pw123
     volumes:
-      - ./fuseki:/fuseki
+      - ./triple-store/fuseki-data:/fuseki
     networks:
       net-10.9.0.0:
-        ipv4_address: 10.9.0.5
+        ipv4_address: 10.9.0.3
     ports:
       - 3030:3030
