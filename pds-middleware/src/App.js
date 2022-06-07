@@ -4,6 +4,8 @@ import Navbar from "react-bootstrap/Navbar"
 import './css/App.css'
 import PersonalDataCard from "./components/PersonalDataCard";
 import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
+import Button from "react-bootstrap/Button"
 
 
 class App extends React.Component {
@@ -61,14 +63,24 @@ class App extends React.Component {
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
-                <div className="card-box">
-                    <Container >
-                        <Row >
-                            {this.renderPersonalData()}
-                        </Row>
+                <Container fluid>
+                    <Row>
+                        <Col md={2} className="data-nav">
+                            <Button size="lg" variant="info">Personal Info</Button>{' '}
+                            <Button size="lg" variant="info">Credentials</Button>{' '}
+                        </Col>
+                        <Col md="auto">
+                            <div className="card-box">
+                                <Container >
+                                    <Row >
+                                        {this.renderPersonalData()}
+                                    </Row>
+                                </Container>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
 
-                    </Container>
-                </div>
 
 
             </div >
