@@ -9,6 +9,7 @@
   "dependencies": {
     "@types/node": "^17.0.40",
     "express": "4.17.1",
+    "fs": "^0.0.1-security",
     "node-fetch": "2",
     "nodemon": "2.0.3",
     "path": "^0.12.7",
