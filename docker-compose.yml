@@ -24,7 +24,7 @@ services:
     image: node
     container_name: middeware
     user: "node"
-    working_dir: /home/node/pds-middleware
+    working_dir: /home/node/pds-middleware/server
     environment:
       - NODE_ENV=production
     volumes:
@@ -33,7 +33,7 @@ services:
       net-10.9.0.0:
         ipv4_address: 10.9.0.2
     expose:
-      - "8080"
+      - "443"
     command: "yarn start"
     ports:
-      - 8080:8080
+      - 443:443
