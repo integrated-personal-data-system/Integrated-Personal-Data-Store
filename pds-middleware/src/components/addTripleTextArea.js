@@ -12,13 +12,12 @@ class AddTripleTextArea extends React.Component {
         super(props)
 
         this.state = {
-
+            text: ""
         }
         this.handleToggle = this.handleToggle.bind(this)
     }
 
     handleToggle() {
-
         if (this.props.toggleAddData) {
             return <Container style={{ padding: "1rem", margin: "1rem" }}>
                 <FloatingLabel controlId="floatingTextarea2" label="Triples">
@@ -26,9 +25,11 @@ class AddTripleTextArea extends React.Component {
                         as="textarea"
                         placeholder="Leave a comment here"
                         style={{ height: '10rem' }}
+                        onChange={(event) => { this.setState({ text: event.target.value }) }}
                     />
+
                 </FloatingLabel>
-                <Button variant="success" onClick={() => createMyData()}>Save</Button>
+                <Button variant="outline-primary" style={{ marginTop: ".5rem" }} onClick={() => createMyData(this.state.text)}>Save</Button>
             </Container >
         } else {
             return ""

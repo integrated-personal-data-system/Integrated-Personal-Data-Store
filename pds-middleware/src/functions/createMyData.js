@@ -1,7 +1,7 @@
 // import fetch from "node-fetch"
 
-function createMyData() {
-    let data = { updateTriples: "prefix cco: <http://www.ontologyrepository.com/CommonCoreOntologies/> select * where { ?s ?p ?o }" }
+function createMyData(triples) {
+    let data = { updateTriples: triples }
     fetch('/createMyData', {
         method: 'POST',
         headers: {
