@@ -22,4 +22,4 @@ function readMyData(callback: ({ success: boolean, data: string }) => void) {
     })
 }
 
-export default readMyData
+export default readMyData 

@@ -27,6 +27,13 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@rdfjs/types@*":
+  "integrity" "sha512-5zm8bN2/CC634dTcn/0AhTRLaQRjXDZs3QfcAsQKNturHT7XVWcKy/8p3P5gXl+YkZTAmy7T5M/LyiT/jbkENw=="
+  "resolved" "https://registry.npmjs.org/@rdfjs/types/-/types-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "@types/node" "*"
+
 "@sindresorhus/is@^0.14.0":
   "integrity" "sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ=="
   "resolved" "https://registry.npmjs.org/@sindresorhus/is/-/is-0.14.0.tgz"
@@ -952,6 +959,13 @@
     "minimist" "^1.2.0"
     "strip-json-comments" "~2.0.1"
 
+"rdf-data-factory@^1.0.4":
+  "integrity" "sha512-g8feOVZ/KL1OK2Pco/jDBDFh4m29QDsOOD+rWloG9qFvIzRFchGy2CviLUX491E0ByewXxMpaq/A3zsWHQA16A=="
+  "resolved" "https://registry.npmjs.org/rdf-data-factory/-/rdf-data-factory-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "@rdfjs/types" "*"
+
 "readdirp@~3.6.0":
   "integrity" "sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA=="
   "resolved" "https://registry.npmjs.org/readdirp/-/readdirp-3.6.0.tgz"
@@ -1045,6 +1059,13 @@
   "integrity" "sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ=="
   "resolved" "https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.7.tgz"
   "version" "3.0.7"
+
+"sparqljs@^3.5.2":
+  "integrity" "sha512-HPe2H6WcEJyZ5sRYRdFE7bWCGqtVf8BZJRD7P1uBCeoYtGPDs7Kcn+BZQ7NLVd6L5OfaP2XFuD1X/xER+hF0uQ=="
+  "resolved" "https://registry.npmjs.org/sparqljs/-/sparqljs-3.5.2.tgz"
+  "version" "3.5.2"
+  dependencies:
+    "rdf-data-factory" "^1.0.4"
 
 "statuses@>= 1.5.0 < 2", "statuses@~1.5.0":
   "integrity" "sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow="
