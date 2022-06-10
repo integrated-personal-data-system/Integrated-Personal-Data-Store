@@ -29,6 +29,9 @@ services:
       - NODE_ENV=production
     volumes:
       - ./pds-middleware:/home/node/pds-middleware
+      - /etc/letsencrypt/live/iamtestingbed.com/cert.pem:/etc/letsencrypt/live/iamtestingbed.com/cert.pem
+      - /etc/letsencrypt/live/iamtestingbed.com/privkey.pem:/etc/letsencrypt/live/iamtestingbed.com/privkey.pem
+
     networks:
       net-10.9.0.0:
         ipv4_address: 10.9.0.2
