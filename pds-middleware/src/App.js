@@ -6,6 +6,7 @@ import PersonalDataCard from "./components/PersonalDataCard";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
+import AddTripleTextArea from "./components/addTripleTextArea";
 
 
 class App extends React.Component {
@@ -16,7 +17,8 @@ class App extends React.Component {
         this.state = {
             showing: "",
             myData: "secondary",
-            creds: "secondary"
+            creds: "secondary",
+            toggleAddData: false
         }
 
         this.myData = {
@@ -58,10 +60,21 @@ class App extends React.Component {
 
     renderDataOrCreds() {
         if (this.state.showing === "my-data") {
+
             return (<Row>
                 <Col>
                     <div className="data-box">
                         <Container >
+                            <Button onClick={() => {
+                                if (!this.state.toggleAddData) {
+                                    this.setState({ toggleAddData: true })
+                                } else {
+                                    this.setState({ toggleAddData: false })
+                                }
+                            }}
+                                variant="danger">Add Data +</Button>
+                            <AddTripleTextArea toggleAddData={this.state.toggleAddData}></AddTripleTextArea>
+
                             <Row >
                                 {this.renderPersonalData()}
                             </Row>

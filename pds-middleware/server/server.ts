@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import readMyData from "./sparql/readMyData";
+import bodyParser from 'body-parser'
 import createMyData from "./sparql/createMyData";
 import path from "path"
 import fs from "fs"
@@ -24,6 +25,8 @@ httpsServer.listen(443, () => {
     console.log(`Aries PDS Middleware software listening on port ${443}`);
 });
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(express.static(path.join(__dirname, "..", "build")));
 app.use(express.static("public"));
@@ -35,6 +38,10 @@ app.use(express.static("public"));
 // SPARQL CRUD Operations 
 /////////////////////////////////
 
+interface createMyDataBody {
+    updateTriples: string
+}
+
 app.get('/readMyData', (request: Request, response: Response) => {
     readMyData((result) => {
         if (result.success) {
@@ -45,8 +52,9 @@ app.get('/readMyData', (request: Request, response: Response) => {
     })
 })
 
-app.post('/createMyData', (request: Request, response: Response) => {
-    createMyData((result) => {
+app.post('/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
+    let updateQuery = request.body.updateTriples
+    createMyData(updateQuery, (result) => {
         if (result.success) {
             response.status(200).send(result.data)
         } else {
