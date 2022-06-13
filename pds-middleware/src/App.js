@@ -7,6 +7,7 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import AddTripleTextArea from "./components/addTripleTextArea";
+import readMyData from "./functions/readMyData";
 
 
 class App extends React.Component {
@@ -18,7 +19,8 @@ class App extends React.Component {
             showing: "",
             myData: "secondary",
             creds: "secondary",
-            toggleAddData: false
+            toggleAddData: false,
+            mydata: []
         }
 
         this.myData = {
@@ -50,17 +52,25 @@ class App extends React.Component {
         this.renderDataOrCreds = this.renderDataOrCreds.bind(this)
     }
 
+    async componentDidMount() {
+        let myDataArray = await readMyData()
+
+        // console.log('my Data Array: ' + myDataArray)
+
+        this.setState({ mydata: myDataArray })
+    }
+
     renderPersonalData() {
         let personalInformation = []
-        for (let item in this.myData) {
-            personalInformation.push(<PersonalDataCard key={item + this.myData[item]} header={item} value={this.myData[item]}></PersonalDataCard>)
+        // console.log(this.state.mydata)
+        for (let item of this.state.mydata) {
+            personalInformation.push(<PersonalDataCard key={item[Object.keys(item)] + Object.keys(item)} header={Object.keys(item)} value={item[Object.keys(item)]}></PersonalDataCard>)
         }
         return personalInformation
     }
 
     renderDataOrCreds() {
         if (this.state.showing === "my-data") {
-
             return (<Row>
                 <Col>
                     <div className="data-box">

@@ -1,5 +1,3 @@
-// import fetch from "node-fetch"
-
 function createMyData(triples) {
     let data = { updateTriples: triples }
     fetch('/createMyData', {
