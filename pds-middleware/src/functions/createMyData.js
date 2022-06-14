@@ -1,5 +1,11 @@
-function createMyData(triples) {
-    let data = { updateTriples: triples }
+function createMyData(person, attribute, value) {
+
+    let data = {
+        "person":person,
+        "attribute": attribute,
+        "value": value
+    }
+
     fetch('/createMyData', {
         method: 'POST',
         headers: {

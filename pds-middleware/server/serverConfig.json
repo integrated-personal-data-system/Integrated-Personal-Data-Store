@@ -1,0 +1,3 @@
+{
+    "current_mapping": ["firstname", "email" , "lastname", "birthday", "mailingstreet", "mailingcity", "mailingstate", "mailingpostcode", "mailingcountry", "homephonenumber", "mobilephonenumber", "employername", "employeetitle"]
+}

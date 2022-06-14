@@ -6,7 +6,7 @@ import PersonalDataCard from "./components/PersonalDataCard";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
-import AddTripleTextArea from "./components/addTripleTextArea";
+import CreateNewDataForm from "./components/CreateNewDataForm";
 import readMyData from "./functions/readMyData";
 
 
@@ -20,55 +20,48 @@ class App extends React.Component {
             myData: "secondary",
             creds: "secondary",
             toggleAddData: false,
+            person:"",
             mydata: []
         }
-
-        this.myData = {
-            firstname: "Jane",
-            lastname: "Doe",
-            birthdate: "12/31/99",
-            mailingstreet: "1234 Walnut St",
-            mailingcity: "Springfield",
-            mailingstate: "MO",
-            mailingcountry: "USA",
-            mailingpostcode: 12345,
-            email: "janedoe@email.com",
-            mobilephonenumber: "617-555-6789",
-            homephonenumber: "555-456-7890",
-            employeetitle: "Lead Developer",
-            employername: "Tech Giant",
-            employerindustry: "Financial Planning",
-            employerstreet: "12345 Business Parkway Suite 100",
-            employercity: "Springfield",
-            employerstate: "MO",
-            employerpostcode: 14521,
-            employercountry: "USA",
-            employeremail: "doe.jane@techgiant.org",
-            employerphone: "555-222-4321",
-            employerfax: "555-999-0987"
-        };
 
         this.renderPersonalData = this.renderPersonalData.bind(this)
         this.renderDataOrCreds = this.renderDataOrCreds.bind(this)
     }
 
+    /**
+     * When all the components mount into the DOM, send a query to the database
+     * to get all the user's data. Sets the state to an array of user's data. 
+     * @CR
+     */
     async componentDidMount() {
         let myDataArray = await readMyData()
+        let person = ""
+        for(let item of myDataArray){
 
-        // console.log('my Data Array: ' + myDataArray)
-
-        this.setState({ mydata: myDataArray })
+            if(Object.keys(item)[0] ==="Person"){
+                person = item[Object.keys(item)]
+            }
+        }
+        this.setState({ mydata: myDataArray, person: person })
     }
 
+    /**
+     * Renders all the elements in this.state.mydata as personal Information Cards
+     * @CR
+     */
     renderPersonalData() {
         let personalInformation = []
-        // console.log(this.state.mydata)
+        console.log(this.state)
         for (let item of this.state.mydata) {
             personalInformation.push(<PersonalDataCard key={item[Object.keys(item)] + Object.keys(item)} header={Object.keys(item)} value={item[Object.keys(item)]}></PersonalDataCard>)
         }
         return personalInformation
     }
 
+    /**
+     * Renders the Data cards or Credentials Cards depending on this.state.showing.
+     * @returns My Data or Credentials
+     */
     renderDataOrCreds() {
         if (this.state.showing === "my-data") {
             return (<Row>
@@ -82,8 +75,18 @@ class App extends React.Component {
                                     this.setState({ toggleAddData: false })
                                 }
                             }}
-                                variant="danger">Add Data +</Button>
-                            <AddTripleTextArea toggleAddData={this.state.toggleAddData}></AddTripleTextArea>
+                                variant="danger"
+                                style={{ margin: ".5rem" }}>Add Data +</Button>
+                            <Button onClick={async () => {
+                                this.setState({ mydata: [] })
+                                let myDataArray = await readMyData()
+                                this.setState({ mydata: myDataArray })
+                            }}
+                                variant="success"
+                                style={{ margin: ".5rem" }}>Refresh</Button>
+
+
+                            <CreateNewDataForm person={this.state.person} toggleAddData={this.state.toggleAddData}></CreateNewDataForm>
 
                             <Row >
                                 {this.renderPersonalData()}
@@ -91,7 +94,7 @@ class App extends React.Component {
                         </Container>
                     </div>
                 </Col>
-            </Row>)
+            </Row >)
         } else if (this.state.showing === "creds") {
             return (<Row>
                 <Col>
@@ -134,14 +137,9 @@ class App extends React.Component {
                             onClick={() => this.setState({ showing: "my-data", myData: "primary", creds: "secondary" })}>My Data</Button>{' '}
                         <Button id="creds-btn"
                             variant={this.state.creds}
-                            onClick={() => this.setState({ showing: "creds", myData: "secondary", creds: "primary" })}>Credentails</Button>{' '}
+                            onClick={() => this.setState({ showing: "creds", myData: "secondary", creds: "primary" })}>Credentials</Button>{' '}
                     </Container>
-
                     {this.renderDataOrCreds()}
-
-
-
-
                 </Container>
 
 

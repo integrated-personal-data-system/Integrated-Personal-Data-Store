@@ -31,7 +31,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, "..", "build")));
 app.use(express.static("public"));
 
-
+//////////////////////////////////
+// Transformation Script
+/////////////////////////////////
 
 
 //////////////////////////////////
@@ -39,7 +41,9 @@ app.use(express.static("public"));
 /////////////////////////////////
 
 interface createMyDataBody {
-    updateTriples: string
+    person: string, 
+    attribute: string,
+    value: string
 }
 
 app.get('/readMyData', (request: Request, response: Response) => {
@@ -53,8 +57,8 @@ app.get('/readMyData', (request: Request, response: Response) => {
 })
 
 app.post('/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
-    let updateQuery = request.body.updateTriples
-    createMyData(updateQuery, (result) => {
+    let data = request.body
+    createMyData(data.person, data.attribute, data.value, (result) => {
         if (result.success) {
             response.status(200).send(result.data)
         } else {
