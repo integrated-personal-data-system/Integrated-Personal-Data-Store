@@ -69,7 +69,7 @@ function pds_firstname(person:string, firstname:string ) {
               cco:designated_by cco:PersonFullName_${lastname_uuid} .
             
             cco:PersonFullName_${lastname_uuid} a cco:PersonFullName ; 
-              <http://purl.obolibrary.org/obo/BFO_0000051> cco:PersonFamilyName_${lastname_uuid}
+              <http://purl.obolibrary.org/obo/BFO_0000051> cco:PersonFamilyName_${lastname_uuid} . 
             
               cco:PersonFamilyName_${lastname_uuid} a cco:PersonFamilyName ;
                 obo:RO_0010001 cco:InformationBearingEntity_PersonFamilyName_${lastname_uuid} .
