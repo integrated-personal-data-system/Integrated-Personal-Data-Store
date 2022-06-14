@@ -8,8 +8,9 @@ async function readMyData() {
 
     let data = await res.json()
     let parsedReults = []
-    for (let result in data) {
-        parsedReults.push({ [result]: data[result].value })
+    parsedReults.push({"Person": data[0][Object.keys(data[0])[0]].value})
+    for (let result of data) {
+        parsedReults.push({ [Object.keys(result)[1]]: result[Object.keys(result)[1]].value })
     }
     return parsedReults
 }

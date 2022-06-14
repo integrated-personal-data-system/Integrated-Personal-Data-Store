@@ -1,11 +1,11 @@
 function createMyData(person, attribute, value) {
 
     let data = {
-        "person":person,
+        "person": person,
         "attribute": attribute,
         "value": value
     }
-
+    console.log(data)
     fetch('/createMyData', {
         method: 'POST',
         headers: {

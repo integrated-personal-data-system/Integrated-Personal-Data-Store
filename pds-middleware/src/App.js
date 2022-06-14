@@ -37,7 +37,7 @@ class App extends React.Component {
         let myDataArray = await readMyData()
         let person = ""
         for(let item of myDataArray){
-
+            console.log(item)
             if(Object.keys(item)[0] ==="Person"){
                 person = item[Object.keys(item)]
             }
@@ -50,8 +50,8 @@ class App extends React.Component {
      * @CR
      */
     renderPersonalData() {
-        let personalInformation = []
         console.log(this.state)
+        let personalInformation = []
         for (let item of this.state.mydata) {
             personalInformation.push(<PersonalDataCard key={item[Object.keys(item)] + Object.keys(item)} header={Object.keys(item)} value={item[Object.keys(item)]}></PersonalDataCard>)
         }

@@ -5,6 +5,9 @@ import { Parser, Generator } from "sparqljs"
 
 function validateUpdateQuery(query: string) {
     try {
+        if(query ==""){
+            return "Query is empty"
+        }
         let parser = new Parser()
         var parsedQuery = parser.parse(query)
         var generator = new Generator()
@@ -36,6 +39,7 @@ function createMyData(person: string , attribute: string, value: string, callbac
 
     let triples = mappingFuction(person, attribute, value)
     let query = createUpdateQuery(triples)
+    console.log(query)
     let vaildatedQuery = validateUpdateQuery(query)
     console.log(vaildatedQuery)
     if(vaildatedQuery != ""){

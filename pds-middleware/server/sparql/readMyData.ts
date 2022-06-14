@@ -1,31 +1,45 @@
 import fetch from "node-fetch"
 
 const myDataQuery = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
-SELECT ?Person ?FirstName ?LastName ?DateOfBirth ?HomeMailingAddress ?HomePostalCode  ?HomeState ?HomeCity  ?HomeCountry ?p ?o
-WHERE {
-  ?Person a cco:Person ;
-          cco:designated_by ?PersonFullName;
-          cco:is_object_of ?Birth;
-          cco:agent_in ?ActOfResiding;
-          cco:uses ?PersonalEmailBox. 
+SELECT * WHERE
+{ 
+{
+    SELECT ?Person ?FirstName WHERE 
+    {
+         ?Person a cco:Person ;
+                 cco:designated_by ?PersonFullName; . 
+                 
+         ?PersonFullName a cco:PersonFullName ;
+                  <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonGivenName .
+     		 ?PersonGivenName a cco:PersonGivenName ;
+                  <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
+ 			 ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
   
-  # Name
-  ?PersonFullName a cco:PersonFullName ;
-    <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonGivenName;
-    <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonFamilyName. 
-  
-  # Last Name
-  ?PersonFamilyName a cco:PersonFamilyName ;
+    }
+}
+UNION
+{
+   SELECT ?Person ?LastName WHERE 
+    {
+         ?Person a cco:Person ;
+                 cco:designated_by ?PersonFullName; . 
+                 
+         ?PersonFullName a cco:PersonFullName ;
+                  <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonFamilyName.
+     		?PersonFamilyName a cco:PersonFamilyName ;
                     <http://purl.obolibrary.org/obo/RO_0010001> ?PersonFamilyNameIBE. 
   
-  ?PersonFamilyNameIBE cco:has_text_value ?LastName . 
+  			?PersonFamilyNameIBE cco:has_text_value ?LastName . 
   
-  # First Name
-  ?PersonGivenName a cco:PersonGivenName ;
-                  <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
-  ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
-  
-  ?Birth a cco:Birth;
+    }
+}
+ UNION
+{
+   SELECT ?Person ?DateOfBirth WHERE 
+    {
+         ?Person a cco:Person ;
+                 cco:is_object_of ?Birth. 
+      ?Birth a cco:Birth;
          cco:occurs_on ?Birth_Day. 
   
   # Date Of Birth
@@ -35,26 +49,44 @@ WHERE {
   ?DataIdentifier <http://purl.obolibrary.org/obo/RO_0010001> ?DataIdentifierIBE . 
   
   ?DataIdentifierIBE  cco:has_text_value ?DateOfBirth . 
+        
   
-  
- # Address 
-  ?ActOfResiding a cco:ActOfResiding ; 
+    }
+}
+UNION
+{
+   SELECT ?Person ?HomeMailingAddress WHERE 
+    {
+         ?Person a cco:Person ;
+                 cco:agent_in ?ActOfResiding . 
+                 
+     	 ?ActOfResiding a cco:ActOfResiding ; 
                  cco:has_object ?ResidentialFacility. 
-  
-  ?ResidentialFacility a cco:ResidentialFacility;
-                      cco:designated_by ?StreetAddress1; 
-                      <http://purl.obolibrary.org/obo/RO_0001025> ?PostalZone1;
-                      <http://purl.obolibrary.org/obo/RO_0001025> ?LocalAdminRegion1. 
-  
-  # Mailing Address
-  ?StreetAddress1 a cco:StreetAddress ; 
+  		?ResidentialFacility a cco:ResidentialFacility;
+                        cco:designated_by ?StreetAddress1.
+                        
+   	  	?StreetAddress1 a cco:StreetAddress ; 
                   <http://purl.obolibrary.org/obo/RO_0010001> ?StreetAddress1IBE . 
   
  
-  ?StreetAddress1IBE  cco:has_text_value ?HomeMailingAddress . 
-  
-  # Postal Code
-  ?PostalZone1 a cco:PostalZone;
+ 		 ?StreetAddress1IBE  cco:has_text_value ?HomeMailingAddress . 
+    }
+}
+UNION
+{
+   SELECT ?Person ?HomePostalCode WHERE 
+    {
+         ?Person a cco:Person ;
+                 cco:agent_in ?ActOfResiding . 
+                 
+     	 ?ActOfResiding a cco:ActOfResiding ; 
+                 cco:has_object ?ResidentialFacility. 
+  		?ResidentialFacility a cco:ResidentialFacility;
+                       <http://purl.obolibrary.org/obo/RO_0001025> ?PostalZone1.
+                        
+   
+ 
+ 		 ?PostalZone1 a cco:PostalZone;
               cco:designated_by ?PostalZoneCode1.
   
   ?PostalZoneCode1 a cco:PostalCode;
@@ -62,30 +94,76 @@ WHERE {
   
   ?PostalZoneCode1IBE  cco:has_text_value ?HomePostalCode. 
   
-  # Admin Region
+    }
+}
+ UNION
+{
+   SELECT ?Person  ?HomeCity WHERE 
+    {
+         ?Person a cco:Person ;
+                 cco:agent_in ?ActOfResiding . 
+                 
+     	 ?ActOfResiding a cco:ActOfResiding ; 
+                 cco:has_object ?ResidentialFacility. 
+  		?ResidentialFacility a cco:ResidentialFacility;
+             <http://purl.obolibrary.org/obo/RO_0001025> ?LocalAdminRegion1. 
+                       
+ 		# Admin Region
   ?LocalAdminRegion1 a cco:LocalAdministrativeRegion ; 
-                     cco:designated_by ?LocalAdminRegion1DesName;
-                     <http://purl.obolibrary.org/obo/BFO_0000050> ?LocalAdminRegion1StateCity. 
-  
-  # City 
+                     cco:designated_by ?LocalAdminRegion1DesName . 
+                      #City 
   ?LocalAdminRegion1DesName a cco:DesignativeName;
                             <http://purl.obolibrary.org/obo/RO_0010001>  ?LocalAdminRegion1DesNameIBE. 
   
   ?LocalAdminRegion1DesNameIBE cco:has_text_value ?HomeCity . 
+    }
+}
+ UNION
+{
+   SELECT ?Person  ?HomeState WHERE 
+    {
+         ?Person a cco:Person ;
+                 cco:agent_in ?ActOfResiding . 
+                 
+     	 ?ActOfResiding a cco:ActOfResiding ; 
+                 cco:has_object ?ResidentialFacility. 
+  		?ResidentialFacility a cco:ResidentialFacility;
+             <http://purl.obolibrary.org/obo/RO_0001025> ?LocalAdminRegion1. 
+                       
+ 		# Admin Region
+  ?LocalAdminRegion1 a cco:LocalAdministrativeRegion ; 
+                     <http://purl.obolibrary.org/obo/BFO_0000050> ?LocalAdminRegion1StateCity . 
   
-  # State
-  ?LocalAdminRegion1StateCity a cco:State ; 
-                              cco:designated_by ?LocalAdminRegion1StateCityDesc;
-                              <http://purl.obolibrary.org/obo/BFO_0000050> ?LocalAdminRegion1StateCountry. 
+ ?LocalAdminRegion1StateCity a cco:State ; 
+                              cco:designated_by ?LocalAdminRegion1StateCityDesc. 
   
- 
-  ?LocalAdminRegion1StateCityDesc a cco:DesignativeName ; 
+  
+ ?LocalAdminRegion1StateCityDesc a cco:DesignativeName ; 
                                   <http://purl.obolibrary.org/obo/RO_0010001>   ?LocalAdminRegion1StateCityDescIBE . 
   
   
   ?LocalAdminRegion1StateCityDescIBE cco:has_text_value ?HomeState. 
   
-  # Country 
+    }
+}
+  UNION
+{
+   SELECT ?Person  ?HomeCountry WHERE 
+    {
+         ?Person a cco:Person ;
+                 cco:agent_in ?ActOfResiding . 
+                 
+     	 ?ActOfResiding a cco:ActOfResiding ; 
+                 cco:has_object ?ResidentialFacility. 
+  		?ResidentialFacility a cco:ResidentialFacility;
+             <http://purl.obolibrary.org/obo/RO_0001025> ?LocalAdminRegion1. 
+                       
+ 		# Admin Region
+  ?LocalAdminRegion1 a cco:LocalAdministrativeRegion ; 
+                     <http://purl.obolibrary.org/obo/BFO_0000050> ?LocalAdminRegion1StateCity . 
+  
+ ?LocalAdminRegion1StateCity a cco:State ; 
+	<http://purl.obolibrary.org/obo/BFO_0000050> ?LocalAdminRegion1StateCountry. 
   ?LocalAdminRegion1StateCountry a cco:Country ; 
                 cco:designated_by ?CountryDesc  . 
       
@@ -93,8 +171,9 @@ WHERE {
     <http://purl.obolibrary.org/obo/RO_0010001> ?CountryDescIBE .  
   
   ?CountryDescIBE cco:has_text_value ?HomeCountry . 
-
-       
+  
+    }
+}     
 }`
 
 function readMyData(callback: ({ success: boolean, data: string }) => void) {
@@ -109,7 +188,7 @@ function readMyData(callback: ({ success: boolean, data: string }) => void) {
     let jsonResults = JSON.parse(data)
     callback({
       success: true,
-      data: jsonResults.results.bindings[0]
+      data: jsonResults.results.bindings
     })
   }).catch((error) => {
     callback({
