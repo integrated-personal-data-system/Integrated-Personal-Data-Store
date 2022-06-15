@@ -131,6 +131,13 @@
   "resolved" "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.1.tgz"
   "version" "1.1.1"
 
+"asn1@^0.2.4":
+  "integrity" "sha512-ix/FxPn0MDjeyJ7i/yoHGFt/EX6LyNbxSEhPPXODPL+KB0VPk86UYfL0lMdy+KCnv+fmvIzySwaK5COwqVbWTQ=="
+  "resolved" "https://registry.npmjs.org/asn1/-/asn1-0.2.6.tgz"
+  "version" "0.2.6"
+  dependencies:
+    "safer-buffer" "~2.1.0"
+
 "balanced-match@^1.0.0":
   "integrity" "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw=="
   "resolved" "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
@@ -884,6 +891,13 @@
   dependencies:
     "whatwg-url" "^5.0.0"
 
+"node-rsa@^1.1.1":
+  "integrity" "sha512-Jd4cvbJMryN21r5HgxQOpMEqv+ooke/korixNNK3mGqfGJmy0M77WDDzo/05969+OkMy3XW1UuZsSmW9KQm7Fw=="
+  "resolved" "https://registry.npmjs.org/node-rsa/-/node-rsa-1.1.1.tgz"
+  "version" "1.1.1"
+  dependencies:
+    "asn1" "^0.2.4"
+
 "nodemon@2.0.3":
   "integrity" "sha512-lLQLPS90Lqwc99IHe0U94rDgvjo+G9I4uEIxRG3evSLROcqQ9hwc0AxlSHKS4T1JW/IMj/7N5mthiN58NL/5kw=="
   "resolved" "https://registry.npmjs.org/nodemon/-/nodemon-2.0.3.tgz"
@@ -1106,7 +1120,7 @@
   "resolved" "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
   "version" "5.1.2"
 
-"safer-buffer@>= 2.1.2 < 3":
+"safer-buffer@>= 2.1.2 < 3", "safer-buffer@~2.1.0":
   "integrity" "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg=="
   "resolved" "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz"
   "version" "2.1.2"

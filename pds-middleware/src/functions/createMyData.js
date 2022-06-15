@@ -5,7 +5,7 @@ function createMyData(person, attribute, value) {
         "attribute": attribute,
         "value": value
     }
-    console.log(data)
+
     fetch('/createMyData', {
         method: 'POST',
         headers: {

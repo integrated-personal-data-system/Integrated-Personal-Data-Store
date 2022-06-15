@@ -8,6 +8,7 @@ import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import CreateNewDataForm from "./components/CreateNewDataForm";
 import readMyData from "./functions/readMyData";
+import createNewRSAKeys from "./functions/createNewRSAKey";
 
 
 class App extends React.Component {
@@ -99,7 +100,7 @@ class App extends React.Component {
             return (<Row>
                 <Col>
                     <div className="data-box">
-                        Credentials
+                        <Button variant="primary"  onClick={() => createNewRSAKeys(this.state.person)}>Create New Keys + </Button>{' '}
                     </div>
                 </Col>
             </Row>)

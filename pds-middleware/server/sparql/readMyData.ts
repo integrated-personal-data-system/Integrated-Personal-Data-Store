@@ -1,6 +1,7 @@
 import fetch from "node-fetch"
 
 const myDataQuery = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
 SELECT * WHERE
 { 
 {
@@ -57,42 +58,43 @@ UNION
 {
    SELECT ?Person ?HomeMailingAddress WHERE 
     {
-         ?Person a cco:Person ;
-                 cco:agent_in ?ActOfResiding . 
-                 
-     	 ?ActOfResiding a cco:ActOfResiding ; 
-                 cco:has_object ?ResidentialFacility. 
-  		?ResidentialFacility a cco:ResidentialFacility;
-                        cco:designated_by ?StreetAddress1.
-                        
-   	  	?StreetAddress1 a cco:StreetAddress ; 
-                  <http://purl.obolibrary.org/obo/RO_0010001> ?StreetAddress1IBE . 
-  
- 
- 		 ?StreetAddress1IBE  cco:has_text_value ?HomeMailingAddress . 
+      ?Person a cco:Person;
+      cco:agent_in ?ActOfResiding.
+
+     ?ActOfResiding a cco:ActOfResiding;
+       obo:RO_0000057 ?ResidentialFacility.
+
+      ?ResidentialFacility a cco:ResidentialFacility;
+        cco:designated_by ?StreetAdress.
+
+      ?StreetAdress a cco:StreetAdress;
+        obo:RO_0010001 ?StreetAdressIBE .
+
+      ?StreetAdressIBE a cco:InformationBearingEntity;
+      cco:has_text_value ?HomeMailingAddress.
     }
 }
 UNION
 {
    SELECT ?Person ?HomePostalCode WHERE 
     {
-         ?Person a cco:Person ;
-                 cco:agent_in ?ActOfResiding . 
-                 
-     	 ?ActOfResiding a cco:ActOfResiding ; 
-                 cco:has_object ?ResidentialFacility. 
-  		?ResidentialFacility a cco:ResidentialFacility;
-                       <http://purl.obolibrary.org/obo/RO_0001025> ?PostalZone1.
-                        
-   
- 
- 		 ?PostalZone1 a cco:PostalZone;
-              cco:designated_by ?PostalZoneCode1.
-  
-  ?PostalZoneCode1 a cco:PostalCode;
-                <http://purl.obolibrary.org/obo/RO_0010001> ?PostalZoneCode1IBE . 
-  
-  ?PostalZoneCode1IBE  cco:has_text_value ?HomePostalCode. 
+      ?Person a cco:Person;
+        cco:agent_in ?ActOfResiding.
+
+    ?ActOfResiding a cco:ActOfResiding;
+      obo:RO_0000057 ?ResidentialFacility.
+
+    ?ResidentialFacility a cco:ResidentialFacility;
+      obo:RO_0001025 ?PostalZone.
+
+    ?PostalZone a cco:PostalZone;
+      cco:designated_by ?PostalCode.
+
+    ?PostalCode a cco:PostalCode;
+      obo:RO_0010001 ?PostalCodeIBE.
+
+    ?PostalCodeIBE a cco:InformationBearingEntity;
+      cco:has_text_value ?HomePostalCode.
   
     }
 }

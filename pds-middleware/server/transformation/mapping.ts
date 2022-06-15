@@ -661,10 +661,10 @@ function mappingFuction(person:string, attribute: string , value: string){
       case "lastname": {
         return pds_lastname(person,value)
       }
-      case "birthday" : {
+      case "dateofbirth" : {
         return pds_birthday(person,value)
       }
-      case "mailingstreet" : {
+      case "homemailingaddress" : {
         return pds_mailingstreet(person, value)
       }
       case "mailingcity":{
@@ -673,7 +673,7 @@ function mappingFuction(person:string, attribute: string , value: string){
       case "mailingstate":{
         return pds_mailingstate(person, value)
       } 
-      case "mailingpostcode":{
+      case "homepostalcode":{
         return pds_mailingpostcode(person, value)
       }
       case "mailingcountry":{

@@ -19,6 +19,7 @@ class CreateNewDataForm extends React.Component {
     }
 
     handleToggle() {
+        console.log(this.props)
         if (this.props.toggleAddData) {
             return <Container style={{ padding: "1rem", margin: "1rem", backgroundColor: "white", borderRadius: ".5rem" }}>
                 <Form>
