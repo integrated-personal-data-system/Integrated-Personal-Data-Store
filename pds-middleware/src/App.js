@@ -8,7 +8,8 @@ import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import CreateNewDataForm from "./components/CreateNewDataForm";
 import readMyData from "./functions/readMyData";
-import createNewRSAKeys from "./functions/createNewRSAKey";
+
+import CreateNewKeyPairForm from "./components/CreateNewKeyPairForm"
 
 
 class App extends React.Component {
@@ -21,6 +22,7 @@ class App extends React.Component {
             myData: "secondary",
             creds: "secondary",
             toggleAddData: false,
+            toggleAddKeyPair: false ,
             person:"",
             mydata: []
         }
@@ -76,14 +78,14 @@ class App extends React.Component {
                                     this.setState({ toggleAddData: false })
                                 }
                             }}
-                                variant="danger"
+                                variant="success"
                                 style={{ margin: ".5rem" }}>Add Data +</Button>
                             <Button onClick={async () => {
                                 this.setState({ mydata: [] })
                                 let myDataArray = await readMyData()
                                 this.setState({ mydata: myDataArray })
                             }}
-                                variant="success"
+                                variant="warning"
                                 style={{ margin: ".5rem" }}>Refresh</Button>
 
 
@@ -100,7 +102,31 @@ class App extends React.Component {
             return (<Row>
                 <Col>
                     <div className="data-box">
-                        <Button variant="primary"  onClick={() => createNewRSAKeys(this.state.person)}>Create New Keys + </Button>{' '}
+                    <Container >
+                            <Button onClick={() => {
+                                if (!this.state.toggleAddKeyPair) {
+                                    this.setState({ toggleAddKeyPair: true })
+                                } else {
+                                    this.setState({ toggleAddKeyPair: false })
+                                }
+                            }}
+                                variant="success"
+                                style={{ margin: ".5rem" }}>Add Key Pair +</Button>
+                            <Button onClick={async () => {
+                                this.setState({ mydata: [] })
+                                let myDataArray = await readMyData()
+                                this.setState({ mydata: myDataArray })
+                            }}
+                                variant="warning"
+                                style={{ margin: ".5rem" }}>Refresh</Button>
+
+
+                            <CreateNewKeyPairForm person={this.state.person} toggleAddKeyPair={this.state.toggleAddKeyPair}></CreateNewKeyPairForm>
+
+                            <Row >
+                                {this.renderPersonalData()}
+                            </Row>
+                        </Container>
                     </div>
                 </Col>
             </Row>)

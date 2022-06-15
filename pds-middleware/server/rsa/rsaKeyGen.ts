@@ -1,4 +1,8 @@
 import {generateKeyPairSync} from "crypto"
+import fetch  from "node-fetch"
+
+
+
 function uploadRSAKeys(person: string, keyPairName:string, publicKey:string, encryptedPrivateKey:string){
     try{
         let query = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
@@ -6,10 +10,10 @@ function uploadRSAKeys(person: string, keyPairName:string, publicKey:string, enc
             
         INSERT DATA
         { 
-            ${person} a cco:Person ;
+            <${person}> a cco:Person ;
                 cco:agent_in cco:ActOfOwnership_${keyPairName} . 
 
-            cco:ActOfOwnership_${keyPairName} cco:ActOfOwnership
+            cco:ActOfOwnership_${keyPairName} a cco:ActOfOwnership;
                 cco:has_object cco:RSAKeyPair_${keyPairName} . 
             
             cco:RSAKeyPair_${keyPairName} a cco:RSAKeyPair ;
@@ -31,24 +35,25 @@ function uploadRSAKeys(person: string, keyPairName:string, publicKey:string, enc
         }
         `
 
-        console.log(query)
-        // fetch('http://localhost:3030/MyData', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/sparql-update',
-        //         "Accept": "*/*"
+        fetch('http://localhost:3030/MyData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/sparql-update',
+                "Accept": "*/*"
 
-        //     },
-        //     body: query
-        // }).then( res => res).then(data => {
-
-        //    return true
-        // }).catch((error) => {
-        //     console.log(console.log(error) )
-        //     return false
-        // })
+            },
+            body: query
+        }).then( res => res).then(data => {
+            console.log(data)
+            console.log("uploaded")
+           return true
+        }).catch((error) => {
+            console.log(console.log(error) )
+            return false
+        })
 
     }catch(error){
+        console.log(error)
         return false
     }
 }
@@ -72,8 +77,7 @@ function createRSAKeyPair(person:string, keyPairName: string, passphrase: string
                 passphrase: `${passphrase}`
               }
           });
-          console.log(publicKey)
-          console.log(privateKey)
+
           uploadRSAKeys(person, keyPairName, publicKey, privateKey)
 
          
