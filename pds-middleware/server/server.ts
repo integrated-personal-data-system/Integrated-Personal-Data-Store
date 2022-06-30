@@ -5,26 +5,37 @@ import createMyData from "./sparql/createMyData";
 import createRSAKeyPair from "./rsa/rsaKeyGen";
 import path from "path"
 import fs from "fs"
+
+let production = false
+
 var https = require('https');
 
 
 const app = express();
 
 
-let certificate = fs.readFileSync("/etc/letsencrypt/live/iamtestingbed.com/cert.pem", 'utf8');
-let privateKey = fs.readFileSync("/etc/letsencrypt/live/iamtestingbed.com/privkey.pem", 'utf8');
 
 
-let credentials = {
-    key: privateKey,
-    cert: certificate
-};
+if (production) {
+    let certificate = fs.readFileSync("/etc/letsencrypt/live/iamtestingbed.com/cert.pem", 'utf8');
+    let privateKey = fs.readFileSync("/etc/letsencrypt/live/iamtestingbed.com/privkey.pem", 'utf8');
 
-var httpsServer = https.createServer(credentials, app);
 
-httpsServer.listen(443, () => {
-    console.log(`Aries PDS Middleware software listening on port ${443}`);
-});
+    let credentials = {
+        key: privateKey,
+        cert: certificate
+    };
+    var httpsServer = https.createServer(credentials, app);
+
+    httpsServer.listen(443, () => {
+        console.log(`Aries PDS Middleware software listening on port in Production mode ${443}`);
+    });
+} else {
+    app.listen(8080, () => {
+        console.log(`Aries PDS Middleware software listening on port in testing Mode ${8080}`);
+    })
+}
+
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -53,13 +64,13 @@ app.post('/createWalletKeyPair', (request: Request<string, any>, response: Respo
 /////////////////////////////////
 
 interface createMyDataBody {
-    person: string, 
+    person: string,
     attribute: string,
     value: string
 }
 
 interface deleteMyDataBody {
-    
+
 }
 
 app.get('/readMyData', (request: Request, response: Response) => {
