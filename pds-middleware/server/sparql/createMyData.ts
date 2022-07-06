@@ -1,11 +1,11 @@
 import fetch from "node-fetch"
-import mappingFuction from "../transformation/mapping"
+import mappingFuction from "../transformation/createPatterns"
 import { Parser, Generator } from "sparqljs"
 
 
 function validateUpdateQuery(query: string) {
     try {
-        if(query ==""){
+        if (query == "") {
             return "Query is empty"
         }
         let parser = new Parser()
@@ -19,8 +19,8 @@ function validateUpdateQuery(query: string) {
     }
 }
 
-function createUpdateQuery(triples: string){
-    try{
+function createUpdateQuery(triples: string) {
+    try {
         let updateQuery = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
 PREFIX obo: <http://purl.obolibrary.org/obo/>
        
@@ -30,19 +30,19 @@ ${triples}
 }
         `
         return updateQuery
-    }catch(error){
+    } catch (error) {
         console.log("Could not create update query")
     }
 }
 
-function createMyData(person: string , attribute: string, value: string, callback: ({ success: boolean, data: string }) => void) {
+function createMyData(person: string, attribute: string, value: string, callback: ({ success: boolean, data: string }) => void) {
 
     let triples = mappingFuction(person, attribute, value)
     let query = createUpdateQuery(triples)
     console.log(query)
     let vaildatedQuery = validateUpdateQuery(query)
     console.log(vaildatedQuery)
-    if(vaildatedQuery != ""){
+    if (vaildatedQuery != "") {
         fetch('http://localhost:3030/MyData', {
             method: 'POST',
             headers: {
@@ -51,27 +51,27 @@ function createMyData(person: string , attribute: string, value: string, callbac
 
             },
             body: query
-        }).then( res => res).then(data => {
+        }).then(res => res).then(data => {
 
             callback({
                 success: true,
                 data: data
             })
         }).catch((error) => {
-            console.log(console.log(error) )
+            console.log(console.log(error))
             callback({
-                
+
                 success: false,
                 data: error
             })
         })
-    }else{
+    } else {
         callback({
             success: false,
             data: "The Query did not validate"
         })
     }
-   
+
 }
 
 export default createMyData

@@ -71,9 +71,6 @@ interface createMyDataBody {
     value: string
 }
 
-interface deleteMyDataBody {
-
-}
 
 app.get('/readMyCerts', (request: Request, response: Response) => {
     readMyCerts((result) => {
@@ -104,6 +101,11 @@ app.post('/createMyData', (request: Request<string, createMyDataBody>, response:
             response.status(500).send(result.data)
         }
     })
+})
+
+app.post('/updateMyData', (request: Request<string, createMyDataBody>, response: Response) => {
+    let data = request.body
+
 })
 
 app.post('/deleteMyData', (request: Request<string, createMyDataBody>, response: Response) => {

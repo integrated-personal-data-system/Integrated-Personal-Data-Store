@@ -1,5 +1,5 @@
 import fetch from "node-fetch"
-import mappingDeleteFuction from "../transformation/deleteMappings"
+import mappingDeleteFuction from "../transformation/deletePatterns"
 
 function deleteMyData(attribute: string, value: string, callback: ({ success: boolean, data: string }) => void) {
     let query = mappingDeleteFuction(attribute, value)
