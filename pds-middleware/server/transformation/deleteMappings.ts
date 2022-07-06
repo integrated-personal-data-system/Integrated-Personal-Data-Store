@@ -1,8 +1,8 @@
 
 
-function delete_firstname(value:string){
-    try{
-        return(`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+function delete_firstname(value: string) {
+  try {
+    return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
 
         Delete {
             ?PersonFullName a cco:PersonFullName ;
@@ -27,16 +27,16 @@ function delete_firstname(value:string){
        
      }
     `)
-    }catch(error){
-        console.log(error)
-        return ""
-    }
+  } catch (error) {
+    console.log(error)
+    return ""
+  }
 }
 
 
-function delete_lastname(value: string){
-    try{
-        return(`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+function delete_lastname(value: string) {
+  try {
+    return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
 
    Delete {
          ?PersonFullName a cco:PersonFullName ;
@@ -57,16 +57,16 @@ function delete_lastname(value: string){
   	FILTER(?LastName = "${value}")
   
 }`)
-    }catch(error){
-        console.log(error)
-        return ""
-    }
+  } catch (error) {
+    console.log(error)
+    return ""
+  }
 }
 
 
-function delete_DateOfBirth(value:string){
-    try{
-        return(`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+function delete_DateOfBirth(value: string) {
+  try {
+    return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
 
         Delete {
      
@@ -97,16 +97,16 @@ function delete_DateOfBirth(value:string){
        
      }
      `)
-    } catch(error){
-        console.log(error)
-        return ""
-    }
+  } catch (error) {
+    console.log(error)
+    return ""
+  }
 }
 
 
-function delete_homemailingaddres(value:string){
-    try{
-        return(`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+function delete_homemailingaddres(value: string) {
+  try {
+    return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
         PREFIX obo: <http://purl.obolibrary.org/obo/>
            Delete {
         
@@ -139,17 +139,17 @@ function delete_homemailingaddres(value:string){
           
         }
         `)
-    } catch(error){
-        console.log(error)
-        return ""
-    }
+  } catch (error) {
+    console.log(error)
+    return ""
+  }
 }
 
 
 
-function delete_homepostalcode(value:string){
-    try{
-        return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+function delete_homepostalcode(value: string) {
+  try {
+    return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
         PREFIX obo: <http://purl.obolibrary.org/obo/>
            Delete {
         
@@ -192,58 +192,58 @@ function delete_homepostalcode(value:string){
         }
         
         `)
-    }catch(error){
-        console.log(error)
-        return ""
-    }
+  } catch (error) {
+    console.log(error)
+    return ""
+  }
 }
 
-function mappingDeleteFuction(attribute: string , value: string){
-    let attributeClean = attribute.toLocaleLowerCase()
-    switch(attributeClean){
-      case "firstname": {
-        return delete_firstname(value)
-      }
-      case "email":{
-        return delete_email(value)
-      }
-      case "lastname": {
-        return delete_lastname(value)
-      }
-      case "dateofbirth" : {
-        return delete_DateOfBirth(value)
-      }
-      case "homemailingaddress" : {
-        return delete_homemailingaddres(value)
-      }
-      case "mailingcity":{
-        return delete_mailingcity(value)
-      }
-      case "mailingstate":{
-        return delete_mailingstate(value)
-      } 
-      case "homepostalcode":{
-        return delete_homepostalcode(value)
-      }
-      case "mailingcountry":{
-        return delete_mailingcountry(value)
-      }
-      case "homephonenumber": {
-        return delete_homephonenumber(value)
-      }
-      case "mobilephonenumber": {
-        return delete_mobilephonenumber(value)
-      }
-      case "employername": {
-        return delete_employername(value)
-      }
-      case "employeetitle":{
-        return delete_employeetitle(value)
-      }
-      default:{
-        return ""
-      }
+function mappingDeleteFuction(attribute: string, value: string) {
+  let attributeClean = attribute.toLocaleLowerCase()
+  switch (attributeClean) {
+    case "firstname": {
+      return delete_firstname(value)
     }
+    // case "email": {
+    //   return delete_email(value)
+    // }
+    case "lastname": {
+      return delete_lastname(value)
+    }
+    case "dateofbirth": {
+      return delete_DateOfBirth(value)
+    }
+    case "homemailingaddress": {
+      return delete_homemailingaddres(value)
+    }
+    // case "mailingcity": {
+    //   return delete_mailingcity(value)
+    // }
+    // case "mailingstate": {
+    //   return delete_mailingstate(value)
+    // }
+    // case "homepostalcode": {
+    //   return delete_homepostalcode(value)
+    // }
+    // case "mailingcountry": {
+    //   return delete_mailingcountry(value)
+    // }
+    // case "homephonenumber": {
+    //   return delete_homephonenumber(value)
+    // }
+    // case "mobilephonenumber": {
+    //   return delete_mobilephonenumber(value)
+    // }
+    // case "employername": {
+    //   return delete_employername(value)
+    // }
+    // case "employeetitle": {
+    //   return delete_employeetitle(value)
+    // }
+    default: {
+      return ""
+    }
+  }
 }
 
 export default mappingDeleteFuction

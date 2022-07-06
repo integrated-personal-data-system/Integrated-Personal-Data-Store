@@ -3,6 +3,7 @@ import readMyData from "./sparql/readMyData";
 import readMyCerts from "./sparql/readMyCerts"
 import bodyParser from 'body-parser'
 import createMyData from "./sparql/createMyData";
+import deleteMyData from "./sparql/deleteMyData";
 import createRSAKeyPair from "./rsa/rsaKeyGen";
 import path from "path"
 import fs from "fs"
@@ -105,4 +106,13 @@ app.post('/createMyData', (request: Request<string, createMyDataBody>, response:
     })
 })
 
-// app.delete('/deleteMyData', (request: Request<string, createMyDataBody>, response: Response) )
+app.post('/deleteMyData', (request: Request<string, createMyDataBody>, response: Response) => {
+    let data = request.body
+    deleteMyData(data.attribute, data.value, (result) => {
+        if (result.success) {
+            response.status(200).send(result.data)
+        } else {
+            response.status(500).send(result.data)
+        }
+    })
+})
