@@ -3,11 +3,13 @@ import Container from "react-bootstrap/Container"
 import Navbar from "react-bootstrap/Navbar"
 import './css/App.css'
 import PersonalDataCard from "./components/PersonalDataCard";
+import CertDataCard from "./components/CertDataCard";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import CreateNewDataForm from "./components/CreateNewDataForm";
 import readMyData from "./functions/readMyData";
+import readMyCerts from "./functions/readMyCerts"
 
 import CreateNewKeyPairForm from "./components/CreateNewKeyPairForm"
 
@@ -22,11 +24,13 @@ class App extends React.Component {
             myData: "secondary",
             creds: "secondary",
             toggleAddData: false,
-            toggleAddKeyPair: false ,
-            person:"",
-            mydata: []
+            toggleAddKeyPair: false,
+            person: "",
+            mydata: [],
+            mycerts: []
         }
 
+        this.renderCerts = this.renderCerts.bind(this)
         this.renderPersonalData = this.renderPersonalData.bind(this)
         this.renderDataOrCreds = this.renderDataOrCreds.bind(this)
     }
@@ -38,14 +42,15 @@ class App extends React.Component {
      */
     async componentDidMount() {
         let myDataArray = await readMyData()
-        let person = ""
-        for(let item of myDataArray){
+        let myCertsArray = await readMyCerts()
 
-            if(Object.keys(item)[0] ==="Person"){
+        let person = ""
+        for (let item of myDataArray) {
+            if (Object.keys(item)[0] === "Person") {
                 person = item[Object.keys(item)]
             }
         }
-        this.setState({ mydata: myDataArray, person: person })
+        this.setState({ mydata: myDataArray, person: person, mycerts: myCertsArray })
     }
 
     /**
@@ -53,12 +58,23 @@ class App extends React.Component {
      * @CR
      */
     renderPersonalData() {
-  
         let personalInformation = []
         for (let item of this.state.mydata) {
             personalInformation.push(<PersonalDataCard key={item[Object.keys(item)] + Object.keys(item)} header={Object.keys(item)} value={item[Object.keys(item)]}></PersonalDataCard>)
         }
         return personalInformation
+    }
+
+    /**
+     * Renders all the elements in this.state.Cert as Cert Data Cards
+     * @CR
+     */
+    renderCerts() {
+        let certInformation = []
+        for (let cert of this.state.mycerts) {
+            certInformation.push(<CertDataCard key={cert.keyPairName} header={cert.keyPairName}></CertDataCard>)
+        }
+        return certInformation
     }
 
     /**
@@ -102,7 +118,7 @@ class App extends React.Component {
             return (<Row>
                 <Col>
                     <div className="data-box">
-                    <Container >
+                        <Container >
                             <Button onClick={() => {
                                 if (!this.state.toggleAddKeyPair) {
                                     this.setState({ toggleAddKeyPair: true })
@@ -113,9 +129,9 @@ class App extends React.Component {
                                 variant="success"
                                 style={{ margin: ".5rem" }}>Add Key Pair +</Button>
                             <Button onClick={async () => {
-                                this.setState({ mydata: [] })
-                                let myDataArray = await readMyData()
-                                this.setState({ mydata: myDataArray })
+                                this.setState({ mycerts: [] })
+                                let myCertsArray = await readMyCerts()
+                                this.setState({ mycerts: myCertsArray })
                             }}
                                 variant="warning"
                                 style={{ margin: ".5rem" }}>Refresh</Button>
@@ -124,7 +140,7 @@ class App extends React.Component {
                             <CreateNewKeyPairForm person={this.state.person} toggleAddKeyPair={this.state.toggleAddKeyPair}></CreateNewKeyPairForm>
 
                             <Row >
-                                {this.renderPersonalData()}
+                                {this.renderCerts()}
                             </Row>
                         </Container>
                     </div>
@@ -168,9 +184,6 @@ class App extends React.Component {
                     </Container>
                     {this.renderDataOrCreds()}
                 </Container>
-
-
-
             </div >
         );
     }

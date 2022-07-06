@@ -1,0 +1,96 @@
+PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+SELECT ?Person ?FirstName ?LastName ?DateOfBirth ?HomeMailingAddress ?HomePostalCode  ?HomeState ?HomeCity  ?HomeCountry ?p ?o
+WHERE {
+  ?Person a cco:Person ;
+          cco:designated_by ?PersonFullName;
+          cco:is_object_of ?Birth;
+          cco:agent_in ?ActOfResiding;
+          cco:uses ?PersonalEmailBox. 
+  
+  # Name
+  ?PersonFullName a cco:PersonFullName ;
+    <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonGivenName;
+    <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonFamilyName. 
+  
+  # Last Name
+  ?PersonFamilyName a cco:PersonFamilyName ;
+                    <http://purl.obolibrary.org/obo/RO_0010001> ?PersonFamilyNameIBE. 
+  
+  ?PersonFamilyNameIBE cco:has_text_value ?LastName . 
+  
+  # First Name
+  ?PersonGivenName a cco:PersonGivenName ;
+                  <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
+  ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
+  
+  ?Birth a cco:Birth;
+         cco:occurs_on ?Birth_Day. 
+  
+  # Date Of Birth
+  ?Birth_Day a cco:Day;
+             cco:designated_by ?DataIdentifier . 
+  
+  ?DataIdentifier <http://purl.obolibrary.org/obo/RO_0010001> ?DataIdentifierIBE . 
+  
+  ?DataIdentifierIBE  cco:has_text_value ?DateOfBirth . 
+  
+  
+ # Address 
+  ?ActOfResiding a cco:ActOfResiding ; 
+                 cco:has_object ?ResidentialFacility. 
+  
+  ?ResidentialFacility a cco:ResidentialFacility;
+                      cco:designated_by ?StreetAddress1; 
+                      <http://purl.obolibrary.org/obo/RO_0001025> ?PostalZone1;
+                      <http://purl.obolibrary.org/obo/RO_0001025> ?LocalAdminRegion1. 
+  
+  # Mailing Address
+  ?StreetAddress1 a cco:StreetAddress ; 
+                  <http://purl.obolibrary.org/obo/RO_0010001> ?StreetAddress1IBE . 
+  
+ 
+  ?StreetAddress1IBE  cco:has_text_value ?HomeMailingAddress . 
+  
+  # Postal Code
+  ?PostalZone1 a cco:PostalZone;
+              cco:designated_by ?PostalZoneCode1.
+  
+  ?PostalZoneCode1 a cco:PostalCode;
+                <http://purl.obolibrary.org/obo/RO_0010001> ?PostalZoneCode1IBE . 
+  
+  ?PostalZoneCode1IBE  cco:has_text_value ?HomePostalCode. 
+  
+  # Admin Region
+  ?LocalAdminRegion1 a cco:LocalAdministrativeRegion ; 
+                     cco:designated_by ?LocalAdminRegion1DesName;
+                     <http://purl.obolibrary.org/obo/BFO_0000050> ?LocalAdminRegion1StateCity. 
+  
+  # City 
+  ?LocalAdminRegion1DesName a cco:DesignativeName;
+                            <http://purl.obolibrary.org/obo/RO_0010001>  ?LocalAdminRegion1DesNameIBE. 
+  
+  ?LocalAdminRegion1DesNameIBE cco:has_text_value ?HomeCity . 
+  
+  # State
+  ?LocalAdminRegion1StateCity a cco:State ; 
+                              cco:designated_by ?LocalAdminRegion1StateCityDesc;
+                              <http://purl.obolibrary.org/obo/BFO_0000050> ?LocalAdminRegion1StateCountry. 
+  
+ 
+  ?LocalAdminRegion1StateCityDesc a cco:DesignativeName ; 
+                                  <http://purl.obolibrary.org/obo/RO_0010001>   ?LocalAdminRegion1StateCityDescIBE . 
+  
+  
+  ?LocalAdminRegion1StateCityDescIBE cco:has_text_value ?HomeState. 
+  
+  # Country 
+  ?LocalAdminRegion1StateCountry a cco:Country ; 
+                cco:designated_by ?CountryDesc  . 
+      
+  ?CountryDesc a cco:DesignativeName ; 
+    <http://purl.obolibrary.org/obo/RO_0010001> ?CountryDescIBE .  
+  
+  ?CountryDescIBE cco:has_text_value ?HomeCountry . 
+
+       
+}

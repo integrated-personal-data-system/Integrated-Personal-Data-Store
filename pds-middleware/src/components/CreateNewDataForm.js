@@ -13,13 +13,13 @@ class CreateNewDataForm extends React.Component {
 
         this.state = {
             attribute: "",
-            value: ""
+            value: "",
+            cert: ""
         }
         this.handleToggle = this.handleToggle.bind(this)
     }
 
     handleToggle() {
-        console.log(this.props)
         if (this.props.toggleAddData) {
             return <Container style={{ padding: "1rem", margin: "1rem", backgroundColor: "white", borderRadius: ".5rem" }}>
                 <Form>
@@ -32,6 +32,11 @@ class CreateNewDataForm extends React.Component {
                         <Form.Label>Value</Form.Label>
                         <Form.Control type="text" placeholder="Value" onChange={(event) => this.setState({ value: event.target.value })} />
                     </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicText">
+                        <Form.Label>Certificate</Form.Label>
+                        <Form.Control type="text" placeholder="Select a Certificate" onChange={(event) => this.setState({ cert: event.target.value })} />
+                    </Form.Group>
+
                     <Button variant="primary" onClick={() => createMyData(this.props.person, this.state.attribute, this.state.value)} >
                         Save
                     </Button>

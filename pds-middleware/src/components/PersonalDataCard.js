@@ -13,9 +13,11 @@ class PersonalDataCard extends React.Component {
             <Col >
                 <Card className="card" border="warning" style={{ width: '15rem', margin: "1rem" }}>
                     <Card.Header>{this.props.header}</Card.Header>
+
                     <Card.Body>
+                        <Card.Title>{this.props.value}</Card.Title>
                         <Card.Text>
-                            {this.props.value}
+                            Self-Signed Cert
                         </Card.Text>
                     </Card.Body>
                 </Card>

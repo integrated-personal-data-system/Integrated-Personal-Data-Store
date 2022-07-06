@@ -1,10 +1,26 @@
-import {generateKeyPairSync} from "crypto"
-import fetch  from "node-fetch"
+import { generateKeyPairSync } from "crypto"
+import fetch from "node-fetch"
+import { Parser, Generator } from "sparqljs"
 
+function validateUpdateQuery(query: string) {
+    try {
+        if (query == "") {
+            return "Query is empty"
+        }
+        let parser = new Parser()
+        var parsedQuery = parser.parse(query)
+        var generator = new Generator()
+        return generator.stringify(parsedQuery)
+    } catch (error) {
+        console.log("Your query has a syntax error")
+        return ""
 
+    }
+}
 
-function uploadRSAKeys(person: string, keyPairName:string, publicKey:string, encryptedPrivateKey:string){
-    try{
+function uploadRSAKeys(person: string, keyPairName: string, publicKey: string, encryptedPrivateKey: string) {
+    try {
+
         let query = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
         PREFIX obo: <http://purl.obolibrary.org/obo/>
             
@@ -35,53 +51,59 @@ function uploadRSAKeys(person: string, keyPairName:string, publicKey:string, enc
         }
         `
 
-        fetch('http://localhost:3030/MyData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/sparql-update',
-                "Accept": "*/*"
+        let validatedQuery = validateUpdateQuery(query)
 
-            },
-            body: query
-        }).then( res => res).then(data => {
-            console.log(data)
-            console.log("uploaded")
-           return true
-        }).catch((error) => {
-            console.log(console.log(error) )
-            return false
-        })
+        if (validatedQuery != "") {
+            fetch('http://localhost:3030/MyData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/sparql-update',
+                    "Accept": "*/*"
 
-    }catch(error){
+                },
+                body: validatedQuery
+            }).then(res => res).then(data => {
+                console.log("uploaded Key Pair")
+                return true
+            }).catch((error) => {
+                console.log(console.log(error))
+                return false
+            })
+        }
+
+    } catch (error) {
         console.log(error)
         return false
     }
 }
 
-function createRSAKeyPair(person:string, keyPairName: string, passphrase: string , callback: ({ success: boolean, data: string }) => void){
-    try{
+function createRSAKeyPair(person: string, keyPairName: string, passphrase: string, callback: ({ success: boolean, data: string }) => void) {
+    try {
         // TODO Hash and salt passphrase
         const {
             publicKey,
             privateKey,
-          } = generateKeyPairSync('rsa', {
+        } = generateKeyPairSync('rsa', {
             modulusLength: 4096,
             publicKeyEncoding: {
-              type: 'spki',
-              format: 'pem'
+                type: 'spki',
+                format: 'pem'
             },
             privateKeyEncoding: {
                 type: 'pkcs8',
                 format: 'pem',
                 cipher: 'aes-256-cbc',
                 passphrase: `${passphrase}`
-              }
-          });
+            }
+        });
 
-          uploadRSAKeys(person, keyPairName, publicKey, privateKey)
+        let cleanPublicKey = publicKey.replace(/[\r\n]/g, "")
+        let cleanPrivateKey = privateKey.replace(/[\r\n]/g, "")
 
-         
-    }catch(error){
+        uploadRSAKeys(person, keyPairName, cleanPublicKey, cleanPrivateKey)
+
+
+    } catch (error) {
 
     }
 }

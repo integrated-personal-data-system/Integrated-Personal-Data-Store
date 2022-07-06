@@ -1,7 +1,0 @@
-cco:Person a cco:Person ;
-    particiaptes actOfOnwrship . 
-
-cco:ActOfOwnership a cco:ActOfOwnership; 
-    cco:has_object cco:PublicKey, PrivateKey. 
-
-

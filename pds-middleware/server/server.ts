@@ -1,12 +1,13 @@
 import express, { application, Request, Response } from "express";
 import readMyData from "./sparql/readMyData";
+import readMyCerts from "./sparql/readMyCerts"
 import bodyParser from 'body-parser'
 import createMyData from "./sparql/createMyData";
 import createRSAKeyPair from "./rsa/rsaKeyGen";
 import path from "path"
 import fs from "fs"
 
-let production = false
+let production = true
 
 var https = require('https');
 
@@ -73,6 +74,16 @@ interface deleteMyDataBody {
 
 }
 
+app.get('/readMyCerts', (request: Request, response: Response) => {
+    readMyCerts((result) => {
+        if (result.success) {
+            response.status(200).send(result.data)
+        } else {
+            response.status(500).send(result.data)
+        }
+    })
+})
+
 app.get('/readMyData', (request: Request, response: Response) => {
     readMyData((result) => {
         if (result.success) {
@@ -85,7 +96,6 @@ app.get('/readMyData', (request: Request, response: Response) => {
 
 app.post('/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
     let data = request.body
-
     createMyData(data.person, data.attribute, data.value, (result) => {
         if (result.success) {
             response.status(200).send(result.data)
