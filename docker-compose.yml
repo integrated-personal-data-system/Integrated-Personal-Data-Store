@@ -19,12 +19,11 @@ services:
         ipv4_address: 10.9.0.3
     ports:
       - 3030:3030
-
   node:
-    image: node
-    container_name: middeware
+    build: ./pds-middleware/
+    container_name: middleware
     user: "node"
-    working_dir: /home/node/pds-middleware/server
+    working_dir: /home/node/pds-middleware/backend
     environment:
       - NODE_ENV=production
     volumes:
@@ -37,6 +36,6 @@ services:
         ipv4_address: 10.9.0.2
     expose:
       - "443"
-    command: "yarn start"
+    command: "npm start"
     ports:
       - 443:443
