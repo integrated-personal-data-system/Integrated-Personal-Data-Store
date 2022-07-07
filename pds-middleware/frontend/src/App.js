@@ -2,16 +2,16 @@ import React from "react";
 import Container from "react-bootstrap/Container"
 import Navbar from "react-bootstrap/Navbar"
 import './css/App.css'
-import PersonalDataCard from "./components/PersonalDataCard";
-import CertDataCard from "./components/CertDataCard";
+import PersonalDataCard from "./components/data-cards/PersonalDataCard";
+import CertDataCard from "./components/data-cards/CertDataCard";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
-import CreateNewDataForm from "./components/CreateNewDataForm";
-import readMyData from "./functions/readMyData";
-import readMyCerts from "./functions/readMyCerts"
+import CreateNewDataForm from "./components/data-forms/CreateNewDataForm";
+import readMyData from "./server-request-functions/readMyData";
+import readMyCerts from "./server-request-functions/readMyCerts"
 
-import CreateNewKeyPairForm from "./components/CreateNewKeyPairForm"
+import CreateNewKeyPairForm from "./components/data-forms/CreateNewKeyPairForm"
 
 
 class App extends React.Component {

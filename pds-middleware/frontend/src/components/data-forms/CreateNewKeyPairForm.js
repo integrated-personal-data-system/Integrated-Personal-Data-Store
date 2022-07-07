@@ -2,8 +2,8 @@ import * as React from "react";
 import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/esm/Container";
-import createMyData from "../functions/createMyData";
-import createNewRSAKeys from "../functions/createNewRSAKey";
+import createMyData from "../../server-request-functions/createMyData";
+import createNewRSAKeys from "../../server-request-functions/createNewRSAKey";
 import Alert from "react-bootstrap/Alert"
 
 
@@ -15,7 +15,7 @@ class CreateNewKeyPairForm extends React.Component {
         super(props)
 
         this.state = {
-            passwordsNotMatch:false,
+            passwordsNotMatch: false,
             keyPairName: "",
             passphrase: "",
             confirmPassphrase: "-1",
@@ -25,23 +25,23 @@ class CreateNewKeyPairForm extends React.Component {
         this.passwordsNotMatchAlert = this.passwordsNotMatchAlert.bind(this)
     }
 
-    handleSubmit(){
-        if(this.state.passphrase === this.state.confirmPassphrase){
-            this.setState({passwordsNotMatch: false})
+    handleSubmit() {
+        if (this.state.passphrase === this.state.confirmPassphrase) {
+            this.setState({ passwordsNotMatch: false })
             console.log(this.props.person, this.state.keyPairName, this.state.passphrase)
             createNewRSAKeys(this.props.person, this.state.keyPairName, this.state.passphrase)
-        }else{
-            this.setState({passwordsNotMatch: true})
+        } else {
+            this.setState({ passwordsNotMatch: true })
         }
-        
+
     }
 
-    passwordsNotMatchAlert(){
-        if(this.state.passwordsNotMatch){
+    passwordsNotMatchAlert() {
+        if (this.state.passwordsNotMatch) {
             return (<Alert key={"danger"} variant={"danger"}>
-            The Passwords Do Not Match
-        </Alert>)
-        }else{
+                The Passwords Do Not Match
+            </Alert>)
+        } else {
             return ""
         }
     }
@@ -50,8 +50,8 @@ class CreateNewKeyPairForm extends React.Component {
         if (this.props.toggleAddKeyPair) {
             return <Container style={{ padding: "1rem", margin: "1rem", backgroundColor: "white", borderRadius: ".5rem" }}>
                 <Form>
-               {this.passwordsNotMatchAlert()}
-                
+                    {this.passwordsNotMatchAlert()}
+
                     <Form.Group className="mb-3" controlId="formBasicText">
                         <Form.Label>Key Pair Name</Form.Label>
                         <Form.Control type="text" placeholder="Enter Key Pair Name" onChange={(event) => this.setState({ keyPairName: event.target.value })} />
@@ -65,7 +65,7 @@ class CreateNewKeyPairForm extends React.Component {
                         <Form.Label>Confirm Passphrase</Form.Label>
                         <Form.Control type="password" placeholder="Enter Passphrase" onChange={(event) => this.setState({ confirmPassphrase: event.target.value })} />
                     </Form.Group>
-                    <Button variant="primary" onClick={() => this.handleSubmit() } >
+                    <Button variant="primary" onClick={() => this.handleSubmit()} >
                         Save
                     </Button>
                 </Form>
@@ -82,8 +82,8 @@ class CreateNewKeyPairForm extends React.Component {
             <div>
                 {this.handleToggle()}
             </div>
-              
- 
+
+
         )
     }
 }

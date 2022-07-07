@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Card from "react-bootstrap/Card"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
-import deleteMyData from "../functions/deleteMyData";
+import deleteMyData from "../../server-request-functions/deleteMyData";
 
 
-import "../css/PersonalDataCard.css"
+import "../../css/PersonalDataCard.css"
 
 class PersonalDataCard extends React.Component {
     constructor(props) {
