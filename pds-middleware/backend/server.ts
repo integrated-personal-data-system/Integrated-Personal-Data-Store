@@ -101,6 +101,7 @@ app.get('/readMyData', (request: Request, response: Response) => {
 app.post('/updateMyData', (request: Request<string, createMyDataBody>, response: Response) => {
     let data = request.body
 
+
 })
 
 

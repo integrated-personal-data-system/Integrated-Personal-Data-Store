@@ -8,8 +8,8 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import CreateNewDataForm from "./components/data-forms/CreateNewDataForm";
-import readMyData from "./server-request-functions/my-data/readMyData";
-import readMyCerts from "./server-request-functions/my-creds/readMyCerts"
+import readMyData from "./api-functions/my-data/readMyData";
+import readMyCerts from "./api-functions/my-creds/readMyCerts"
 
 import CreateNewKeyPairForm from "./components/data-forms/CreateNewKeyPairForm"
 
