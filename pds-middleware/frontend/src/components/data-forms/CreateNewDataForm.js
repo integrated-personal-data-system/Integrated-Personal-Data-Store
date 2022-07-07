@@ -2,7 +2,7 @@ import * as React from "react";
 import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/esm/Container";
-import createMyData from "../../server-request-functions/createMyData";
+import createMyData from "../../server-request-functions/my-data/createMyData";
 
 
 
@@ -37,7 +37,7 @@ class CreateNewDataForm extends React.Component {
                         <Form.Control type="text" placeholder="Select a Certificate" onChange={(event) => this.setState({ cert: event.target.value })} />
                     </Form.Group>
 
-                    <Button variant="primary" onClick={() => createMyData(this.props.person, this.state.attribute, this.state.value)} >
+                    <Button variant="primary" onClick={() => createMyData(this.props.person, this.state.attribute, this.state.value, this.state.cert)} >
                         Save
                     </Button>
                 </Form>

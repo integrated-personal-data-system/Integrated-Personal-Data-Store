@@ -2,8 +2,8 @@ import * as React from "react";
 import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/esm/Container";
-import createMyData from "../../server-request-functions/createMyData";
-import createNewRSAKeys from "../../server-request-functions/createNewRSAKey";
+import createMyData from "../../server-request-functions/my-data/createMyData";
+import createNewRSAKeys from "../../server-request-functions/my-creds/createNewRSAKey";
 import Alert from "react-bootstrap/Alert"
 
 
