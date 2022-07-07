@@ -5,10 +5,8 @@ function createMyData(person, attribute, value, cert) {
         "attribute": attribute,
         "value": value,
         "cert": cert,
-        "certPassword": certPassword
     }
 
-    console.log(data)
 
     fetch('/createMyData', {
         method: 'POST',
