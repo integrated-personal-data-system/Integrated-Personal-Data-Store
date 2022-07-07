@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "server.ts",
   "scripts": {
-    "start": "(cd ../frontend && npm run build) && (cd ../backend && sudo nodemon server.ts)"
+    "start": "(cd ../frontend && npm run build) && (cd ../backend && sudo nodemon server.ts)",
+    "docker-start": "(cd ../frontend && npm run build) && (cd ../backend && nodemon server.ts)"
   },
   "license": "MIT",
   "dependencies": {

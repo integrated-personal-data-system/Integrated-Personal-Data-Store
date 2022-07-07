@@ -39,11 +39,11 @@ function createMyData(person: string, attribute: string, value: string, callback
 
     let triples = mappingFuction(person, attribute, value)
     let query = createUpdateQuery(triples)
-    console.log(query)
+
     let vaildatedQuery = validateUpdateQuery(query)
     console.log(vaildatedQuery)
     if (vaildatedQuery != "") {
-        fetch('http://localhost:3030/MyData', {
+        fetch('http://iamtestingbed.com:3030/MyData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/sparql-update',

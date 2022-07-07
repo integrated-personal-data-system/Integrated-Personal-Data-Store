@@ -28,7 +28,7 @@ select ?Person ?KeyPair ?PublicKey ?PrivateKey where{
 }`
 
 function readMyCerts(callback: ({ success: boolean, data: string }) => void) {
-    fetch('http://localhost:3030/MyData/sparql', {
+    fetch('http://iamtestingbed.com:3030/MyData/sparql', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/sparql-query',

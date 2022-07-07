@@ -20,7 +20,7 @@ services:
     ports:
       - 3030:3030
   node:
-    build: ./pds-middleware/
+    image: node
     container_name: middleware
     user: "node"
     working_dir: /home/node/pds-middleware/backend
@@ -36,6 +36,6 @@ services:
         ipv4_address: 10.9.0.2
     expose:
       - "443"
-    command: "npm start"
+    command: "npm run docker-start"
     ports:
       - 443:443

@@ -5,7 +5,7 @@ function deleteMyData(attribute: string, value: string, callback: ({ success: bo
     let query = mappingDeleteFuction(attribute, value)
     console.log(query)
     if (query != "") {
-        fetch('http://localhost:3030/MyData', {
+        fetch('http://iamtestingbed.com:3030/MyData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/sparql-update',
