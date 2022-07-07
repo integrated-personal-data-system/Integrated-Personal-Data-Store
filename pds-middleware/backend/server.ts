@@ -1,6 +1,6 @@
 import express, { application, Request, Response } from "express";
 import readMyData from "./sparql/readMyData";
-import readMyCerts from "./sparql/readMyCerts"
+import { readMyCerts } from "./sparql/readMyCerts"
 import bodyParser from 'body-parser'
 import createMyData from "./sparql/createMyData";
 import deleteMyData from "./sparql/deleteMyData";
@@ -11,17 +11,11 @@ import fs from "fs"
 let production = true
 
 var https = require('https');
-
-
 const app = express();
-
-
-
 
 if (production) {
     let certificate = fs.readFileSync("/etc/letsencrypt/live/iamtestingbed.com/cert.pem", 'utf8');
     let privateKey = fs.readFileSync("/etc/letsencrypt/live/iamtestingbed.com/privkey.pem", 'utf8');
-
 
     let credentials = {
         key: privateKey,
@@ -46,7 +40,7 @@ app.use(express.static(path.join(__dirname, "../frontend", "build")));
 app.use(express.static("public"));
 
 //////////////////////////////////
-// Key Generation
+// Credentials Endpoints
 /////////////////////////////////
 
 app.post('/createWalletKeyPair', (request: Request<string, any>, response: Response) => {
@@ -59,19 +53,6 @@ app.post('/createWalletKeyPair', (request: Request<string, any>, response: Respo
     })
 })
 
-
-
-//////////////////////////////////
-// SPARQL CRUD Operations 
-/////////////////////////////////
-
-interface createMyDataBody {
-    person: string,
-    attribute: string,
-    value: string
-}
-
-
 app.get('/readMyCerts', (request: Request, response: Response) => {
     readMyCerts((result) => {
         if (result.success) {
@@ -81,6 +62,30 @@ app.get('/readMyCerts', (request: Request, response: Response) => {
         }
     })
 })
+
+
+//////////////////////////////////
+// My Data Endpoints
+/////////////////////////////////
+
+interface createMyDataBody {
+    person: string,
+    attribute: string,
+    value: string
+}
+
+app.post('/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
+    let data = request.body
+    console.log(data)
+    createMyData(data.person, data.attribute, data.value, data.cert, (result) => {
+        if (result.success) {
+            response.status(200).send(result.data)
+        } else {
+            response.status(500).send(result.data)
+        }
+    })
+})
+
 
 app.get('/readMyData', (request: Request, response: Response) => {
     readMyData((result) => {
@@ -92,21 +97,12 @@ app.get('/readMyData', (request: Request, response: Response) => {
     })
 })
 
-app.post('/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
-    let data = request.body
-    createMyData(data.person, data.attribute, data.value, (result) => {
-        if (result.success) {
-            response.status(200).send(result.data)
-        } else {
-            response.status(500).send(result.data)
-        }
-    })
-})
 
 app.post('/updateMyData', (request: Request<string, createMyDataBody>, response: Response) => {
     let data = request.body
 
 })
+
 
 app.post('/deleteMyData', (request: Request<string, createMyDataBody>, response: Response) => {
     let data = request.body

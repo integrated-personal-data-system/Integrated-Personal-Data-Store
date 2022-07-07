@@ -1,5 +1,6 @@
 import fetch from "node-fetch"
-import mappingFuction from "../transformation/createPatterns"
+import mappingFuction from "./transformation/createPatterns"
+
 import { Parser, Generator } from "sparqljs"
 
 
@@ -35,13 +36,13 @@ ${triples}
     }
 }
 
-function createMyData(person: string, attribute: string, value: string, callback: ({ success: boolean, data: string }) => void) {
+function createMyData(person: string, attribute: string, value: string, cert: string, callback: ({ success: boolean, data: string }) => void) {
 
-    let triples = mappingFuction(person, attribute, value)
+    let triples = mappingFuction(person, attribute, value, cert)
     let query = createUpdateQuery(triples)
 
     let vaildatedQuery = validateUpdateQuery(query)
-    console.log(vaildatedQuery)
+
     if (vaildatedQuery != "") {
         fetch('http://iamtestingbed.com:3030/MyData', {
             method: 'POST',
