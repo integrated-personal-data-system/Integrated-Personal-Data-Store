@@ -59,9 +59,18 @@ class App extends React.Component {
      */
     renderPersonalData() {
         let personalInformation = []
+        console.log(this.state.mydata)
         for (let item of this.state.mydata) {
             if (Object.keys(item)[0] !== "Person") {
-                personalInformation.push(<PersonalDataCard key={item[Object.keys(item)] + Object.keys(item)} person={this.state.person} header={Object.keys(item)[0]} value={item[Object.keys(item)]}></PersonalDataCard>)
+                personalInformation.push(
+                    <PersonalDataCard
+                        key={item.data.attribute + item.data.value}
+                        person={this.state.person}
+                        header={item.data.attribute}
+                        value={item.data.value}
+                        keyPairName={item.keyPairName}
+                        signature={item.signature}>
+                    </PersonalDataCard>)
             }
         }
         return personalInformation
