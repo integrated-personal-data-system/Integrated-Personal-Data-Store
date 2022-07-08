@@ -26,7 +26,7 @@ function UpdateModal(props) {
             header: props.header,
             newValue: value
         }
-        updateMyData(props.person, props.header, value)
+        updateMyData(props.person, props.header, value, props.oldValue)
     }
 
 
@@ -87,7 +87,7 @@ class PersonalDataCard extends React.Component {
                                 <Button variant="danger" style={{ float: "left" }} onClick={() => deleteMyData(this.props.person, this.props.header, this.props.value)} >
                                     Delete
                                 </Button>
-                                <UpdateModal person={this.props.person} header={this.props.header} value={this.props.value}></UpdateModal>
+                                <UpdateModal person={this.props.person} header={this.props.header} oldValue={this.props.value}></UpdateModal>
                             </Card.Body>
                         </Card>
                     </div>

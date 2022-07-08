@@ -1,4 +1,4 @@
-import { generateKeyPairSync } from "crypto"
+import { generateKeyPairSync, createPrivateKey, createPublicKey, createSign, createVerify } from "crypto"
 import fetch from "node-fetch"
 import { Parser, Generator } from "sparqljs"
 
@@ -53,13 +53,13 @@ function uploadRSAKeys(person: string, keyPairName: string, publicKey: string, e
 
         let validatedQuery = validateUpdateQuery(query)
 
+
         if (validatedQuery != "") {
-            fetch('http://localhost:3030/MyData', {
+            fetch('http://iamtestingbed.com:3030/MyData', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/sparql-update',
                     "Accept": "*/*"
-
                 },
                 body: validatedQuery
             }).then(res => res).then(data => {
@@ -92,19 +92,39 @@ function createRSAKeyPair(person: string, keyPairName: string, passphrase: strin
             privateKeyEncoding: {
                 type: 'pkcs8',
                 format: 'pem',
-                cipher: 'aes-256-cbc',
-                passphrase: `${passphrase}`
             }
         });
 
-        let cleanPublicKey = publicKey.replace(/[\r\n]/g, "")
-        let cleanPrivateKey = privateKey.replace(/[\r\n]/g, "")
 
-        uploadRSAKeys(person, keyPairName, cleanPublicKey, cleanPrivateKey)
+        let sparqlReadyPrivateKey = privateKey.replace(/[\n]/g, "")
+        let sparqlReadyPublicKey = publicKey.replace(/[\n]/g, "")
+
+        // let two = cleanPrivateKey.replace("-----BEGIN PRIVATE KEY-----", "-----BEGIN PRIVATE KEY-----\n")
+        // let three = two.replace("-----END PRIVATE KEY-----", "\n-----END PRIVATE KEY-----")
+
+        // // let privateKeyTest = createPrivateKey(three)
+        // // console.log(privateKeyTest)
+        // // const sign = createSign('SHA256');
+        // // sign.update('some data to sign');
+        // // sign.end();
+        // // const signature = sign.sign(privateKey, "hex");
+        // // console.log(signature)
+
+        // // const verify = createVerify('SHA256');
+        // // verify.update('some data to sign');
+        // // verify.end();
+        // // console.log(verify.verify(publicKey, signature, "hex"));
+
+        // // let pubkicKeyTest = createPublicKey(publicKey)
+
+        // // console.log(privateKeyTest)
+        // // console.log(pubkicKeyTest)
+
+        uploadRSAKeys(person, keyPairName, sparqlReadyPublicKey, sparqlReadyPrivateKey)
 
 
     } catch (error) {
-
+        console.log(error)
     }
 }
 

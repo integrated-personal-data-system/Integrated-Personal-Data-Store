@@ -43,35 +43,35 @@ function createMyData(person: string, attribute: string, value: string, cert: st
 
     let vaildatedQuery = validateUpdateQuery(query)
 
-    if (vaildatedQuery != "") {
-        fetch('http://iamtestingbed.com:3030/MyData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/sparql-update',
-                "Accept": "*/*"
+    // if (vaildatedQuery != "") {
+    //     fetch('http://iamtestingbed.com:3030/MyData', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/sparql-update',
+    //             "Accept": "*/*"
 
-            },
-            body: query
-        }).then(res => res).then(data => {
+    //         },
+    //         body: query
+    //     }).then(res => res).then(data => {
 
-            callback({
-                success: true,
-                data: data
-            })
-        }).catch((error) => {
-            console.log(console.log(error))
-            callback({
+    //         callback({
+    //             success: true,
+    //             data: data
+    //         })
+    //     }).catch((error) => {
+    //         console.log(console.log(error))
+    //         callback({
 
-                success: false,
-                data: error
-            })
-        })
-    } else {
-        callback({
-            success: false,
-            data: "The Query did not validate"
-        })
-    }
+    //             success: false,
+    //             data: error
+    //         })
+    //     })
+    // } else {
+    //     callback({
+    //         success: false,
+    //         data: "The Query did not validate"
+    //     })
+    // }
 
 }
 

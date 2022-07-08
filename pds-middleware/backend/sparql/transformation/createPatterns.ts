@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import { readCertByName } from "../readMyCerts"
-import { createPrivateKey } from "crypto"
+import { createPrivateKey, createSign } from "crypto"
 
-function pds_firstname(person: string, firstname: string) {
+function pds_firstname(person: string, firstname: string, signature: string) {
   var firstname_uuid, triples;
 
   try {
@@ -28,7 +28,7 @@ function pds_firstname(person: string, firstname: string) {
   }
 }
 
-function pds_email(person: string, email: string) {
+function pds_email(person: string, email: string, signature: string) {
   var email_uuid, triples;
 
   try {
@@ -60,7 +60,7 @@ function pds_email(person: string, email: string) {
   }
 }
 
-function pds_lastname(person: string, lastname: string) {
+function pds_lastname(person: string, lastname: string, signature: string) {
   var lastname_uuid, triples;
 
   try {
@@ -86,7 +86,7 @@ function pds_lastname(person: string, lastname: string) {
   }
 }
 
-function pds_birthday(person: string, birthday: string) {
+function pds_birthday(person: string, birthday: string, signature: string) {
   var birthday_uuid, triples;
 
   try {
@@ -115,7 +115,7 @@ function pds_birthday(person: string, birthday: string) {
   }
 }
 
-function pds_mailingstreet(person: string, mailingstreet: string) {
+function pds_mailingstreet(person: string, mailingstreet: string, signature: string) {
   var mailingstreet_uuid, triples;
 
   try {
@@ -144,7 +144,7 @@ function pds_mailingstreet(person: string, mailingstreet: string) {
   }
 }
 
-function pds_mailingcity(person: string, mailingcity: string) {
+function pds_mailingcity(person: string, mailingcity: string, signature: string) {
   var mailingcity_uuid, triples;
 
   try {
@@ -176,7 +176,7 @@ function pds_mailingcity(person: string, mailingcity: string) {
   }
 }
 
-function pds_mailingstate(person: string, mailingstate: string) {
+function pds_mailingstate(person: string, mailingstate: string, signature: string) {
   var mailingstate_uuid, triples;
 
   try {
@@ -211,7 +211,7 @@ function pds_mailingstate(person: string, mailingstate: string) {
   }
 }
 
-function pds_mailingpostcode(person: string, mailingpostcode: string) {
+function pds_mailingpostcode(person: string, mailingpostcode: string, signature: string) {
   var mailingpostcode_uuid, triples;
 
   try {
@@ -243,7 +243,7 @@ function pds_mailingpostcode(person: string, mailingpostcode: string) {
   }
 }
 
-function pds_mailingcountry(person: string, mailingcountry: string) {
+function pds_mailingcountry(person: string, mailingcountry: string, signature: string) {
   var mailingcountry_uuid, mailingstate_uuid, triples;
 
   try {
@@ -282,7 +282,7 @@ function pds_mailingcountry(person: string, mailingcountry: string) {
   }
 }
 
-function pds_homephonenumber(person: string, homephonenumber: string) {
+function pds_homephonenumber(person: string, homephonenumber: string, signature: string) {
   var homephonenumber_uuid, triples;
 
   try {
@@ -314,7 +314,7 @@ function pds_homephonenumber(person: string, homephonenumber: string) {
   }
 }
 
-function pds_mobilephonenumber(person: string, mobilephonenumber: string) {
+function pds_mobilephonenumber(person: string, mobilephonenumber: string, signature: string) {
   var mobilephonenumber_uuid, triples;
 
   try {
@@ -346,7 +346,7 @@ function pds_mobilephonenumber(person: string, mobilephonenumber: string) {
   }
 }
 
-function pds_employername(person: string, employername: string) {
+function pds_employername(person: string, employername: string, signature: string) {
   var employername_uuid, triples;
 
   try {
@@ -622,7 +622,7 @@ function pds_employername(person: string, employername: string) {
 //     }
 //   }
 
-function pds_employeetitle(person: string, employeetitle: string) {
+function pds_employeetitle(person: string, employeetitle: string, signature: string) {
   var employeetitle_uuid, triples;
 
   try {
@@ -653,58 +653,79 @@ function pds_employeetitle(person: string, employeetitle: string) {
 
 function mappingFuction(person: string, attribute: string, value: string, cert: string) {
   let attributeClean = attribute.toLocaleLowerCase()
-  // if (cert != "") {
-  //   readCertByName(cert, (result) => {
-  //     console.log(String(result.data.PrivateKey.value))
+  if (cert != "") {
+    readCertByName(cert, (result) => {
+      let addTop = result.data.PrivateKey.value.replace("-----BEGIN PRIVATE KEY-----", "-----BEGIN PRIVATE KEY-----\n")
+      let addButtom = addTop.replace("-----END PRIVATE KEY-----", "\n-----END PRIVATE KEY-----")
 
-  //   })
-  // }
+      let privateKey = createPrivateKey(addButtom)
+      console.log(privateKey)
+      const sign = createSign('SHA256');
+      sign.update("12345");
+      sign.end();
+      const signature = sign.sign(privateKey, "hex");
+      console.log(signature)
+      switch (attributeClean) {
+        case "firstname": {
+          return pds_firstname(person, value, signature)
+        }
+        case "email": {
+          return pds_email(person, value, signature)
+        }
+        case "lastname": {
+          return pds_lastname(person, value, signature)
+        }
+        case "dateofbirth": {
+          return pds_birthday(person, value, signature)
+        }
+        case "homemailingaddress": {
+          return pds_mailingstreet(person, value, signature)
+        }
+        case "mailingcity": {
+          return pds_mailingcity(person, value, signature)
+        }
+        case "mailingstate": {
+          return pds_mailingstate(person, value, signature)
+        }
+        case "homepostalcode": {
+          return pds_mailingpostcode(person, value, signature)
+        }
+        case "mailingcountry": {
+          return pds_mailingcountry(person, value, signature)
+        }
+        case "homephonenumber": {
+          return pds_homephonenumber(person, value, signature)
+        }
+        case "mobilephonenumber": {
+          return pds_mobilephonenumber(person, value, signature)
+        }
+        case "employername": {
+          return pds_employername(person, value, signature)
+        }
+        case "employeetitle": {
+          return pds_employeetitle(person, value, signature)
+        }
+        default: {
+          return ""
+        }
+      }
+
+      // // const verify = createVerify('SHA256');
+      // // verify.update('some data to sign');
+      // // verify.end();
+      // // console.log(verify.verify(publicKey, signature, "hex"));
+
+      // // let pubkicKeyTest = createPublicKey(publicKey)
+
+      // // console.log(privateKeyTest)
+      // // console.log(pubkicKeyTest)
 
 
-  switch (attributeClean) {
-    case "firstname": {
-      return pds_firstname(person, value)
-    }
-    case "email": {
-      return pds_email(person, value)
-    }
-    case "lastname": {
-      return pds_lastname(person, value)
-    }
-    case "dateofbirth": {
-      return pds_birthday(person, value)
-    }
-    case "homemailingaddress": {
-      return pds_mailingstreet(person, value)
-    }
-    case "mailingcity": {
-      return pds_mailingcity(person, value)
-    }
-    case "mailingstate": {
-      return pds_mailingstate(person, value)
-    }
-    case "homepostalcode": {
-      return pds_mailingpostcode(person, value)
-    }
-    case "mailingcountry": {
-      return pds_mailingcountry(person, value)
-    }
-    case "homephonenumber": {
-      return pds_homephonenumber(person, value)
-    }
-    case "mobilephonenumber": {
-      return pds_mobilephonenumber(person, value)
-    }
-    case "employername": {
-      return pds_employername(person, value)
-    }
-    case "employeetitle": {
-      return pds_employeetitle(person, value)
-    }
-    default: {
-      return ""
-    }
+    })
   }
+
+  return "123"
+
 }
 
 export default mappingFuction

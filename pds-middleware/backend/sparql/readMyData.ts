@@ -1,26 +1,34 @@
 import fetch from "node-fetch"
 
+
 const myDataQuery = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
 PREFIX obo: <http://purl.obolibrary.org/obo/>
 SELECT * WHERE
 { 
 {
-    SELECT ?Person ?FirstName WHERE 
-    {
-         ?Person a cco:Person ;
-                 cco:designated_by ?PersonFullName; . 
-                 
-         ?PersonFullName a cco:PersonFullName ;
-                  <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonGivenName .
-     		 ?PersonGivenName a cco:PersonGivenName ;
-                  <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
- 			 ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
-  
-    }
+  SELECT ?Person ?FirstName ?Signature ?keyPairName WHERE 
+      {
+          ?Person a cco:Person ;
+            cco:designated_by ?PersonFullName; .  
+          ?PersonFullName a cco:PersonFullName ;
+            <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonGivenName .
+          ?PersonGivenName a cco:PersonGivenName ;
+            <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
+          ?PersonGivenNameIBE cco:has_text_value ?FirstName; 
+            obo:RO_0000056 ?RSASignature. 
+          ?RSASignature a cco:RSASignature ; 
+            obo:RO_0000056 ?keyPair; 
+            cco:has_text_value ?Signature . 
+          ?keyPair a cco:RSAKeyPair; 
+            cco:designated_by ?keyPairDesc . 
+          ?keyPairDesc obo:RO_0010001 ?keyPairDescIBE.
+          ?keyPairDescIBE cco:has_text_value ?keyPairName . 
+      }
+   
 }
 UNION
 {
-   SELECT ?Person ?LastName WHERE 
+   SELECT ?Person ?LastName ?Signature ?keyPairName WHERE 
     {
          ?Person a cco:Person ;
                  cco:designated_by ?PersonFullName; . 
@@ -30,13 +38,21 @@ UNION
      		?PersonFamilyName a cco:PersonFamilyName ;
                     <http://purl.obolibrary.org/obo/RO_0010001> ?PersonFamilyNameIBE. 
   
-  			?PersonFamilyNameIBE cco:has_text_value ?LastName . 
+  			?PersonFamilyNameIBE cco:has_text_value ?LastName ;
+        obo:RO_0000056 ?RSASignature. 
+          ?RSASignature a cco:RSASignature ; 
+            obo:RO_0000056 ?keyPair; 
+            cco:has_text_value ?Signature . 
+          ?keyPair a cco:RSAKeyPair; 
+            cco:designated_by ?keyPairDesc . 
+          ?keyPairDesc obo:RO_0010001 ?keyPairDescIBE.
+          ?keyPairDescIBE cco:has_text_value ?keyPairName .  
   
     }
 }
  UNION
 {
-   SELECT ?Person ?DateOfBirth WHERE 
+   SELECT ?Person ?DateOfBirth ?Signature ?keyPairName WHERE 
     {
          ?Person a cco:Person ;
                  cco:is_object_of ?Birth. 
@@ -49,14 +65,22 @@ UNION
   
   ?DataIdentifier <http://purl.obolibrary.org/obo/RO_0010001> ?DataIdentifierIBE . 
   
-  ?DataIdentifierIBE  cco:has_text_value ?DateOfBirth . 
+  ?DataIdentifierIBE  cco:has_text_value ?DateOfBirth ;
+  obo:RO_0000056 ?RSASignature. 
+          ?RSASignature a cco:RSASignature ; 
+            obo:RO_0000056 ?keyPair; 
+            cco:has_text_value ?Signature . 
+          ?keyPair a cco:RSAKeyPair; 
+            cco:designated_by ?keyPairDesc . 
+          ?keyPairDesc obo:RO_0010001 ?keyPairDescIBE.
+          ?keyPairDescIBE cco:has_text_value ?keyPairName . 
         
   
     }
 }
 UNION
 {
-   SELECT ?Person ?HomeMailingAddress WHERE 
+   SELECT ?Person ?HomeMailingAddress ?Signature ?keyPairName WHERE 
     {
       ?Person a cco:Person;
       cco:agent_in ?ActOfResiding.
@@ -71,12 +95,13 @@ UNION
         obo:RO_0010001 ?StreetAdressIBE .
 
       ?StreetAdressIBE a cco:InformationBearingEntity;
-      cco:has_text_value ?HomeMailingAddress.
+      cco:has_text_value ?HomeMailingAddress;
+
     }
 }
 UNION
 {
-   SELECT ?Person ?HomePostalCode WHERE 
+   SELECT ?Person ?HomePostalCode  ?Signature ?keyPairName WHERE 
     {
       ?Person a cco:Person;
         cco:agent_in ?ActOfResiding.
@@ -94,13 +119,21 @@ UNION
       obo:RO_0010001 ?PostalCodeIBE.
 
     ?PostalCodeIBE a cco:InformationBearingEntity;
-      cco:has_text_value ?HomePostalCode.
+      cco:has_text_value ?HomePostalCode;
+      obo:RO_0000056 ?RSASignature. 
+          ?RSASignature a cco:RSASignature ; 
+            obo:RO_0000056 ?keyPair; 
+            cco:has_text_value ?Signature . 
+          ?keyPair a cco:RSAKeyPair; 
+            cco:designated_by ?keyPairDesc . 
+          ?keyPairDesc obo:RO_0010001 ?keyPairDescIBE.
+          ?keyPairDescIBE cco:has_text_value ?keyPairName . 
   
     }
 }
  UNION
 {
-   SELECT ?Person  ?HomeCity WHERE 
+   SELECT ?Person  ?HomeCity  ?Signature ?keyPairName WHERE 
     {
          ?Person a cco:Person ;
                  cco:agent_in ?ActOfResiding . 
@@ -117,12 +150,20 @@ UNION
   ?LocalAdminRegion1DesName a cco:DesignativeName;
                             <http://purl.obolibrary.org/obo/RO_0010001>  ?LocalAdminRegion1DesNameIBE. 
   
-  ?LocalAdminRegion1DesNameIBE cco:has_text_value ?HomeCity . 
+  ?LocalAdminRegion1DesNameIBE cco:has_text_value ?HomeCity ;
+  obo:RO_0000056 ?RSASignature. 
+          ?RSASignature a cco:RSASignature ; 
+            obo:RO_0000056 ?keyPair; 
+            cco:has_text_value ?Signature . 
+          ?keyPair a cco:RSAKeyPair; 
+            cco:designated_by ?keyPairDesc . 
+          ?keyPairDesc obo:RO_0010001 ?keyPairDescIBE.
+          ?keyPairDescIBE cco:has_text_value ?keyPairName . 
     }
 }
  UNION
 {
-   SELECT ?Person  ?HomeState WHERE 
+   SELECT ?Person  ?HomeState ?Signature ?keyPairName WHERE 
     {
          ?Person a cco:Person ;
                  cco:agent_in ?ActOfResiding . 
@@ -144,13 +185,21 @@ UNION
                                   <http://purl.obolibrary.org/obo/RO_0010001>   ?LocalAdminRegion1StateCityDescIBE . 
   
   
-  ?LocalAdminRegion1StateCityDescIBE cco:has_text_value ?HomeState. 
+  ?LocalAdminRegion1StateCityDescIBE cco:has_text_value ?HomeState;
+  obo:RO_0000056 ?RSASignature. 
+          ?RSASignature a cco:RSASignature ; 
+            obo:RO_0000056 ?keyPair; 
+            cco:has_text_value ?Signature . 
+          ?keyPair a cco:RSAKeyPair; 
+            cco:designated_by ?keyPairDesc . 
+          ?keyPairDesc obo:RO_0010001 ?keyPairDescIBE.
+          ?keyPairDescIBE cco:has_text_value ?keyPairName . 
   
     }
 }
   UNION
 {
-   SELECT ?Person  ?HomeCountry WHERE 
+   SELECT ?Person  ?HomeCountry ?Signature ?keyPairName WHERE 
     {
          ?Person a cco:Person ;
                  cco:agent_in ?ActOfResiding . 
@@ -172,11 +221,20 @@ UNION
   ?CountryDesc a cco:DesignativeName ; 
     <http://purl.obolibrary.org/obo/RO_0010001> ?CountryDescIBE .  
   
-  ?CountryDescIBE cco:has_text_value ?HomeCountry . 
+  ?CountryDescIBE cco:has_text_value ?HomeCountry;
+  obo:RO_0000056 ?RSASignature. 
+          ?RSASignature a cco:RSASignature ; 
+            obo:RO_0000056 ?keyPair; 
+            cco:has_text_value ?Signature . 
+          ?keyPair a cco:RSAKeyPair; 
+            cco:designated_by ?keyPairDesc . 
+          ?keyPairDesc obo:RO_0010001 ?keyPairDescIBE.
+          ?keyPairDescIBE cco:has_text_value ?keyPairName . 
   
     }
 }     
 }`
+
 
 function readMyData(callback: ({ success: boolean, data: string }) => void) {
   fetch('http://iamtestingbed.com:3030/MyData/sparql', {

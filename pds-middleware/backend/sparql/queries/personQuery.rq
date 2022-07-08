@@ -94,3 +94,16 @@ WHERE {
 
        
 }
+
+ // SELECT ?Person ?FirstName WHERE 
+    // {
+    //      ?Person a cco:Person ;
+    //              cco:designated_by ?PersonFullName; . 
+                 
+    //      ?PersonFullName a cco:PersonFullName ;
+    //               <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonGivenName .
+    //  		 ?PersonGivenName a cco:PersonGivenName ;
+    //               <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
+ 		// 	 ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
+  
+    // }

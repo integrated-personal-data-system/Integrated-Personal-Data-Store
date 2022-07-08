@@ -1,9 +1,10 @@
-function updateMyData(person, attribute, newValue, cert) {
+function updateMyData(person, attribute, newValue, oldDataValue) {
 
     let data = {
         "person": person,
         "attribute": attribute,
         "newDataValue": newValue,
+        "oldDataValue": oldDataValue
     }
 
 
