@@ -1,18 +1,19 @@
 import fetch from "node-fetch"
 
 const allCertsQuery = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
 
 select ?Person ?KeyPair ?PublicKey ?PrivateKey where{
  	?Person a cco:Person;
           cco:agent_in ?ActOfOwnerShip. 
   
  	?ActOfOwnerShip a cco:ActOfOwnership ;
-  		cco:has_object ?RSAKeyPair. 
+  		obo:RO_0000057 ?RSAKeyPair. 
   
   	?RSAKeyPair a cco:RSAKeyPair ;
                cco:designated_by  ?KeyPairDesc ;
-               cco:has_object ?PublicKeyIBA;
-               cco:has_object ?PrivateKeyIBA. 
+               obo:RO_0000057 ?PublicKeyIBA;
+               obo:RO_0000057 ?PrivateKeyIBA. 
   
   ?KeyPairDesc a cco:DesignativeName;
                <http://purl.obolibrary.org/obo/RO_0010001> ?KeyPairDescIBE.
@@ -28,18 +29,19 @@ select ?Person ?KeyPair ?PublicKey ?PrivateKey where{
 
 function createCertQuery(certName) {
     let query = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+    PREFIX obo: <http://purl.obolibrary.org/obo/>
 
     select ?Person ?KeyPair ?PublicKey ?PrivateKey where{
          ?Person a cco:Person;
               cco:agent_in ?ActOfOwnerShip. 
       
          ?ActOfOwnerShip a cco:ActOfOwnership ;
-              cco:has_object ?RSAKeyPair. 
+              obo:RO_0000057 ?RSAKeyPair. 
       
           ?RSAKeyPair a cco:RSAKeyPair ;
                    cco:designated_by  ?KeyPairDesc ;
-                   cco:has_object ?PublicKeyIBA;
-                   cco:has_object ?PrivateKeyIBA. 
+                   obo:RO_0000057 ?PublicKeyIBA;
+                   obo:RO_0000057 ?PrivateKeyIBA. 
       
       ?KeyPairDesc a cco:DesignativeName;
                    <http://purl.obolibrary.org/obo/RO_0010001> ?KeyPairDescIBE.
@@ -73,7 +75,7 @@ export function readCertByName(certName: string, callback: ({ success: boolean, 
             })
         } else {
             callback({
-                success: true,
+                success: false,
                 data: ""
             })
         }

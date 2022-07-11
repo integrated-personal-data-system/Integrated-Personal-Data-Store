@@ -10,6 +10,8 @@ import Button from "react-bootstrap/Button"
 import CreateNewDataForm from "./components/data-forms/CreateNewDataForm";
 import readMyData from "./api-functions/my-data/readMyData";
 import readMyCerts from "./api-functions/my-creds/readMyCerts"
+import createNewUser from "./api-functions/my-data/createNewUser";
+import readMappedAttributes from "./api-functions/my-data/readMappedAttributes"
 
 import CreateNewKeyPairForm from "./components/data-forms/CreateNewKeyPairForm"
 
@@ -27,12 +29,14 @@ class App extends React.Component {
             toggleAddKeyPair: false,
             person: "",
             mydata: [],
-            mycerts: []
+            mycerts: [],
+            mappedAttributes: []
         }
 
         this.renderCerts = this.renderCerts.bind(this)
         this.renderPersonalData = this.renderPersonalData.bind(this)
         this.renderDataOrCreds = this.renderDataOrCreds.bind(this)
+        this.refreshData = this.refreshData.bind(this)
     }
 
     /**
@@ -43,14 +47,28 @@ class App extends React.Component {
     async componentDidMount() {
         let myDataArray = await readMyData()
         let myCertsArray = await readMyCerts()
-
+        let mappedAttributesArray = await readMappedAttributes()
         let person = ""
         for (let item of myDataArray) {
             if (Object.keys(item)[0] === "Person") {
-                person = item[Object.keys(item)]
+                person = item.Person
             }
         }
-        this.setState({ mydata: myDataArray, person: person, mycerts: myCertsArray })
+        if (person != "") {
+            this.setState({ mydata: myDataArray, person: person, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
+        } else {
+            createNewUser((person) => {
+                this.setState({ mydata: myDataArray, person: person, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
+            })
+        }
+
+
+    }
+
+    async refreshData() {
+        this.setState({ mydata: [] })
+        let myDataArray = await readMyData()
+        this.setState({ mydata: myDataArray })
     }
 
     /**
@@ -59,7 +77,6 @@ class App extends React.Component {
      */
     renderPersonalData() {
         let personalInformation = []
-        console.log(this.state.mydata)
         for (let item of this.state.mydata) {
             if (Object.keys(item)[0] !== "Person") {
                 personalInformation.push(
@@ -69,7 +86,9 @@ class App extends React.Component {
                         header={item.data.attribute}
                         value={item.data.value}
                         keyPairName={item.keyPairName}
-                        signature={item.signature}>
+                        signature={item.signature}
+                        refreshData={this.refreshData}>
+
                     </PersonalDataCard>)
             }
         }
@@ -83,7 +102,7 @@ class App extends React.Component {
     renderCerts() {
         let certInformation = []
         for (let cert of this.state.mycerts) {
-            certInformation.push(<CertDataCard key={cert.keyPairName} header={cert.keyPairName}></CertDataCard>)
+            certInformation.push(<CertDataCard key={cert.keyPairName} header={cert.keyPairName} ></CertDataCard>)
         }
         return certInformation
     }
@@ -116,7 +135,7 @@ class App extends React.Component {
                                 style={{ margin: ".5rem" }}>Refresh</Button>
 
 
-                            <CreateNewDataForm person={this.state.person} toggleAddData={this.state.toggleAddData}></CreateNewDataForm>
+                            <CreateNewDataForm person={this.state.person} toggleAddData={this.state.toggleAddData} certs={this.state.mycerts} attributes={this.state.mappedAttributes} refreshData={this.refreshData}></CreateNewDataForm>
 
                             <Row >
                                 {this.renderPersonalData()}

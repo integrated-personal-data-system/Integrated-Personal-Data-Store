@@ -1,4 +1,4 @@
-function deleteMyData(person, attribute, value) {
+function deleteMyData(person, attribute, value, callback) {
 
     let data = {
         "person": person,
@@ -14,9 +14,14 @@ function deleteMyData(person, attribute, value) {
         },
         body: JSON.stringify(data)
     }).then(res => res.text()).then(data => {
-        console.log(data)
+        callback({
+            data: data
+        })
     }).catch((error) => {
-        console.log(error)
+        callback({
+            data: error
+        })
+
     })
 }
 

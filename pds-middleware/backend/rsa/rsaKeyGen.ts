@@ -99,6 +99,8 @@ function createRSAKeyPair(person: string, keyPairName: string, passphrase: strin
         let sparqlReadyPrivateKey = privateKey.replace(/[\n]/g, "")
         let sparqlReadyPublicKey = publicKey.replace(/[\n]/g, "")
 
+
+
         // let two = cleanPrivateKey.replace("-----BEGIN PRIVATE KEY-----", "-----BEGIN PRIVATE KEY-----\n")
         // let three = two.replace("-----END PRIVATE KEY-----", "\n-----END PRIVATE KEY-----")
 

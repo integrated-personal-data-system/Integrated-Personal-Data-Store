@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { readCertByName } from "../readMyCerts"
 import { createPrivateKey, createSign } from "crypto"
 
-function pds_firstname(person: string, firstname: string, signature: string) {
+function pds_firstname(person: string, firstname: string, signature: string, cert: string) {
   var firstname_uuid, triples;
 
   try {
@@ -19,7 +19,12 @@ function pds_firstname(person: string, firstname: string, signature: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_PersonGivenName_${firstname_uuid} .
             
             cco:InformationBearingEntity_PersonGivenName_${firstname_uuid} a cco:InformationBearingEntity ;
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${firstname}> ; 
                 cco:has_text_value "${firstname}".
+
+             <http://www.cubrc.org/Data/RSASignature-${cert}-${firstname}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -28,7 +33,7 @@ function pds_firstname(person: string, firstname: string, signature: string) {
   }
 }
 
-function pds_email(person: string, email: string, signature: string) {
+function pds_email(person: string, email: string, signature: string, cert: string) {
   var email_uuid, triples;
 
   try {
@@ -51,7 +56,13 @@ function pds_email(person: string, email: string, signature: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_EmailAddress_${email_uuid} .
             
             cco:InformationBearingEntity_EmailAddress_${email_uuid} a cco:InformationBearingEntity ;
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${email}> ; 
                 cco:has_text_value "${email}".
+
+              <http://www.cubrc.org/Data/RSASignature-${cert}-${email}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
+            
   `;
       return triples;
     }
@@ -60,7 +71,7 @@ function pds_email(person: string, email: string, signature: string) {
   }
 }
 
-function pds_lastname(person: string, lastname: string, signature: string) {
+function pds_lastname(person: string, lastname: string, signature: string, cert: string) {
   var lastname_uuid, triples;
 
   try {
@@ -77,7 +88,12 @@ function pds_lastname(person: string, lastname: string, signature: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_PersonFamilyName_${lastname_uuid} .
             
             cco:InformationBearingEntity_PersonFamilyName_${lastname_uuid} a cco:InformationBearingEntity ;
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${lastname}> ;
                 cco:has_text_value "${lastname}".
+
+              <http://www.cubrc.org/Data/RSASignature-${cert}-${lastname}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
   `;
       return triples;
     }
@@ -86,10 +102,11 @@ function pds_lastname(person: string, lastname: string, signature: string) {
   }
 }
 
-function pds_birthday(person: string, birthday: string, signature: string) {
+function pds_birthday(person: string, birthday: string, signature: string, cert: string) {
   var birthday_uuid, triples;
 
   try {
+    let cleanBirthday = birthday.replace(/\s/g, "")
     if (birthday !== "") {
       birthday_uuid = uuidv4();
       triples = `
@@ -106,7 +123,13 @@ function pds_birthday(person: string, birthday: string, signature: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_DataIdentifier_${birthday_uuid} .
             
             cco:InformationBearingEntity_DataIdentifier_${birthday_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${birthday}".
+              obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${cleanBirthday}>  ; 
+              cco:has_text_value "${birthday}".
+
+                <http://www.cubrc.org/Data/RSASignature-${cert}-${cleanBirthday}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
+
   `;
       return triples;
     }
@@ -115,7 +138,7 @@ function pds_birthday(person: string, birthday: string, signature: string) {
   }
 }
 
-function pds_mailingstreet(person: string, mailingstreet: string, signature: string) {
+function pds_mailingstreet(person: string, mailingstreet: string, signature: string, cert: string) {
   var mailingstreet_uuid, triples;
 
   try {
@@ -135,7 +158,12 @@ function pds_mailingstreet(person: string, mailingstreet: string, signature: str
                 obo:RO_0010001 cco:InformationBearingEntity_StreetAdress_${mailingstreet_uuid} .
             
             cco:InformationBearingEntity_StreetAdress_${mailingstreet_uuid} a cco:InformationBearingEntity ;
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstreet}> ;
                 cco:has_text_value "${mailingstreet}".
+
+            <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstreet}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -144,7 +172,7 @@ function pds_mailingstreet(person: string, mailingstreet: string, signature: str
   }
 }
 
-function pds_mailingcity(person: string, mailingcity: string, signature: string) {
+function pds_mailingcity(person: string, mailingcity: string, signature: string, cert: string) {
   var mailingcity_uuid, triples;
 
   try {
@@ -167,7 +195,12 @@ function pds_mailingcity(person: string, mailingcity: string, signature: string)
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingcity_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingcity_uuid} a cco:InformationBearingEntity ;
+            obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcity}> ; 
                 cco:has_text_value "${mailingcity}".
+
+            <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcity}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -176,7 +209,7 @@ function pds_mailingcity(person: string, mailingcity: string, signature: string)
   }
 }
 
-function pds_mailingstate(person: string, mailingstate: string, signature: string) {
+function pds_mailingstate(person: string, mailingstate: string, signature: string, cert: string) {
   var mailingstate_uuid, triples;
 
   try {
@@ -202,7 +235,12 @@ function pds_mailingstate(person: string, mailingstate: string, signature: strin
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingstate_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingstate_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${mailingstate}".
+            obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstate}>; 
+            cco:has_text_value "${mailingstate}".
+
+              <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstate}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -211,7 +249,7 @@ function pds_mailingstate(person: string, mailingstate: string, signature: strin
   }
 }
 
-function pds_mailingpostcode(person: string, mailingpostcode: string, signature: string) {
+function pds_mailingpostcode(person: string, mailingpostcode: string, signature: string, cert: string) {
   var mailingpostcode_uuid, triples;
 
   try {
@@ -234,7 +272,12 @@ function pds_mailingpostcode(person: string, mailingpostcode: string, signature:
                 obo:RO_0010001 cco:InformationBearingEntity_PostalCode_${mailingpostcode_uuid} .
             
             cco:InformationBearingEntity_PostalCode_${mailingpostcode_uuid} a cco:InformationBearingEntity ;
+            obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingpostcode}> ;
                 cco:has_text_value "${mailingpostcode}".
+
+                <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingpostcode}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -243,7 +286,7 @@ function pds_mailingpostcode(person: string, mailingpostcode: string, signature:
   }
 }
 
-function pds_mailingcountry(person: string, mailingcountry: string, signature: string) {
+function pds_mailingcountry(person: string, mailingcountry: string, signature: string, cert) {
   var mailingcountry_uuid, mailingstate_uuid, triples;
 
   try {
@@ -273,7 +316,12 @@ function pds_mailingcountry(person: string, mailingcountry: string, signature: s
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingcountry_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingcountry_uuid} a cco:InformationBearingEntity ;
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcountry}> ; 
                 cco:has_text_value "${mailingcountry}".
+
+                <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcountry}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -282,7 +330,7 @@ function pds_mailingcountry(person: string, mailingcountry: string, signature: s
   }
 }
 
-function pds_homephonenumber(person: string, homephonenumber: string, signature: string) {
+function pds_homephonenumber(person: string, homephonenumber: string, signature: string, cert: string) {
   var homephonenumber_uuid, triples;
 
   try {
@@ -305,7 +353,12 @@ function pds_homephonenumber(person: string, homephonenumber: string, signature:
                 obo:RO_0010001 cco:InformationBearingEntity_TelephoneNumber_${homephonenumber_uuid} .
             
             cco:InformationBearingEntity_TelephoneNumber_${homephonenumber_uuid} a cco:InformationBearingEntity ;
+                obo:RO_0000056  <http://www.cubrc.org/Data/RSASignature-${cert}-${homephonenumber}> ;
                 cco:has_text_value "${homephonenumber}".
+
+                <http://www.cubrc.org/Data/RSASignature-${cert}-${homephonenumber}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -314,7 +367,7 @@ function pds_homephonenumber(person: string, homephonenumber: string, signature:
   }
 }
 
-function pds_mobilephonenumber(person: string, mobilephonenumber: string, signature: string) {
+function pds_mobilephonenumber(person: string, mobilephonenumber: string, signature: string, cert: string) {
   var mobilephonenumber_uuid, triples;
 
   try {
@@ -337,7 +390,12 @@ function pds_mobilephonenumber(person: string, mobilephonenumber: string, signat
                 obo:RO_0010001 cco:InformationBearingEntity_TelephoneNumber_${mobilephonenumber_uuid} .
             
             cco:InformationBearingEntity_TelephoneNumber_${mobilephonenumber_uuid} a cco:InformationBearingEntity ;
+            obo:RO_0000056  <http://www.cubrc.org/Data/RSASignature-${cert}-${mobilephonenumber}> ; 
                 cco:has_text_value "${mobilephonenumber}".
+
+            <http://www.cubrc.org/Data/RSASignature-${cert}-${mobilephonenumber}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -346,7 +404,7 @@ function pds_mobilephonenumber(person: string, mobilephonenumber: string, signat
   }
 }
 
-function pds_employername(person: string, employername: string, signature: string) {
+function pds_employername(person: string, employername: string, signature: string, cert: string) {
   var employername_uuid, triples;
 
   try {
@@ -366,7 +424,12 @@ function pds_employername(person: string, employername: string, signature: strin
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${employername_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${employername_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${employername}".
+              obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${employername}>  ; 
+              cco:has_text_value "${employername}".
+
+                <http://www.cubrc.org/Data/RSASignature-${cert}-${employername}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -375,254 +438,7 @@ function pds_employername(person: string, employername: string, signature: strin
   }
 }
 
-//   function pds_employerindustry(organization, employerindustry) {
-//     var employerindustry_uuid, triples;
-
-//     try {
-//       if (employerindustry !== "") {
-//         employerindustry_uuid =uuidv4();
-//         triples = `
-//             ${organization} obo:RO_0000053 cco:Capability_${employerindustry_uuid} .
-
-//             cco:Capability_${employerindustry_uuid} a cco:Capability;
-//             cco:is_measured_by_nominal cco:DescriptiveMeasurementContentEntity_${employerindustry_uuid}.
-
-//             cco:DescriptiveMeasurementContentEntity_${employerindustry_uuid} a cco:DescriptiveMeasurementContentEntity ;
-//             obo:RO_0010001 cco:InformationBearingEntity_DescriptiveMeasurementContentEntity_${employerindustry_uuid} .
-
-//             cco:InformationBearingEntity_DescriptiveMeasurementContentEntity_${employerindustry_uuid} a cco:InformationBearingEntity ;
-//             cco:has_text_value "${employerindustry}".
-//             `;
-//         return triples;
-//       }
-//     } catch (e) {
-//       console.log("Place of employeer industry" + e);
-//     }
-//   }
-
-//   function pds_employerstreet(organization, employerstreet) {
-//     var employerstreet_uuid, triples;
-
-//     try {
-//       if (employerstreet !== "") {
-//         employerstreet_uuid =uuidv4();
-//         triples = `
-//   ${organization} cco:agent_in cco:ActOfInhabitancy_${employerstreet_uuid} .
-//   cco:ActOfInhabitancy_${employerstreet_uuid} a cco:ActOfInhabitancy;
-//   cco:has_object cco:Facility_${employerstreet_uuid}.
-
-//   cco:Facility_${employerstreet_uuid} a cco:Facility ;
-//   cco:designed_by cco:StreetAdress_${employerstreet_uuid} .
-
-//   cco:StreetAdress_${employerstreet_uuid} a cco:StreetAdress ;
-//   obo:RO_0010001 cco:InformationBearingEntity_StreetAdress_${employerstreet_uuid} .
-
-//   cco:InformationBearingEntity_StreetAdress_${employerstreet_uuid} a cco:InformationBearingEntity ;
-//   cco:has_text_value "${employerstreet}".
-//   `;
-//         return triples;
-//       }
-//     } catch (e) {
-//       console.log("Employeers address" + e);
-//     }
-//   }
-
-//   function pds_employercity(organization, employercity) {
-//     var employercity_uuid, triples;
-
-//     try {
-//       if (employercity !== "") {
-//         employercity_uuid =uuidv4();
-//         triples = `
-//   ${organization} cco:agent_in cco:ActOfInhabitancy_${employercity_uuid} .
-//   cco:ActOfInhabitancy_${employercity_uuid} a cco:ActOfInhabitancy;
-//   cco:has_object cco:Facility_${employercity_uuid}.
-
-//   cco:Facility_${employercity_uuid} a cco:Facility ;
-//   obo:RO_0001025 cco:LocalAdministrativeRegion_${employercity_uuid} .
-
-//   cco:LocalAdministrativeRegion_${employercity_uuid} a cco:LocalAdministrativeRegion ;
-//   cco:designed_by cco:DesignativeName_${employercity_uuid}.
-
-//   cco:DesignativeName_${employercity_uuid} a cco:DesignativeName ;
-//   obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${employercity_uuid} .
-
-//   cco:InformationBearingEntity_DesignativeName_${employercity_uuid} a cco:InformationBearingEntity;
-//   cco:has_text_value "${employercity}".
-//   `;
-//         return triples;
-//       }
-//     } catch (e) {
-//       console.log("Employeers city" + e);
-//     }
-//   }
-
-//   function pds_employerstate(organization, employerstate) {
-//     var employerstate_uuid, triples;
-
-//     try {
-//       if (employerstate !== "") {
-//         employerstate_uuid =uuidv4();
-//         triples = `
-//   ${organization} cco:agent_in cco:ActOFInhabitancy_${employerstate_uuid} .
-//   cco:ActOfInhabitancy_${employerstate_uuid} a cco:ActOfInhabitancy;
-//   cco:has_object cco:Facility_${employerstate_uuid}.
-
-//   cco:Facility_${employerstate_uuid} a cco:Facility ;
-//   obo:RO_0001025 cco:LocalAdministrativeRegion_${employerstate_uuid} .
-
-//   cco:LocalAdministrativeRegion_${employerstate_uuid} a cco:LocalAdministrativeRegion ;
-//   obo:BFO_0000050 cco:FirstOrderAdministrativeRegion_${employerstate_uuid} .
-
-//   cco:FirstOrderAdministrativeRegion_${employerstate_uuid} a cco:FirstOrderAdministrativeRegion ;
-//   cco:designated_by cco:DesignativeName_${employerstate_uuid} .
-
-//   cco:DesignativeName_${employerstate_uuid} a cco:DesignativeName ;
-//   obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${employerstate_uuid} .
-
-//   cco:InformationBearingEntity_DesignativeName_${employerstate_uuid} a cco:InformationBearingEntity ;
-//   cco:has_text_value "${employerstate}".
-//   `;
-//         return triples;
-//       }
-//     } catch (e) {
-//       console.log("Employeer state" + e);
-//     }
-//   }
-
-//   function pds_employerpostcode(organization, employerpostcode) {
-//     var employerpostcode_uuid, triples;
-
-//     try {
-//       if (employerpostcode !== "") {
-//         employerpostcode_uuid =uuidv4();
-//         triples = `
-//   ${organization} cco:agent_in cco:ActOFInhabitancy_${employerpostcode_uuid} .
-//   cco:ActOfInhabitancy_${employerpostcode_uuid} a cco:ActOfInhabitancy;
-//   cco:has_object cco:Facility_${employerpostcode_uuid}.
-
-//   cco:Facility_${employerpostcode_uuid} a cco:Facility ;
-//   obo:RO_0001025 cco:PostalZone_${employerpostcode_uuid} .
-
-//   cco:PostalZone_${employerpostcode_uuid} a cco:PostalZone;
-//   cco:designated_by cco:PostalCode_${employerpostcode_uuid} .
-
-//   cco:PostalCode_${employerpostcode_uuid} a cco:PostalCode;
-//   obo:RO_0010001 cco:InformationBearingEntity_PostalCode_${employerpostcode_uuid} .
-
-//   cco:InformationBearingEntity_PostalCode_${employerpostcode_uuid} a cco:InformationBearingEntity;
-//   cco:has_text_value "${employerpostcode_uuid}".
-//   `;
-//         return triples;
-//       }
-//     } catch (e) {
-//       console.log("Employeer post code" + e);
-//     }
-//   }
-
-//   function pds_employercountry(organization, employercountry) {
-//     var employercountry_uuid, triples;
-
-//     try {
-//       if (employercountry !== "") {
-//         employercountry_uuid =uuidv4();
-//         triples = `
-//   ${organization} cco:agent_in cco:ActOfInhabitancy_${employercountry_uuid} .
-//   cco:ActOfInhebitancy_${employercountry_uuid} a cco:ActOfInhebitancy ;
-//   cco:has_object cco:Facility_${employercountry_uuid} .
-
-//   cco:Facility_${employercountry_uuid} a cco:Facility ;
-//   obo:RO_0001025 cco:LocalAdministrativeRegion_${employercountry_uuid} .
-
-//   cco:LocalAdministrativeRegion_${employercountry_uuid} a cco:LocalAdministrativeRegion ;
-//   obo:BFO_0000050 cco:FirstOrderAdministrativeRegion_${employercountry_uuid} .
-
-//   cco:FirstOrderAdministrativeRegion_${employercountry_uuid} a cco:FirstOrderAdministrativeRegion ;
-//   obo:BFO_0000050 cco:County_${employercountry_uuid} .
-
-//   cco:Country_${employercountry_uuid} a cco:Country ;
-//   cco:designated_by cco:DesignativeName_${employercountry_uuid} .
-
-//   cco:DesignativeName_${employercountry_uuid} a cco:DesignativeName ;
-//   obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${employercountry_uuid} .
-
-//   cco:InformationBearingEntity_DesignativeName_${employercountry_uuid} a cco:InformationBearingEntity ;
-//   cco:has_text_value "${employercountry}".
-//   `;
-//         return triples;
-//       }
-//     } catch (e) {
-//       console.log("Employer country:" + e);
-//     }
-//   }
-
-//   function pds_employerphone(organization, employerphone) {
-//     var employerphone_uuid, triples;
-
-//     try {
-//       if (employerphone !== "") {
-//         employerphone_uuid =uuidv4();
-//         triples = `
-//   ${organization} cco:agent_in cco:ActOFOwnership_${employerphone_uuid} .
-//   cco:ActOfOwnership_${employerphone_uuid} a cco:ActOfOwnership;
-//   cco:has_object cco:Telephone_${employerphone_uuid}.
-
-//   cco:Telephone_${employerphone_uuid} a cco:Telephone ;
-//   obo:RO_000056 cco:StasisOfTelecommunicayionEndpointAssignment_${employerphone_uuid} .
-
-//   cco:StasisOfTelecommunicayionEndpointAssignment_${employerphone_uuid} a cco:StasisOfTelecommunicayionEndpointAssignment ;
-//   obo:RO_0000057 cco:TelecommunicationEndpoint_${employerphone_uuid} .
-
-//   cco:TelecommunicationEndpoint_${employerphone_uuid} a cco:TelecommunicationEndpoint ;
-//   cco:designed_by cco:TelephoneNumber_${employerphone_uuid} .
-
-//   cco:TelephoneNumber_${employerphone_uuid} a cco:TelephoneNumber ;
-//   obo:RO_0010001 cco:InformationBearingEntity_TelephoneNumber_${employerphone_uuid} .
-
-//   cco:InformationBearingEntity_TelephoneNumber_${employerphone_uuid} a cco:InformationBearingEntity ;
-//   cco:has_text_value "${employerphone}".
-//   `;
-//         return triples;
-//       }
-//     } catch (e) {
-//       console.log("Employer phone number" + e);
-//     }
-//   }
-
-//   function pds_employerfax(organization, employerfax) {
-//     var employerfax_uuid, triples;
-
-//     try {
-//       if (employerfax !== "") {
-//         employerfax_uuid =uuidv4();
-//         triples = `
-//   ${organization} cco:agent_in cco:ActOFOwnership_${employerfax_uuid} .
-//   cco:ActOfOwnership_${employerfax_uuid} a cco:ActOfOwnership;
-//   cco:has_object cco:FacsimileMachine_${employerfax_uuid}.
-
-//   cco:FacsimileMachine_${employerfax_uuid} a cco:FacsimileMachine;
-//   obo:RO_000056 cco:StasisOfTelecommunicayionEndpointAssignment_${employerfax_uuid} .
-
-//   cco:StasisOfTelecommunicayionEndpointAssignment_${employerfax_uuid} a cco:StasisOfTelecommunicayionEndpointAssignment ;
-//   obo:RO_0000057 cco:TelecommunicationEndpoint_${employerfax_uuid} .
-
-//   cco:TelecommunicationEndpoint_${employerfax_uuid} a cco:TelecommunicationEndpoint ;
-//   cco:designed_by cco:FacsimileMachineNumber_${employerfax_uuid} .
-
-//   cco:FacsimileMachineNumber_${employerfax_uuid} a cco:FacsimileMachineNumber ;
-//   obo:RO_0010001 cco:InformationBearingEntity_FacsimileMachineNumber_${employerfax_uuid} .
-
-//   cco:InformationBearingEntity_FacsimileMachineNumber_${employerfax_uuid} a cco:InformationBearingEntity ;
-//   cco:has_text_value "${employerfax}".
-//   `;
-//         return triples;
-//       }
-//     } catch (e) {
-//       console.log("Employer fax:" + e);
-//     }
-//   }
-
-function pds_employeetitle(person: string, employeetitle: string, signature: string) {
+function pds_employeetitle(person: string, employeetitle: string, signature: string, cert: string) {
   var employeetitle_uuid, triples;
 
   try {
@@ -639,7 +455,12 @@ function pds_employeetitle(person: string, employeetitle: string, signature: str
                 obo:RO_0010001 cco:InformationBearingEntity_NominalMeasurementInformationContentEntity_${employeetitle_uuid} .
             
             cco:InformationBearingEntity_NominalMeasurementInformationContentEntity_${employeetitle_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${employeetitle}".
+              obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${employeetitle}> ; 
+              cco:has_text_value "${employeetitle}".
+
+              <http://www.cubrc.org/Data/RSASignature-${cert}-${employeetitle}> a cco:RSASignature ; 
+                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -648,65 +469,153 @@ function pds_employeetitle(person: string, employeetitle: string, signature: str
   }
 }
 
+function pds_weight(person: string, weight: string, signature: string, cert: string) {
+  try {
+    let personWeight_uuid = uuidv4();
+    let triples = `
+    <${person}> a cco:Person ;
+    cco:has_quality <http://www.ontologyrepository.com/CommonCoreOntologies/Quality-Weight-${personWeight_uuid}> .
+
+    <http://www.ontologyrepository.com/CommonCoreOntologies/Quality-Weight-${personWeight_uuid}> a cco:Weight ; 
+    cco:is_measured_by <http://www.ontologyrepository.com/CommonCoreOntologies/${personWeight_uuid}-Quality-Weight-MeasuredICE> . 
+
+    <http://www.ontologyrepository.com/CommonCoreOntologies/${personWeight_uuid}-Quality-Weight-MeasuredICE>  a cco:MeasurementInformationContentEntity ; 
+     obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/${personWeight_uuid}-Quality-Weight-MeasuredIBE> . 
+
+  <http://www.ontologyrepository.com/CommonCoreOntologies/${personWeight_uuid}-Quality-Weight-MeasuredIBE>  a cco:InformationBearingEntity ; 
+      obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${weight}> ;
+      cco:has_text_value "${weight}" . 
+
+  <http://www.cubrc.org/Data/RSASignature-${cert}-${weight}> a cco:RSASignature ; 
+      obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
+      cco:has_text_value "${signature}" . 
+`
+    return triples
+  } catch (error) {
+    console.log("Weight error: " + error)
+  }
+}
 
 
-
-function mappingFuction(person: string, attribute: string, value: string, cert: string) {
-  let attributeClean = attribute.toLocaleLowerCase()
-  if (cert != "") {
+export function mappingFuction(person: string, attribute: string, value: string, cert: string, callback: ({ success: boolean, data: string }) => void) {
+  try {
+    let attributeClean = attribute.toLocaleLowerCase()
     readCertByName(cert, (result) => {
       let addTop = result.data.PrivateKey.value.replace("-----BEGIN PRIVATE KEY-----", "-----BEGIN PRIVATE KEY-----\n")
       let addButtom = addTop.replace("-----END PRIVATE KEY-----", "\n-----END PRIVATE KEY-----")
 
       let privateKey = createPrivateKey(addButtom)
-      console.log(privateKey)
       const sign = createSign('SHA256');
-      sign.update("12345");
+      sign.update(value);
       sign.end();
       const signature = sign.sign(privateKey, "hex");
-      console.log(signature)
+
+
       switch (attributeClean) {
         case "firstname": {
-          return pds_firstname(person, value, signature)
+          let triples = pds_firstname(person, value, signature, cert)
+          console.log(triples)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         case "email": {
-          return pds_email(person, value, signature)
+          let triples = pds_email(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         case "lastname": {
-          return pds_lastname(person, value, signature)
+          let triples = pds_lastname(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
-        case "dateofbirth": {
-          return pds_birthday(person, value, signature)
+        case "birthdate": {
+          let triples = pds_birthday(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
-        case "homemailingaddress": {
-          return pds_mailingstreet(person, value, signature)
+        case "mailingstreet": {
+          let triples = pds_mailingstreet(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         case "mailingcity": {
-          return pds_mailingcity(person, value, signature)
+          let triples = pds_mailingcity(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         case "mailingstate": {
-          return pds_mailingstate(person, value, signature)
+          let triples = pds_mailingstate(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         case "homepostalcode": {
-          return pds_mailingpostcode(person, value, signature)
+          let triples = pds_mailingpostcode(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         case "mailingcountry": {
-          return pds_mailingcountry(person, value, signature)
+          let triples = pds_mailingcountry(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         case "homephonenumber": {
-          return pds_homephonenumber(person, value, signature)
+          let triples = pds_homephonenumber(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         case "mobilephonenumber": {
-          return pds_mobilephonenumber(person, value, signature)
+          let triples = pds_mobilephonenumber(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         case "employername": {
-          return pds_employername(person, value, signature)
+          let triples = pds_employername(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         case "employeetitle": {
-          return pds_employeetitle(person, value, signature)
+          let triples = pds_employeetitle(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
+        }
+        case "weight": {
+          let triples = pds_weight(person, value, signature, cert)
+          return callback({
+            success: true,
+            data: triples
+          })
         }
         default: {
-          return ""
+          return callback({
+            success: false,
+            data: "triples"
+          })
         }
       }
 
@@ -722,10 +631,11 @@ function mappingFuction(person: string, attribute: string, value: string, cert: 
 
 
     })
-  }
 
-  return "123"
+  } catch (error) {
+    console.log(error)
+  }
 
 }
 
-export default mappingFuction
+mappingFuction

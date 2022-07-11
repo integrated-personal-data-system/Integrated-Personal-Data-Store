@@ -70,6 +70,8 @@ function UpdateModal(props) {
     );
 }
 
+
+
 function ShowSignature(props) {
     const [show, setShow] = useState(false);
 
@@ -99,13 +101,17 @@ function ShowSignature(props) {
                 <Container>
                     <Row>
                         <Col>
-                            <p class="text-justify">{props.signature}</p>
+                            Signature
+                        </Col>
+                        <Col>
+                            <div class="text-justify overflow-scroll">{props.signature}</div>
                         </Col>
                     </Row>
                 </Container>
 
             </Modal.Body>
             <Modal.Footer>
+                <Button onClick={() => { navigator.clipboard.writeText(props.signature) }}>Copy</Button>
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
@@ -118,6 +124,14 @@ function ShowSignature(props) {
 class PersonalDataCard extends React.Component {
     constructor(props) {
         super(props)
+
+        this.handleDelete = this.handleDelete.bind(this)
+    }
+
+    handleDelete() {
+        deleteMyData(this.props.person, this.props.header, this.props.value, () => {
+            this.props.refreshData()
+        })
     }
 
     render() {
@@ -133,7 +147,7 @@ class PersonalDataCard extends React.Component {
 
                                 <ShowSignature keyPairName={this.props.keyPairName} signature={this.props.signature}></ ShowSignature>
                                 <Container style={{ marginTop: "1rem" }}>
-                                    <Button variant="danger" style={{ float: "left" }} onClick={() => deleteMyData(this.props.person, this.props.header, this.props.value)} >
+                                    <Button variant="danger" style={{ float: "left" }} onClick={() => this.handleDelete()} >
                                         Delete
                                     </Button>
                                     <UpdateModal person={this.props.person} header={this.props.header} oldValue={this.props.value}></UpdateModal>

@@ -1,4 +1,4 @@
-function createMyData(person, attribute, value, cert) {
+function createMyData(person, attribute, value, cert, callback) {
 
     let data = {
         "person": person,
@@ -6,7 +6,6 @@ function createMyData(person, attribute, value, cert) {
         "value": value,
         "cert": cert,
     }
-
 
     fetch('/createMyData', {
         method: 'POST',
@@ -16,9 +15,14 @@ function createMyData(person, attribute, value, cert) {
         },
         body: JSON.stringify(data)
     }).then(res => res.text()).then(data => {
-        console.log(data)
+        callback({
+            data: data
+        })
+
     }).catch((error) => {
-        console.log(error)
+        callback({
+            data: error
+        })
     })
 }
 

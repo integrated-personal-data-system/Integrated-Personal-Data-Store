@@ -5,6 +5,8 @@ import bodyParser from 'body-parser'
 import createMyData from "./sparql/createMyData";
 import deleteMyData from "./sparql/deleteMyData";
 import createRSAKeyPair from "./rsa/rsaKeyGen";
+import createNewUser from "./sparql/createNewUser";
+import { current_mapping } from './serverConfig'
 import path from "path"
 import fs from "fs"
 
@@ -71,19 +73,33 @@ app.get('/readMyCerts', (request: Request, response: Response) => {
 interface createMyDataBody {
     person: string,
     attribute: string,
+    cert: string,
     value: string
 }
 
-app.post('/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
-    let data = request.body
-    console.log(data)
-    createMyData(data.person, data.attribute, data.value, data.cert, (result) => {
+app.post('/createNewUser', (request: Request<string, createMyDataBody>, response: Response) => {
+    createNewUser((result) => {
         if (result.success) {
             response.status(200).send(result.data)
         } else {
-            response.status(500).send(result.data)
+            response.status(500).send("Could not create person")
         }
     })
+})
+
+app.post('/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
+    let data = request.body
+    createMyData(data.person, data.attribute, data.value, data.cert, (result) => {
+        if (result.success) {
+            response.status(200).send("Successfully Uploaded " + data.attribute)
+        } else {
+            response.status(500).send("Could Not Uploaded " + data.attribute)
+        }
+    })
+})
+
+app.get('/readMappedAttributes', (request: Request, response: Response) => {
+    response.status(200).send({ attrList: current_mapping })
 })
 
 
@@ -107,11 +123,12 @@ app.post('/updateMyData', (request: Request<string, createMyDataBody>, response:
 
 app.post('/deleteMyData', (request: Request<string, createMyDataBody>, response: Response) => {
     let data = request.body
+    console.log(request.body)
     deleteMyData(data.attribute, data.value, (result) => {
         if (result.success) {
-            response.status(200).send(result.data)
+            response.status(200).send("Successfully Deleted " + data.attribute)
         } else {
-            response.status(500).send(result.data)
+            response.status(500).send("Could Not Delete " + data.attribute)
         }
     })
 })

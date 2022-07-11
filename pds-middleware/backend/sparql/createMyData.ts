@@ -1,5 +1,6 @@
 import fetch from "node-fetch"
-import mappingFuction from "./transformation/createPatterns"
+import { mappingFuction } from "./transformation/createPatterns"
+import { v4 as uuidv4 } from 'uuid'
 
 import { Parser, Generator } from "sparqljs"
 
@@ -37,42 +38,39 @@ ${triples}
 }
 
 function createMyData(person: string, attribute: string, value: string, cert: string, callback: ({ success: boolean, data: string }) => void) {
+    mappingFuction(person, attribute, value, cert, (result) => {
+        let query = createUpdateQuery(result.data)
 
-    let triples = mappingFuction(person, attribute, value, cert)
-    let query = createUpdateQuery(triples)
+        let vaildatedQuery = validateUpdateQuery(query)
+        if (vaildatedQuery != "") {
+            fetch('http://iamtestingbed.com:3030/MyData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/sparql-update',
+                    "Accept": "*/*"
 
-    let vaildatedQuery = validateUpdateQuery(query)
+                },
+                body: query
+            }).then(res => res).then(data => {
 
-    // if (vaildatedQuery != "") {
-    //     fetch('http://iamtestingbed.com:3030/MyData', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/sparql-update',
-    //             "Accept": "*/*"
-
-    //         },
-    //         body: query
-    //     }).then(res => res).then(data => {
-
-    //         callback({
-    //             success: true,
-    //             data: data
-    //         })
-    //     }).catch((error) => {
-    //         console.log(console.log(error))
-    //         callback({
-
-    //             success: false,
-    //             data: error
-    //         })
-    //     })
-    // } else {
-    //     callback({
-    //         success: false,
-    //         data: "The Query did not validate"
-    //     })
-    // }
-
+                callback({
+                    success: true,
+                    data: data
+                })
+            }).catch((error) => {
+                console.log(console.log(error))
+                callback({
+                    success: false,
+                    data: error
+                })
+            })
+        } else {
+            callback({
+                success: false,
+                data: "The Query did not validate"
+            })
+        }
+    })
 }
 
 export default createMyData
