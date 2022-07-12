@@ -104,7 +104,6 @@ function delete_DateOfBirth(value: string) {
   }
 }
 
-
 function delete_homemailingaddres(value: string) {
   try {
     return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
@@ -209,6 +208,7 @@ function delete_mailingcity(value: string) {
     return ""
   }
 }
+
 function delete_mailingPostCode(value: string) {
   try {
     return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>

@@ -1,11 +1,11 @@
 import express, { application, Request, Response } from "express";
-import readMyData from "./sparql/readMyData";
-import { readMyCerts } from "./sparql/readMyCerts"
+import readMyData from "./serverFunctions/my-data/readMyData";
+import { readMyCerts } from "./serverFunctions/my-certs/readMyCerts"
 import bodyParser from 'body-parser'
-import createMyData from "./sparql/createMyData";
-import deleteMyData from "./sparql/deleteMyData";
-import createRSAKeyPair from "./rsa/rsaKeyGen";
-import createNewUser from "./sparql/createNewUser";
+import createMyData from "./serverFunctions/my-data/createMyData";
+import deleteMyData from "./serverFunctions/my-data/deleteMyData";
+import createRSAKeyPair from "./serverFunctions/my-certs/rsaKeyGen";
+import createNewUser from "./serverFunctions/my-data/createNewUser";
 import { current_mapping } from './serverConfig'
 import path from "path"
 import fs from "fs"

@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { readCertByName } from "../readMyCerts"
+import { readCertByName } from "../../my-certs/readMyCerts"
 import { createPrivateKey, createSign } from "crypto"
 
 function pds_firstname(person: string, firstname: string, signature: string, cert: string) {

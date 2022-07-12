@@ -1,7 +1,5 @@
 import fetch from "node-fetch"
-import { mappingFuction } from "./transformation/createPatterns"
-import { v4 as uuidv4 } from 'uuid'
-
+import mappingDeleteFuction from "./mappings/deletePatterns"
 import { Parser, Generator } from "sparqljs"
 
 
@@ -21,25 +19,9 @@ function validateUpdateQuery(query: string) {
     }
 }
 
-function createUpdateQuery(personGuid: string) {
-    try {
-        let updateQuery = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
-PREFIX obo: <http://purl.obolibrary.org/obo/>
-       
-INSERT DATA
-{ 
-    <${personGuid}> a cco:Person . 
-}
-        `
-        return updateQuery
-    } catch (error) {
-        console.log("Could not create update query")
-    }
-}
 
-function createNewUser(callback: ({ success: boolean, data: string }) => void) {
-    let personGuid = "http://www.cubrc.org/Data/Person1_" + uuidv4();
-    let query = createUpdateQuery(personGuid)
+function deleteMyData(attribute: string, value: string, callback: ({ success: boolean, data: string }) => void) {
+    let query = mappingDeleteFuction(attribute, value)
     let vaildatedQuery = validateUpdateQuery(query)
 
     if (vaildatedQuery != "") {
@@ -52,12 +34,12 @@ function createNewUser(callback: ({ success: boolean, data: string }) => void) {
             },
             body: query
         }).then(res => res).then(data => {
-
             callback({
                 success: true,
-                data: personGuid
+                data: data
             })
         }).catch((error) => {
+            console.log(console.log(error))
             callback({
                 success: false,
                 data: error
@@ -66,9 +48,11 @@ function createNewUser(callback: ({ success: boolean, data: string }) => void) {
     } else {
         callback({
             success: false,
-            data: "The Query did not validate"
+            data: "Query Was Empty"
         })
     }
+
 }
 
-export default createNewUser
+
+export default deleteMyData
