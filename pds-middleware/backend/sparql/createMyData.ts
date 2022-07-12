@@ -40,7 +40,6 @@ ${triples}
 function createMyData(person: string, attribute: string, value: string, cert: string, callback: ({ success: boolean, data: string }) => void) {
     mappingFuction(person, attribute, value, cert, (result) => {
         let query = createUpdateQuery(result.data)
-
         let vaildatedQuery = validateUpdateQuery(query)
         if (vaildatedQuery != "") {
             fetch('http://iamtestingbed.com:3030/MyData', {

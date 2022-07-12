@@ -196,7 +196,8 @@ UNION
                                   <http://purl.obolibrary.org/obo/RO_0010001>   ?LocalAdminRegion1StateCityDescIBE . 
   
   
-  ?LocalAdminRegion1StateCityDescIBE cco:has_text_value ?MailingState;
+  ?LocalAdminRegion1StateCityDescIBE a cco:InformationBearingEntity ;
+       cco:has_text_value ?MailingState;
   obo:RO_0000056 ?RSASignature. 
           ?RSASignature a cco:RSASignature ; 
             obo:RO_0000056 ?keyPair; 

@@ -6,7 +6,7 @@ import {
     Route,
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import App from "./App";
+import App from "./pages/App";
 
 
 const root = ReactDOM.createRoot(

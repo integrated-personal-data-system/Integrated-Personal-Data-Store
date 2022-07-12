@@ -8,6 +8,7 @@ function pds_firstname(person: string, firstname: string, signature: string, cer
   try {
     if (firstname !== "") {
       firstname_uuid = uuidv4();
+      let firstNameIRI = firstname.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:designated_by cco:PersonFullName_${firstname_uuid} .
@@ -19,10 +20,10 @@ function pds_firstname(person: string, firstname: string, signature: string, cer
                 obo:RO_0010001 cco:InformationBearingEntity_PersonGivenName_${firstname_uuid} .
             
             cco:InformationBearingEntity_PersonGivenName_${firstname_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${firstname}> ; 
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${firstNameIRI}> ; 
                 cco:has_text_value "${firstname}".
 
-             <http://www.cubrc.org/Data/RSASignature-${cert}-${firstname}> a cco:RSASignature ; 
+             <http://www.cubrc.org/Data/RSASignature-${cert}-${firstNameIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             `;
@@ -39,6 +40,7 @@ function pds_email(person: string, email: string, signature: string, cert: strin
   try {
     if (email !== "") {
       email_uuid = uuidv4();
+      let emailIRI = email.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:uses cco:EmailBox_${email_uuid} .
@@ -56,10 +58,10 @@ function pds_email(person: string, email: string, signature: string, cert: strin
                 obo:RO_0010001 cco:InformationBearingEntity_EmailAddress_${email_uuid} .
             
             cco:InformationBearingEntity_EmailAddress_${email_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${email}> ; 
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${emailIRI}> ; 
                 cco:has_text_value "${email}".
 
-              <http://www.cubrc.org/Data/RSASignature-${cert}-${email}> a cco:RSASignature ; 
+              <http://www.cubrc.org/Data/RSASignature-${cert}-${emailIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             
@@ -77,6 +79,7 @@ function pds_lastname(person: string, lastname: string, signature: string, cert:
   try {
     if (lastname !== "") {
       lastname_uuid = uuidv4();
+      let lastnameIRI = lastname.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
               cco:designated_by cco:PersonFullName_${lastname_uuid} .
@@ -88,10 +91,10 @@ function pds_lastname(person: string, lastname: string, signature: string, cert:
                 obo:RO_0010001 cco:InformationBearingEntity_PersonFamilyName_${lastname_uuid} .
             
             cco:InformationBearingEntity_PersonFamilyName_${lastname_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${lastname}> ;
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${lastnameIRI}> ;
                 cco:has_text_value "${lastname}".
 
-              <http://www.cubrc.org/Data/RSASignature-${cert}-${lastname}> a cco:RSASignature ; 
+              <http://www.cubrc.org/Data/RSASignature-${cert}-${lastnameIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
   `;
@@ -144,6 +147,7 @@ function pds_mailingstreet(person: string, mailingstreet: string, signature: str
   try {
     if (mailingstreet !== "") {
       mailingstreet_uuid = uuidv4();
+      let mailingstreetIRI = mailingstreet.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:agent_in cco:ActOfResiding_${mailingstreet_uuid} .
@@ -154,14 +158,14 @@ function pds_mailingstreet(person: string, mailingstreet: string, signature: str
             cco:ResidentialFacility_${mailingstreet_uuid} a cco:ResidentialFacility ;
                 cco:designated_by cco:StreetAdress_${mailingstreet_uuid} .
             
-            cco:StreetAdress_${mailingstreet_uuid} a cco:StreetAdress ;
+            cco:StreetAdress_${mailingstreet_uuid} a cco:StreetAddress ;
                 obo:RO_0010001 cco:InformationBearingEntity_StreetAdress_${mailingstreet_uuid} .
             
             cco:InformationBearingEntity_StreetAdress_${mailingstreet_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstreet}> ;
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstreetIRI}> ;
                 cco:has_text_value "${mailingstreet}".
 
-            <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstreet}> a cco:RSASignature ; 
+            <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstreetIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             `;
@@ -178,6 +182,7 @@ function pds_mailingcity(person: string, mailingcity: string, signature: string,
   try {
     if (mailingcity !== "") {
       mailingcity_uuid = uuidv4();
+      let mailingcityIRI = mailingcity.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:agent_in cco:ActOfResiding_${mailingcity_uuid} .
@@ -195,10 +200,10 @@ function pds_mailingcity(person: string, mailingcity: string, signature: string,
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingcity_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingcity_uuid} a cco:InformationBearingEntity ;
-            obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcity}> ; 
+            obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcityIRI}> ; 
                 cco:has_text_value "${mailingcity}".
 
-            <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcity}> a cco:RSASignature ; 
+            <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcityIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             `;
@@ -215,6 +220,7 @@ function pds_mailingstate(person: string, mailingstate: string, signature: strin
   try {
     if (mailingstate !== "") {
       mailingstate_uuid = uuidv4();
+      let mailingstateIRI = mailingstate.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:agent_in cco:ActOfResiding_${mailingstate_uuid} .
@@ -228,17 +234,17 @@ function pds_mailingstate(person: string, mailingstate: string, signature: strin
             cco:LocalAdministrativeRegion_${mailingstate_uuid} a cco:LocalAdministrativeRegion ;
                 obo:BFO_0000050 cco:FirstOrderAdministrativeRegion_${mailingstate_uuid} .
             
-            cco:FirstOrderAdministrativeRegion_${mailingstate_uuid} a cco:FirstOrderAdministrativeRegion ;
+            cco:FirstOrderAdministrativeRegion_${mailingstate_uuid} a cco:State ;
                 cco:designated_by cco:DesignativeName_${mailingstate_uuid} .
             
             cco:DesignativeName_${mailingstate_uuid} a cco:DesignativeName ;
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingstate_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingstate_uuid} a cco:InformationBearingEntity ;
-            obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstate}>; 
+            obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstateIRI}>; 
             cco:has_text_value "${mailingstate}".
 
-              <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstate}> a cco:RSASignature ; 
+              <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstateIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             `;
@@ -255,6 +261,7 @@ function pds_mailingpostcode(person: string, mailingpostcode: string, signature:
   try {
     if (mailingpostcode !== "") {
       mailingpostcode_uuid = uuidv4();
+      let mailingpostcodeIRI = mailingpostcode.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:agent_in cco:ActOfResiding_${mailingpostcode_uuid} .
@@ -263,7 +270,7 @@ function pds_mailingpostcode(person: string, mailingpostcode: string, signature:
                 obo:RO_0000057 cco:ResidentialFacility_${mailingpostcode_uuid} .
             
             cco:ResidentialFacility_${mailingpostcode_uuid} a cco:ResidentialFacility ;
-                obo:RO_0001025 cco:PostalZone_${mailingpostcode_uuid} .
+              obo:RO_0001025 cco:PostalZone_${mailingpostcode_uuid} .
             
             cco:PostalZone_${mailingpostcode_uuid} a cco:PostalZone ;
                 cco:designated_by cco:PostalCode_${mailingpostcode_uuid} .
@@ -272,10 +279,10 @@ function pds_mailingpostcode(person: string, mailingpostcode: string, signature:
                 obo:RO_0010001 cco:InformationBearingEntity_PostalCode_${mailingpostcode_uuid} .
             
             cco:InformationBearingEntity_PostalCode_${mailingpostcode_uuid} a cco:InformationBearingEntity ;
-            obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingpostcode}> ;
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingpostcodeIRI}> ;
                 cco:has_text_value "${mailingpostcode}".
 
-                <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingpostcode}> a cco:RSASignature ; 
+                <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingpostcodeIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             `;
@@ -293,6 +300,7 @@ function pds_mailingcountry(person: string, mailingcountry: string, signature: s
     if (mailingcountry !== "") {
       mailingcountry_uuid = uuidv4();
       mailingstate_uuid = uuidv4();
+      let mailingcountryIRI = mailingcountry.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:agent_in cco:ActOfResiding_${mailingcountry_uuid} .
@@ -306,7 +314,7 @@ function pds_mailingcountry(person: string, mailingcountry: string, signature: s
                 cco:LocalAdministrativeRegion_${mailingcountry_uuid} a cco:LocalAdministrativeRegion ;
                  obo:BFO_0000050 cco:FirstOrderAdministrativeRegion_${mailingcountry_uuid} .
             
-            cco:FirstOrderAdministrativeRegion_${mailingcountry_uuid} a cco:FirstOrderAdministrativeRegion ;
+            cco:FirstOrderAdministrativeRegion_${mailingcountry_uuid} a cco:State ;
                 obo:BFO_0000050 cco:County_${mailingcountry_uuid} .
             
             cco:County_${mailingcountry_uuid} a cco:Country ;
@@ -316,10 +324,10 @@ function pds_mailingcountry(person: string, mailingcountry: string, signature: s
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingcountry_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingcountry_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcountry}> ; 
+                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcountryIRI}> ; 
                 cco:has_text_value "${mailingcountry}".
 
-                <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcountry}> a cco:RSASignature ; 
+                <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcountryIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             `;
@@ -336,6 +344,7 @@ function pds_homephonenumber(person: string, homephonenumber: string, signature:
   try {
     if (homephonenumber !== "") {
       homephonenumber_uuid = uuidv4();
+      let homephonenumberIRI = homephonenumber.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:user cco:LandlineTelephone_${homephonenumber_uuid} .
@@ -353,10 +362,10 @@ function pds_homephonenumber(person: string, homephonenumber: string, signature:
                 obo:RO_0010001 cco:InformationBearingEntity_TelephoneNumber_${homephonenumber_uuid} .
             
             cco:InformationBearingEntity_TelephoneNumber_${homephonenumber_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056  <http://www.cubrc.org/Data/RSASignature-${cert}-${homephonenumber}> ;
+                obo:RO_0000056  <http://www.cubrc.org/Data/RSASignature-${cert}-${homephonenumberIRI}> ;
                 cco:has_text_value "${homephonenumber}".
 
-                <http://www.cubrc.org/Data/RSASignature-${cert}-${homephonenumber}> a cco:RSASignature ; 
+                <http://www.cubrc.org/Data/RSASignature-${cert}-${homephonenumberIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             `;
@@ -373,6 +382,7 @@ function pds_mobilephonenumber(person: string, mobilephonenumber: string, signat
   try {
     if (mobilephonenumber !== "") {
       mobilephonenumber_uuid = uuidv4();
+      let mobilephonenumberIRI = mobilephonenumber.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:user cco:MobileTelephone_${mobilephonenumber_uuid} .
@@ -390,10 +400,10 @@ function pds_mobilephonenumber(person: string, mobilephonenumber: string, signat
                 obo:RO_0010001 cco:InformationBearingEntity_TelephoneNumber_${mobilephonenumber_uuid} .
             
             cco:InformationBearingEntity_TelephoneNumber_${mobilephonenumber_uuid} a cco:InformationBearingEntity ;
-            obo:RO_0000056  <http://www.cubrc.org/Data/RSASignature-${cert}-${mobilephonenumber}> ; 
+            obo:RO_0000056  <http://www.cubrc.org/Data/RSASignature-${cert}-${mobilephonenumberIRI}> ; 
                 cco:has_text_value "${mobilephonenumber}".
 
-            <http://www.cubrc.org/Data/RSASignature-${cert}-${mobilephonenumber}> a cco:RSASignature ; 
+            <http://www.cubrc.org/Data/RSASignature-${cert}-${mobilephonenumberIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             `;
@@ -410,6 +420,7 @@ function pds_employername(person: string, employername: string, signature: strin
   try {
     if (employername !== "") {
       employername_uuid = uuidv4();
+      let employernameIRI = employername.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             obo:RO_0000053 cco:OccupationRole_${employername_uuid} .
@@ -424,10 +435,10 @@ function pds_employername(person: string, employername: string, signature: strin
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${employername_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${employername_uuid} a cco:InformationBearingEntity ;
-              obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${employername}>  ; 
+              obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${employernameIRI}>  ; 
               cco:has_text_value "${employername}".
 
-                <http://www.cubrc.org/Data/RSASignature-${cert}-${employername}> a cco:RSASignature ; 
+                <http://www.cubrc.org/Data/RSASignature-${cert}-${employernameIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             `;
@@ -444,6 +455,7 @@ function pds_employeetitle(person: string, employeetitle: string, signature: str
   try {
     if (employeetitle !== "") {
       employeetitle_uuid = uuidv4();
+      let employeetitleIRI = employeetitle.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             obo:RO_0000053 cco:OccupationRole_${employeetitle_uuid} .
@@ -455,10 +467,10 @@ function pds_employeetitle(person: string, employeetitle: string, signature: str
                 obo:RO_0010001 cco:InformationBearingEntity_NominalMeasurementInformationContentEntity_${employeetitle_uuid} .
             
             cco:InformationBearingEntity_NominalMeasurementInformationContentEntity_${employeetitle_uuid} a cco:InformationBearingEntity ;
-              obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${employeetitle}> ; 
+              obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${employeetitleIRI}> ; 
               cco:has_text_value "${employeetitle}".
 
-              <http://www.cubrc.org/Data/RSASignature-${cert}-${employeetitle}> a cco:RSASignature ; 
+              <http://www.cubrc.org/Data/RSASignature-${cert}-${employeetitleIRI}> a cco:RSASignature ; 
                 obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
                 cco:has_text_value "${signature}" .
             `;
@@ -472,6 +484,7 @@ function pds_employeetitle(person: string, employeetitle: string, signature: str
 function pds_weight(person: string, weight: string, signature: string, cert: string) {
   try {
     let personWeight_uuid = uuidv4();
+    let weightIRI = weight.replace(/\s/g, "")
     let triples = `
     <${person}> a cco:Person ;
     cco:has_quality <http://www.ontologyrepository.com/CommonCoreOntologies/Quality-Weight-${personWeight_uuid}> .
@@ -483,10 +496,10 @@ function pds_weight(person: string, weight: string, signature: string, cert: str
      obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/${personWeight_uuid}-Quality-Weight-MeasuredIBE> . 
 
   <http://www.ontologyrepository.com/CommonCoreOntologies/${personWeight_uuid}-Quality-Weight-MeasuredIBE>  a cco:InformationBearingEntity ; 
-      obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${weight}> ;
+      obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${weightIRI}> ;
       cco:has_text_value "${weight}" . 
 
-  <http://www.cubrc.org/Data/RSASignature-${cert}-${weight}> a cco:RSASignature ; 
+  <http://www.cubrc.org/Data/RSASignature-${cert}-${weightIRI}> a cco:RSASignature ; 
       obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
       cco:has_text_value "${signature}" . 
 `
@@ -534,7 +547,7 @@ export function mappingFuction(person: string, attribute: string, value: string,
             data: triples
           })
         }
-        case "birthdate": {
+        case "birthday": {
           let triples = pds_birthday(person, value, signature, cert)
           return callback({
             success: true,
@@ -562,7 +575,7 @@ export function mappingFuction(person: string, attribute: string, value: string,
             data: triples
           })
         }
-        case "homepostalcode": {
+        case "mailingpostcode": {
           let triples = pds_mailingpostcode(person, value, signature, cert)
           return callback({
             success: true,

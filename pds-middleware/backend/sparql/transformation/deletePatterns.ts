@@ -6,8 +6,7 @@ function delete_firstname(value: string) {
     PREFIX obo: <http://purl.obolibrary.org/obo/>
 
         Delete {
-            ?PersonFullName a cco:PersonFullName ;
-                       <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonGivenName .
+
                    ?PersonGivenName a cco:PersonGivenName ;
                        <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
                    ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
@@ -16,8 +15,7 @@ function delete_firstname(value: string) {
                    ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
                  
          }where{
-       ?PersonFullName a cco:PersonFullName ;
-                       <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonGivenName .
+
                    ?PersonGivenName a cco:PersonGivenName ;
                        <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
                    ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
@@ -41,8 +39,7 @@ function delete_lastname(value: string) {
     PREFIX obo: <http://purl.obolibrary.org/obo/>
 
    Delete {
-         ?PersonFullName a cco:PersonFullName ;
-                  <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonFamilyName.
+        
      		?PersonFamilyName a cco:PersonFamilyName ;
                     <http://purl.obolibrary.org/obo/RO_0010001> ?PersonFamilyNameIBE. 
   
@@ -50,8 +47,7 @@ function delete_lastname(value: string) {
     		
     }where{
            
-         ?PersonFullName a cco:PersonFullName ;
-                  <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonFamilyName.
+  
      		?PersonFamilyName a cco:PersonFamilyName ;
                     <http://purl.obolibrary.org/obo/RO_0010001> ?PersonFamilyNameIBE. 
   
@@ -115,32 +111,22 @@ function delete_homemailingaddres(value: string) {
         PREFIX obo: <http://purl.obolibrary.org/obo/>
            Delete {
         
-         ?ActOfResiding a cco:ActOfResiding;
-               obo:RO_0000057 ?ResidentialFacility.
-        
-              ?ResidentialFacility a cco:ResidentialFacility;
-                cco:designated_by ?StreetAdress.
-        
-              ?StreetAdress a cco:StreetAdress;
-                obo:RO_0010001 ?StreetAdressIBE .
-        
-              ?StreetAdressIBE a cco:InformationBearingEntity;
-              cco:has_text_value ?HomeMailingAddress.
+    
+           ?StreetAdress a cco:StreetAddress;
+             obo:RO_0010001 ?StreetAdressIBE .
+     
+           ?StreetAdressIBE a cco:InformationBearingEntity;
+             cco:has_text_value  ?MailingStreet ;
                     
             }where{
-                   
-           ?ActOfResiding a cco:ActOfResiding;
-               obo:RO_0000057 ?ResidentialFacility.
-        
-              ?ResidentialFacility a cco:ResidentialFacility;
-                cco:designated_by ?StreetAdress.
-        
-              ?StreetAdress a cco:StreetAdress;
-                obo:RO_0010001 ?StreetAdressIBE .
-        
-              ?StreetAdressIBE a cco:InformationBearingEntity;
-              cco:has_text_value ?HomeMailingAddress.
-              FILTER(?HomeMailingAddress = "${value}")
+
+       
+             ?StreetAdress a cco:StreetAddress;
+               obo:RO_0010001 ?StreetAdressIBE .
+       
+             ?StreetAdressIBE a cco:InformationBearingEntity;
+               cco:has_text_value  ?MailingStreet ;
+              FILTER(?MailingStreet  = "${value}")
           
         }
         `)
@@ -195,47 +181,61 @@ function delete_email(value: string) {
   }
 }
 
-function delete_homepostalcode(value: string) {
+function delete_mailingcity(value: string) {
   try {
     return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
         PREFIX obo: <http://purl.obolibrary.org/obo/>
            Delete {
         
-         ?ActOfResiding a cco:ActOfResiding ; 
-                         obo:RO_0000057 ?ResidentialFacility. 
+    
+            ?LocalAdminRegion1DesName a cco:DesignativeName;
+            obo:RO_0010001  ?LocalAdminRegion1DesNameIBE. 
+
+            ?LocalAdminRegion1DesNameIBE cco:has_text_value ?MailingCity ;
+                    
+            }where{
+
+       
+              ?LocalAdminRegion1DesName a cco:DesignativeName;
+              obo:RO_0010001  ?LocalAdminRegion1DesNameIBE. 
+
+              ?LocalAdminRegion1DesNameIBE cco:has_text_value ?MailingCity ;
+              FILTER( ?MailingCity   = "${value}")
           
-          ?ResidentialFacility a cco:ResidentialFacility;
-                               <http://purl.obolibrary.org/obo/RO_0001025> ?PostalZone1.
-                                
-           
-         
-         ?PostalZone1 a cco:PostalZone;
-                      cco:designated_by ?PostalZoneCode1.
-          
-          ?PostalZoneCode1 a cco:PostalCode;
-                        <http://purl.obolibrary.org/obo/RO_0010001> ?PostalZoneCode1IBE . 
-          
-          ?PostalZoneCode1IBE  cco:has_text_value ?HomePostalCode. 
+        }
+        `)
+  } catch (error) {
+    console.log(error)
+    return ""
+  }
+}
+function delete_mailingPostCode(value: string) {
+  try {
+    return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+        PREFIX obo: <http://purl.obolibrary.org/obo/>
+           Delete {
+        
+            ?PostalZone a cco:PostalZone;
+            cco:designated_by ?PostalCode.
+      
+          ?PostalCode a cco:PostalCode;
+            obo:RO_0010001 ?PostalCodeIBE.
+      
+          ?PostalCodeIBE a cco:InformationBearingEntity;
+            cco:has_text_value ?MailingPostCode.
                     
             }where{
                    
-         ?ActOfResiding a cco:ActOfResiding ; 
-                         obo:RO_0000057 ?ResidentialFacility. 
+              ?PostalZone a cco:PostalZone;
+              cco:designated_by ?PostalCode.
+        
+            ?PostalCode a cco:PostalCode;
+              obo:RO_0010001 ?PostalCodeIBE.
+        
+            ?PostalCodeIBE a cco:InformationBearingEntity;
+              cco:has_text_value ?MailingPostCode;
           
-          ?ResidentialFacility a cco:ResidentialFacility;
-                               <http://purl.obolibrary.org/obo/RO_0001025> ?PostalZone1.
-                                
-           
-         
-         ?PostalZone1 a cco:PostalZone;
-                      cco:designated_by ?PostalZoneCode1.
-          
-          ?PostalZoneCode1 a cco:PostalCode;
-                        <http://purl.obolibrary.org/obo/RO_0010001> ?PostalZoneCode1IBE . 
-          
-          ?PostalZoneCode1IBE  cco:has_text_value ?HomePostalCode. 
-          
-              FILTER(?HomePostalCode = "${value}")
+              FILTER(?MailingPostCode = "${value}")
           
         }
         
@@ -278,6 +278,76 @@ function delete_weight(value: string) {
   }
 }
 
+function delete_mailingstate(value: string) {
+  try {
+    return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+        PREFIX obo: <http://purl.obolibrary.org/obo/>
+           Delete {
+        
+
+  
+  
+ ?LocalAdminRegion1StateCityDesc a cco:DesignativeName ; 
+                                  <http://purl.obolibrary.org/obo/RO_0010001>   ?LocalAdminRegion1StateCityDescIBE . 
+  
+  
+  ?LocalAdminRegion1StateCityDescIBE cco:has_text_value ?MailingState;
+                    
+            }where{
+
+  
+ ?LocalAdminRegion1StateCityDesc a cco:DesignativeName ; 
+                                  <http://purl.obolibrary.org/obo/RO_0010001>   ?LocalAdminRegion1StateCityDescIBE . 
+  
+  
+  ?LocalAdminRegion1StateCityDescIBE cco:has_text_value ?MailingState;
+          
+              FILTER(?MailingState = "${value}")
+          
+        }
+        
+        `)
+  } catch (error) {
+    console.log(error)
+    return ""
+  }
+}
+
+function delete_mailingCountry(value: string) {
+  try {
+    return (`PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+        PREFIX obo: <http://purl.obolibrary.org/obo/>
+           Delete {
+        
+            ?LocalAdminRegion1StateCountry a cco:Country ; 
+            cco:designated_by ?CountryDesc  . 
+  
+?CountryDesc a cco:DesignativeName ; 
+<http://purl.obolibrary.org/obo/RO_0010001> ?CountryDescIBE .  
+
+?CountryDescIBE cco:has_text_value ?MailingCountry;
+                    
+            }where{
+
+              ?LocalAdminRegion1StateCountry a cco:Country ; 
+              cco:designated_by ?CountryDesc  . 
+    
+?CountryDesc a cco:DesignativeName ; 
+  <http://purl.obolibrary.org/obo/RO_0010001> ?CountryDescIBE .  
+
+?CountryDescIBE cco:has_text_value ?MailingCountry;
+          
+              FILTER(?MailingCountry = "${value}")
+          
+        }
+        
+        `)
+  } catch (error) {
+    console.log(error)
+    return ""
+  }
+}
+
 function mappingDeleteFuction(attribute: string, value: string) {
   let attributeClean = attribute.toLocaleLowerCase()
   switch (attributeClean) {
@@ -293,33 +363,24 @@ function mappingDeleteFuction(attribute: string, value: string) {
     case "birthday": {
       return delete_DateOfBirth(value)
     }
-    case "homemailingaddress": {
+    case "mailingstreet": {
       return delete_homemailingaddres(value)
     }
     case "weight": {
       return delete_weight(value)
     }
-    // case "mailingstate": {
-    //   return delete_mailingstate(value)
-    // }
-    // case "homepostalcode": {
-    //   return delete_homepostalcode(value)
-    // }
-    // case "mailingcountry": {
-    //   return delete_mailingcountry(value)
-    // }
-    // case "homephonenumber": {
-    //   return delete_homephonenumber(value)
-    // }
-    // case "mobilephonenumber": {
-    //   return delete_mobilephonenumber(value)
-    // }
-    // case "employername": {
-    //   return delete_employername(value)
-    // }
-    // case "employeetitle": {
-    //   return delete_employeetitle(value)
-    // }
+    case "mailingcity": {
+      return delete_mailingcity(value)
+    }
+    case "mailingpostcode": {
+      return delete_mailingPostCode(value)
+    }
+    case "mailingstate": {
+      return delete_mailingstate(value)
+    }
+    case "mailingcountry": {
+      return delete_mailingCountry(value)
+    }
     default: {
       return ""
     }
