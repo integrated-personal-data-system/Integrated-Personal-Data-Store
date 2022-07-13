@@ -39,7 +39,6 @@ function deleteMyData(attribute: string, value: string, callback: ({ success: bo
                 data: data
             })
         }).catch((error) => {
-            console.log(console.log(error))
             callback({
                 success: false,
                 data: error

@@ -57,7 +57,6 @@ function createMyData(person: string, attribute: string, value: string, cert: st
                     data: data
                 })
             }).catch((error) => {
-                console.log(console.log(error))
                 callback({
                     success: false,
                     data: error

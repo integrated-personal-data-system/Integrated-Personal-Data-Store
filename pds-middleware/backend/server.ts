@@ -38,24 +38,6 @@ const logger = createLogger({
     ),
 });
 
-app.use(expressWinston.logger({
-    transports: [,
-        new winston.transports.File({ filename: "./logs/server.log" })
-    ],
-    format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.json(),
-        winston.format.printf(({ timestamp, level, message }) => {
-            return `[${timestamp}] ${level}: ${message}`;
-        })
-    ),
-    meta: true, // optional: control whether you want to log the meta data about the request (default to true)
-    msg: "HTTP {{req.method}} {{req.url}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
-    expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
-    colorize: false, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
-    ignoreRoute: function (req, res) { return false; } // optional: allows to skip some log messages based on request and/or response
-}));
-
 
 app.use('/', router)
 
@@ -88,20 +70,24 @@ if (production) {
 /////////////////////////////////
 
 app.post('/createWalletKeyPair', (request: Request<string, any>, response: Response) => {
+    logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
     createRSAKeyPair(request.body.person, request.body.keyPairName, request.body.passphrase, (result) => {
         if (result.success) {
             response.status(200).send(result.data)
         } else {
+            logger.error(result.data);
             response.status(500).send(result.data)
         }
     })
 })
 
 app.get('/readMyCerts', (request: Request, response: Response) => {
+    logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
     readMyCerts((result) => {
         if (result.success) {
             response.status(200).send(result.data)
         } else {
+            logger.error(result.data);
             response.status(500).send(result.data)
         }
     })
@@ -120,6 +106,7 @@ interface createMyDataBody {
 }
 
 app.post('/createNewUser', (request: Request<string, createMyDataBody>, response: Response) => {
+    logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
     createNewUser((result) => {
         if (result.success) {
             response.status(200).send(result.data)
@@ -130,27 +117,31 @@ app.post('/createNewUser', (request: Request<string, createMyDataBody>, response
 })
 
 app.post('/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
+    logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
     let data = request.body
     createMyData(data.person, data.attribute, data.value, data.cert, (result) => {
         if (result.success) {
             response.status(200).send("Successfully Uploaded " + data.attribute)
         } else {
+            logger.error(result.data);
             response.status(500).send("Could Not Uploaded " + data.attribute)
         }
     })
 })
 
 app.get('/readMappedAttributes', (request: Request, response: Response) => {
+    logger.info("URL:" + request.url + " | METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
     response.status(200).send({ attrList: current_mapping })
 })
 
 
 app.get('/readMyData', (request: Request, response: Response) => {
+    logger.info("URL:" + request.url + "  |  METHOD:" + request.method + "  |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
     readMyData((result) => {
         if (result.success) {
             response.status(200).send(result.data)
         } else {
-            console.log("Data Read failed: " + result.data)
+            logger.error(result.data);
             response.status(500).send("Failed to Read Data")
         }
     })
@@ -159,6 +150,7 @@ app.get('/readMyData', (request: Request, response: Response) => {
 
 app.post('/updateMyData', (request: Request<string, createMyDataBody>, response: Response) => {
     try {
+        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         response.status(500).send("Cound Not Update Data")
         throw new Error("Yooooo");
     } catch (error) {
@@ -169,12 +161,13 @@ app.post('/updateMyData', (request: Request<string, createMyDataBody>, response:
 
 
 app.post('/deleteMyData', (request: Request<string, createMyDataBody>, response: Response,) => {
+    logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
     let data = request.body
-    console.log(request.body)
     deleteMyData(data.attribute, data.value, (result) => {
         if (result.success) {
             response.status(200).send("Successfully Deleted " + data.attribute)
         } else {
+            logger.error(result.data);
             response.status(500).send("Could Not Delete " + data.attribute)
         }
     })

@@ -49,7 +49,6 @@ class App extends React.Component {
         let myDataArray = await readMyData()
         let myCertsArray = await readMyCerts()
         let mappedAttributesArray = await readMappedAttributes()
-        console.log(myDataArray)
         let person = ""
         for (let item of myDataArray) {
             if (Object.keys(item)[0] === "Person") {

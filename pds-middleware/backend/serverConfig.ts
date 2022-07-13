@@ -13,8 +13,4 @@ const current_mapping = ["firstname", "weight", "email", "lastname", "birthday",
 // If false - run the server over http
 const production = true
 
-const debug = true
-
-const logPath = `./logs/session.log`
-
-export { current_mapping, production, debug, logPath } 
+export { current_mapping, production } 
