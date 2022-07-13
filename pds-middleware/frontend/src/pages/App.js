@@ -45,9 +45,11 @@ class App extends React.Component {
      * @CR
      */
     async componentDidMount() {
+        console.log("running")
         let myDataArray = await readMyData()
         let myCertsArray = await readMyCerts()
         let mappedAttributesArray = await readMappedAttributes()
+        console.log(myDataArray)
         let person = ""
         for (let item of myDataArray) {
             if (Object.keys(item)[0] === "Person") {
@@ -107,7 +109,7 @@ class App extends React.Component {
         return certInformation
     }
 
-    
+
 
     /**
      * Renders the Data cards or Credentials Cards depending on this.state.showing.

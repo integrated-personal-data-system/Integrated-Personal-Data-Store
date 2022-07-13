@@ -36,6 +36,8 @@ services:
         ipv4_address: 10.9.0.2
     expose:
       - "443"
+      - "80"
     command: "npm run docker-start"
     ports:
       - 443:443
+      - 80:80

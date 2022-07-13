@@ -1,3 +1,4 @@
 .DS_Store
 pds-middleware/node_modules
 Aries-storage/etc/letsencrypt/live/iamtestingbed.com
+Aries-storage/pds-middleware/backend/logs

@@ -1,17 +1,21 @@
-# Aries-storage
+# Aries Personal Data Store 
 
 ## Introduction
 This is an architecture for a database designed to store verifyable credentials and other miscellanious information associated with an Aries agent. It is intended to run on the cloud, and can serve several users while still guaranteeing that only the user can access their data. Data would be stored as an RDF graph using <a href=https://www.w3.org/TR/turtle/>turtle</a>, <a href=https://www.w3.org/TR/rdf-syntax-grammar/>XML</a>, or similar. The data would be standardized using the classes provided in the <a href=https://github.com/I-AM-project/my-data-ontology>My Data Ontology</a>, build on the <a href=https://github.com/CommonCoreOntology/CommonCoreOntologies>Common Core Ontolgy</a>, which is an extension of the <a href=https://github.com/BFO-ontology>Basic Formal Ontology</a>.
 
-## What's is include
-
-`./crypto`
-
-&emsp;Secret Key Crypto that uses AES to decrypt and encrypt messages
+## What's included
 
 `./pds-middleware`
 
-&emsp;Containers the node server for the middleware. This folder is also a docker volume for the node container
+&emsp;Containers the node server for the middleware. This folder is also a docker volume for the node container.
+
+`./pds-middlware/backend`
+&emsp; An Express Typescript server that host the api for the personal data store. The server's purpose is to interface with the triple store by crafting sparql 
+queries. 
+
+`./pds-middlware/frontend`
+&emsp; A React Webapp that displays a person's data and credentials. The front end sends http requests when it needs to Create, Udpate, Read, Destroy data. 
+
 
 `./triple-store`
 
@@ -19,7 +23,7 @@ This is an architecture for a database designed to store verifyable credentials 
 
 `./docker-compose.yml`
 
-&emsp;The docker-compose file that definded a docker network and 2 contains
+&emsp;The docker-compose file that defines a docker network and 2 containers - Triple Store and Middleware
 
 
 ## Getting Started
@@ -30,17 +34,24 @@ This is an architecture for a database designed to store verifyable credentials 
 2. Install docker-compose [here](https://docs.docker.com/compose/install/)
 
 ### How to Run
-1. ```docker-compose up -d``` 
+
+1. Decide what mode you want to run the server in.
+- Production Mode: Run the platform over https at the address: https://iamtestingbed.com/
+- Testing Mode: Run the platform over http at <ip address>:80
+> To set the different mode, navigate to the file ./pds-middleware/backend/serverConfig.ts and send the value for production
+
+
+2. ```docker-compose up -d``` 
 > Docker-compose creates two docker containers. The first container is an apache jena fuseki triple store. The seconds is a node server that runs a middleware. 
 
-2. ```docker-compose down``` 
+3. ```docker-compose down``` 
 > To stop all the containers
 
 ### How to Access the triple store Web Interface
 Jena fuseki runs a web interface that allows developers to run queries and input data. To access the web interface locally visit [http://localhost:3030/](http://localhost:3030/) in your internet browser
 
 ### Middleware API 
-TODO 
+
 
 <!-- ## Input format
 The server would receive PUT, POST, and GET requests from the agent. Before anything else, it would check that the agent is authorized to use the data it is trying to access (the details will vary depending on the chain provider; in Sovrin's case, you would use the policy oracle). All requests would have a path parameter with the rdfs:label property of the class they are using to represent the data. The ontology would be either stored locally on the machine with the server or queried from a separate database. 
