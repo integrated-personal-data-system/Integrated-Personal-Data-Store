@@ -10,16 +10,10 @@ function delete_firstname(value: string) {
                    ?PersonGivenName a cco:PersonGivenName ;
                        <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
                    ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
-        ?PersonGivenName a cco:PersonGivenName ;
-                       <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
-                   ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
                  
          }where{
 
                    ?PersonGivenName a cco:PersonGivenName ;
-                       <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
-                   ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
-        ?PersonGivenName a cco:PersonGivenName ;
                        <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
                    ?PersonGivenNameIBE cco:has_text_value ?FirstName. 
            FILTER(?FirstName = "${value}")

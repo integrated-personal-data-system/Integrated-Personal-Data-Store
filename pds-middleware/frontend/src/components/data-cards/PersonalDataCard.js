@@ -25,18 +25,18 @@ function UpdateModal(props) {
         setValue(valueNew)
     };
 
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     const handleSave = () => {
-        let updateData = {
-            person: props.person,
-            header: props.header,
-            newValue: value
-        }
-        updateMyData(props.person, props.header, value, props.oldValue)
+        updateMyData(props.person, props.header, value, props.oldValue, () => {
+            props.refreshData()
+            handleClose()
+        })
     }
 
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+
 
     return (
         <>
@@ -150,7 +150,7 @@ class PersonalDataCard extends React.Component {
                                     <Button variant="danger" style={{ float: "left" }} onClick={() => this.handleDelete()} >
                                         Delete
                                     </Button>
-                                    <UpdateModal person={this.props.person} header={this.props.header} oldValue={this.props.value}></UpdateModal>
+                                    <UpdateModal person={this.props.person} header={this.props.header} oldValue={this.props.value} refreshData={this.props.refreshData}></UpdateModal>
                                 </Container>
 
                             </Card.Body>

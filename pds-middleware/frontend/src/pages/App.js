@@ -45,7 +45,6 @@ class App extends React.Component {
      * @CR
      */
     async componentDidMount() {
-        console.log("running")
         let myDataArray = await readMyData()
         let myCertsArray = await readMyCerts()
         let mappedAttributesArray = await readMappedAttributes()
@@ -89,7 +88,6 @@ class App extends React.Component {
                         keyPairName={item.keyPairName}
                         signature={item.signature}
                         refreshData={this.refreshData}>
-
                     </PersonalDataCard>)
             }
         }

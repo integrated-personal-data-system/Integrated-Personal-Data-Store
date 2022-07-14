@@ -1,4 +1,4 @@
-function updateMyData(person, attribute, newValue, oldDataValue) {
+function updateMyData(person, attribute, newValue, oldDataValue, callback) {
 
     let data = {
         "person": person,
@@ -16,9 +16,13 @@ function updateMyData(person, attribute, newValue, oldDataValue) {
         },
         body: JSON.stringify(data)
     }).then(res => res.text()).then(data => {
-        console.log(data)
+        callback({
+            data: data
+        })
     }).catch((error) => {
-        console.log(error)
+        callback({
+            data: error
+        })
     })
 }
 

@@ -5,10 +5,10 @@ import bodyParser from 'body-parser'
 import createMyData from "./serverFunctions/my-data/createMyData";
 import deleteMyData from "./serverFunctions/my-data/deleteMyData";
 import createRSAKeyPair from "./serverFunctions/my-certs/rsaKeyGen";
+import { updateMyData } from "./serverFunctions/my-data/updateMyData";
 import createNewUser from "./serverFunctions/my-data/createNewUser";
 import { current_mapping, production } from './serverConfig'
-import winston, { createLogger, format, transports } from 'winston'
-import expressWinston from "express-winston"
+import { createLogger, format, transports } from 'winston'
 
 import path from "path"
 import fs from "fs"
@@ -42,7 +42,6 @@ const logger = createLogger({
 app.use('/', router)
 
 
-
 if (production) {
     let certificate = fs.readFileSync("/etc/letsencrypt/live/iamtestingbed.com/cert.pem", 'utf8');
     let privateKey = fs.readFileSync("/etc/letsencrypt/live/iamtestingbed.com/privkey.pem", 'utf8');
@@ -70,15 +69,20 @@ if (production) {
 /////////////////////////////////
 
 app.post('/createWalletKeyPair', (request: Request<string, any>, response: Response) => {
-    logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-    createRSAKeyPair(request.body.person, request.body.keyPairName, request.body.passphrase, (result) => {
-        if (result.success) {
-            response.status(200).send(result.data)
-        } else {
-            logger.error(result.data);
-            response.status(500).send(result.data)
-        }
-    })
+    try {
+        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        createRSAKeyPair(request.body.person, request.body.keyPairName, request.body.passphrase, (result) => {
+            if (result.success) {
+                response.status(200).send(result.data)
+            } else {
+                logger.error(result.data);
+                response.status(500).send(result.data)
+            }
+        })
+    } catch (error) {
+        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
+    }
+
 })
 
 app.get('/readMyCerts', (request: Request, response: Response) => {
@@ -149,14 +153,16 @@ app.get('/readMyData', (request: Request, response: Response) => {
 
 
 app.post('/updateMyData', (request: Request<string, createMyDataBody>, response: Response) => {
-    try {
-        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-        response.status(500).send("Cound Not Update Data")
-        throw new Error("Yooooo");
-    } catch (error) {
-        logger.error(error);
-    }
-
+    logger.info("URL:" + request.url + "  |  METHOD:" + request.method + "  |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+    let data = request.body
+    updateMyData(data.person, data.attribute, data.newDataValue, data.oldDataValue, (result) => {
+        if (result.success) {
+            response.status(200).send("Successfully Updated " + data.attribute)
+        } else {
+            logger.error(result.data);
+            response.status(500).send("Could Not Update " + data.attribute)
+        }
+    })
 })
 
 
