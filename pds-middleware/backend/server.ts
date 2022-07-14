@@ -75,7 +75,7 @@ app.post('/createWalletKeyPair', (request: Request<string, any>, response: Respo
             if (result.success) {
                 response.status(200).send(result.data)
             } else {
-                logger.error(result.data);
+                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
                 response.status(500).send(result.data)
             }
         })
@@ -86,15 +86,20 @@ app.post('/createWalletKeyPair', (request: Request<string, any>, response: Respo
 })
 
 app.get('/readMyCerts', (request: Request, response: Response) => {
-    logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-    readMyCerts((result) => {
-        if (result.success) {
-            response.status(200).send(result.data)
-        } else {
-            logger.error(result.data);
-            response.status(500).send(result.data)
-        }
-    })
+    try {
+        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        readMyCerts((result) => {
+            if (result.success) {
+                response.status(200).send(result.data)
+            } else {
+                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                response.status(500).send(result.data)
+            }
+        })
+    } catch (error) {
+        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
+    }
+
 })
 
 
@@ -110,73 +115,104 @@ interface createMyDataBody {
 }
 
 app.post('/createNewUser', (request: Request<string, createMyDataBody>, response: Response) => {
-    logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-    createNewUser((result) => {
-        if (result.success) {
-            response.status(200).send(result.data)
-        } else {
-            response.status(500).send("Could not create person")
-        }
-    })
+    try {
+        logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        createNewUser((result) => {
+            if (result.success) {
+                response.status(200).send(result.data)
+            } else {
+                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                response.status(500).send("Could not create person")
+            }
+        })
+    } catch (error) {
+        logger.error(error);
+    }
+
 })
 
 app.post('/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
-    logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-    let data = request.body
-    createMyData(data.person, data.attribute, data.value, data.cert, (result) => {
-        if (result.success) {
-            response.status(200).send("Successfully Uploaded " + data.attribute)
-        } else {
-            logger.error(result.data);
-            response.status(500).send("Could Not Uploaded " + data.attribute)
-        }
-    })
+    try {
+        logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        let data = request.body
+        createMyData(data.person, data.attribute, data.value, data.cert, (result) => {
+            if (result.success) {
+                response.status(200).send("Successfully Uploaded " + data.attribute)
+            } else {
+                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                response.status(500).send("Could Not Uploaded " + data.attribute)
+            }
+        })
+    } catch (error) {
+        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
+    }
+
 })
 
 app.get('/readMappedAttributes', (request: Request, response: Response) => {
-    logger.info("URL:" + request.url + " | METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-    response.status(200).send({ attrList: current_mapping })
+    try {
+        logger.info("URL:" + request.url + " | METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        response.status(200).send({ attrList: current_mapping })
+    } catch (error) {
+        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
+    }
+
 })
 
 
 app.get('/readMyData', (request: Request, response: Response) => {
-    logger.info("URL:" + request.url + "  |  METHOD:" + request.method + "  |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-    readMyData((result) => {
-        if (result.success) {
-            response.status(200).send(result.data)
-        } else {
-            logger.error(result.data);
-            response.status(500).send("Failed to Read Data")
-        }
-    })
+    try {
+        logger.info("URL:" + request.url + "  |  METHOD:" + request.method + "  |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        readMyData((result) => {
+            if (result.success) {
+                response.status(200).send(result.data)
+            } else {
+                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                response.status(500).send("Failed to Read Data")
+            }
+        })
+    } catch (error) {
+        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
+    }
+
 })
 
 
 app.post('/updateMyData', (request: Request<string, createMyDataBody>, response: Response) => {
-    logger.info("URL:" + request.url + "  |  METHOD:" + request.method + "  |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-    let data = request.body
-    updateMyData(data.person, data.attribute, data.newDataValue, data.oldDataValue, (result) => {
-        if (result.success) {
-            response.status(200).send("Successfully Updated " + data.attribute)
-        } else {
-            logger.error(result.data);
-            response.status(500).send("Could Not Update " + data.attribute)
-        }
-    })
+    try {
+        logger.info("URL:" + request.url + "  |  METHOD:" + request.method + "  |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        let data = request.body
+        updateMyData(data.person, data.attribute, data.newDataValue, data.oldDataValue, (result) => {
+            if (result.success) {
+                response.status(200).send("Successfully Updated " + data.attribute)
+            } else {
+                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                response.status(500).send("Could Not Update " + data.attribute)
+            }
+        })
+    } catch (error) {
+        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
+    }
+
 })
 
 
 app.post('/deleteMyData', (request: Request<string, createMyDataBody>, response: Response,) => {
-    logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-    let data = request.body
-    deleteMyData(data.attribute, data.value, (result) => {
-        if (result.success) {
-            response.status(200).send("Successfully Deleted " + data.attribute)
-        } else {
-            logger.error(result.data);
-            response.status(500).send("Could Not Delete " + data.attribute)
-        }
-    })
+    try {
+        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        let data = request.body
+        deleteMyData(data.attribute, data.value, (result) => {
+            if (result.success) {
+                response.status(200).send("Successfully Deleted " + data.attribute)
+            } else {
+                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                response.status(500).send("Could Not Delete " + data.attribute)
+            }
+        })
+    } catch (error) {
+        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
+    }
+
 })
 
 

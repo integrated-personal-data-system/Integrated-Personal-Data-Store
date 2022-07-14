@@ -57,8 +57,10 @@ class App extends React.Component {
         if (person != "") {
             this.setState({ mydata: myDataArray, person: person, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
         } else {
-            createNewUser((person) => {
-                this.setState({ mydata: myDataArray, person: person, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
+            createNewUser((result) => {
+                if (result.success) {
+                    this.setState({ mydata: myDataArray, person: result.person, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
+                }
             })
         }
 

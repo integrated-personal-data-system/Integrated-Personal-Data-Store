@@ -51,7 +51,6 @@ function createMyData(person: string, attribute: string, value: string, cert: st
                 },
                 body: query
             }).then(res => res).then(data => {
-
                 callback({
                     success: true,
                     data: data
