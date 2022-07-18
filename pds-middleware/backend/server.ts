@@ -9,12 +9,17 @@ import { updateMyData } from "./serverFunctions/my-data/updateMyData";
 import createNewUser from "./serverFunctions/my-data/createNewUser";
 import { current_mapping, production } from './serverConfig'
 import { createLogger, format, transports } from 'winston'
+import { createNewCredentials, createWallet } from "./wallet"
+import 'dotenv/config'
+
 
 import path from "path"
 import fs from "fs"
 
 
 var https = require('https');
+
+
 const app = express();
 var router = express.Router();
 app.use(bodyParser.json())
@@ -43,8 +48,9 @@ app.use('/', router)
 
 
 if (production) {
-    let certificate = fs.readFileSync("/etc/letsencrypt/live/iamtestingbed.com/cert.pem", 'utf8');
-    let privateKey = fs.readFileSync("/etc/letsencrypt/live/iamtestingbed.com/privkey.pem", 'utf8');
+    console.log(typeof process.env.SSL_CERT)
+    let certificate = fs.readFileSync(`${process.env.SSL_CERT}`, 'utf8');
+    let privateKey = fs.readFileSync(`${process.env.SSL_PRIVATE_KEY}`, 'utf8');
 
     let credentials = {
         key: privateKey,
@@ -52,7 +58,7 @@ if (production) {
     };
     var httpsServer = https.createServer(credentials, app);
 
-    httpsServer.listen(443, () => {
+    httpsServer.listen(443, async () => {
         logger.info("Started Server");
         console.log(`Aries PDS Middleware software listening on port in Production mode ${443}`);
     });
