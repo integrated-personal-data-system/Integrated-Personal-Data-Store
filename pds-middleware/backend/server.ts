@@ -25,8 +25,14 @@ var router = express.Router();
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+
+
 app.use(express.static(path.join(__dirname, "../frontend", "build")));
 app.use(express.static("public"));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "build", "index.html"));
+});
 
 const logger = createLogger({
     transports: [
@@ -48,7 +54,6 @@ app.use('/', router)
 
 
 if (production) {
-    console.log(typeof process.env.SSL_CERT)
     let certificate = fs.readFileSync(`${process.env.SSL_CERT}`, 'utf8');
     let privateKey = fs.readFileSync(`${process.env.SSL_PRIVATE_KEY}`, 'utf8');
 

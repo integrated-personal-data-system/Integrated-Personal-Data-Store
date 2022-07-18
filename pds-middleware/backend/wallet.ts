@@ -18,9 +18,6 @@ export const credentialsClient = new CredentialsServiceClient(
 );
 
 
-
-
-
 // Provider API
 // const providerClient = new ProviderServiceClient(
 //     new ProviderCredentials(providerKey),
