@@ -5,3 +5,5 @@
 Aries-storage/pds-middleware/backend/logs
 pds-middleware/backend/.env
 triple-store/fuseki-data
+pds-middleware/frontend/build
+pds-middleware/backend/logs/server.log
