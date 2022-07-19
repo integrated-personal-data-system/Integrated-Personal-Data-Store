@@ -10,7 +10,7 @@ import { current_mapping } from './serverConfig'
 import path from "path"
 import fs from "fs"
 
-let production = true
+let production = false
 
 var https = require('https');
 const app = express();
