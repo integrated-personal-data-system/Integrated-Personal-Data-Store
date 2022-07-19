@@ -30,10 +30,9 @@ class Init extends React.Component {
 
         // Gets the KeyPairs, Returns Null if there is no Key Pairs
         let keyPairs = await readMyCerts()
-
+        console.log(keyPairs)
         // Gets the WalletId, Returns Null if there is no Key Pairs
         let walletID = await getWalletID()
-        console.log(walletID)
 
         if (personIRI.value == null) {
             let newUser = await createNewUser()
@@ -50,7 +49,7 @@ class Init extends React.Component {
             walletID = newWallet.value
         }
 
-        this.setState({ personIRI: personIRI.value, keyPairs: keyPairs[0].keyPairName, walletID: walletID })
+        this.setState({ personIRI: personIRI.value, keyPairs: keyPairs, walletID: walletID })
     }
 
 

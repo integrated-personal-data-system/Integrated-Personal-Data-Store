@@ -11,6 +11,7 @@ import CreateNewDataForm from "../components/data-forms/CreateNewDataForm";
 import readMyData from "../api-functions/my-data/readMyData";
 import readMyCerts from "../api-functions/my-creds/readMyCerts"
 import createNewUser from "../api-functions/my-data/createNewUser";
+import getWalletID from "../api-functions/my-wallet/getWalletID";
 import readMappedAttributes from "../api-functions/my-data/readMappedAttributes"
 import getPersonIRI from "../api-functions/my-data/getPersonIRI"
 
@@ -30,7 +31,8 @@ class App extends React.Component {
             person: "",
             mydata: [],
             mycerts: [],
-            mappedAttributes: []
+            mappedAttributes: [],
+            wallets: []
         }
 
         this.renderCerts = this.renderCerts.bind(this)
@@ -49,6 +51,7 @@ class App extends React.Component {
         let myDataArray = await readMyData()
         let myCertsArray = await readMyCerts()
         let mappedAttributesArray = await readMappedAttributes()
+        let wallets = await getWalletID()
 
 
         if (personIRI.value != "") {

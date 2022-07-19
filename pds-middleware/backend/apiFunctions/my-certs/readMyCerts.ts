@@ -8,7 +8,7 @@ select ?Person ?KeyPairName where{
           cco:agent_in ?ActOfOwnerShip. 
   
   ?ActOfOwnerShip a cco:ActOfOwnership;
-            cco:has_object ?RSAKeyPairIRI .
+  obo:RO_0000057 ?RSAKeyPairIRI .
   
   ?RSAKeyPairIRI a cco:RSAKeyPair ;
                 cco:designated_by ?RSAKeyPairDESC . 
@@ -30,11 +30,11 @@ function createCertQuery(certName) {
               cco:agent_in ?ActOfOwnerShip. 
       
       ?ActOfOwnerShip a cco:ActOfOwnership;
-                cco:has_object ?RSAKeyPairIRI .
+        obo:RO_0000057 ?RSAKeyPairIRI .
       
       ?RSAKeyPairIRI a cco:RSAKeyPair ;
-                     cco:has_object ?PrivateKeyIRI ; 
-                     cco:has_object ?PublicKeyIRI ; 
+        obo:RO_0000057 ?PrivateKeyIRI ; 
+        obo:RO_0000057 ?PublicKeyIRI ; 
                     cco:designated_by ?RSAKeyPairDESC . 
     
       
@@ -67,6 +67,7 @@ export function readCertByName(certName: string, callback: ({ success: boolean, 
         body: query
     }).then(res => res.text()).then(data => {
         let jsonResults = JSON.parse(data)
+        console.log(jsonResults.results.bindings[0])
         if (jsonResults.results.bindings[0] != undefined) {
             callback({
                 success: true,
@@ -98,8 +99,10 @@ export function readMyCerts(callback: ({ success: boolean, data: string }) => vo
         body: allCertsQuery
     }).then(res => res.text()).then(data => {
         let jsonResults = JSON.parse(data)
+        console.log(jsonResults)
         if (jsonResults.results.bindings[0] != undefined) {
             let keyPairArray = []
+            console.log(jsonResults.results.bindings[0])
             for (let keyPairs of jsonResults.results.bindings) {
                 let ParseKeyPairObj = {
                     person: keyPairs["Person"].value,

@@ -15,11 +15,11 @@ function uploadRSAKeys(person: string, keyPairName: string, publicKey: string, e
                 cco:agent_in cco:ActOfOwnership_${keyPairName} . 
 
             cco:ActOfOwnership_${keyPairName} a cco:ActOfOwnership;
-                cco:has_object cco:RSAKeyPair_${keyPairName} . 
+                obo:RO_0000057 cco:RSAKeyPair_${keyPairName} . 
             
             cco:RSAKeyPair_${keyPairName} a cco:RSAKeyPair ;
-                cco:has_object cco:RSAPublicKey_${keyPairName} ;
-                cco:has_object cco:RSAPrivateKey_${keyPairName} ; 
+                obo:RO_0000057 cco:RSAPublicKey_${keyPairName} ;
+                obo:RO_0000057 cco:RSAPrivateKey_${keyPairName} ; 
                 cco:designated_by cco:RSAKeyPairDesc_${keyPairName} . 
 
             cco:RSAKeyPairDesc_${keyPairName} a cco:DesignativeName;
