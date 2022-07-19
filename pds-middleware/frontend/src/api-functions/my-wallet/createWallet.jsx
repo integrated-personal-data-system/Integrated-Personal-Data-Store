@@ -1,5 +1,5 @@
 async function createWallet(personIRI) {
-    let data = {
+    let uploadData = {
         person: personIRI
     }
 
@@ -9,11 +9,16 @@ async function createWallet(personIRI) {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(uploadData)
     })
 
-    let resData = await res.json()
-    return resData.data
+    let data = await res.json()
+    if (data.value !== null) {
+        return data.value
+    } else {
+        return ""
+    }
+
 }
 
 export default createWallet

@@ -21,7 +21,7 @@ function getPersonIRI(callback: ({ success: boolean, data: string }) => void) {
         if (jsonResults.results.bindings[0] != undefined) {
             callback({
                 success: true,
-                data: jsonResults.results.bindings[0].Person
+                data: { "value": jsonResults.results.bindings[0].Person.value }
             })
         } else {
             callback({
@@ -34,7 +34,7 @@ function getPersonIRI(callback: ({ success: boolean, data: string }) => void) {
     }).catch((error) => {
         callback({
             success: false,
-            data: { "value": null }
+            data: { "value ": "Failed to Read Person IRI" }
         })
     })
 }

@@ -89,10 +89,10 @@ app.post('/api/createWallet', (request: Request<string, any>, response: Response
         logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         createWallet(request.body.person, (result) => {
             if (result.success) {
-                response.status(200).send({ data: result.data })
+                response.status(200).send(result.data)
             } else {
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send({ data: result.data })
+                response.status(500).send(result.data)
             }
         })
     } catch (error) {
@@ -108,10 +108,10 @@ app.get('/api/getWalletId', async (request: Request<string, any>, response: Resp
         logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         await getWalletId((result) => {
             if (result.success) {
-                response.status(200).send({ data: result.data })
+                response.status(200).send(result.data)
             } else {
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send({ data: result.data })
+                response.status(500).send(result.data)
             }
         })
     } catch (error) {
@@ -140,10 +140,10 @@ app.get('/api/readMyCerts', (request: Request, response: Response) => {
         logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         readMyCerts((result) => {
             if (result.success) {
-                response.status(200).send({ data: result.data })
+                response.status(200).send(result.data)
             } else {
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send({ data: "Failed to Read Keys" })
+                response.status(500).send(result.data)
             }
         })
     } catch (error) {
@@ -174,7 +174,7 @@ app.get('/api/getPersonIRI', (request: Request<string, createMyDataBody>, respon
             } else {
                 console.log(result.data)
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send({ data: "Failed to Read Person IRI" })
+                response.status(500).send(result.data)
             }
         })
     } catch (error) {

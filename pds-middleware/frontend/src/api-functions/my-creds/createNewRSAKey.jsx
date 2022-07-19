@@ -1,5 +1,5 @@
 async function createNewRSAKeys(person, keyPairName, passphrase) {
-    let data = {
+    let uploadData = {
         "person": person,
         "keyPairName": keyPairName.replace(/\s/g, ''),
         "passphrase": passphrase
@@ -11,11 +11,15 @@ async function createNewRSAKeys(person, keyPairName, passphrase) {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(uploadData)
     })
 
-    let resData = await res.json()
-    return resData.data
+    let data = await res.json()
+    if (data.value != null) {
+        return data.value
+    } else {
+        return ""
+    }
 }
 
 export default createNewRSAKeys

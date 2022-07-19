@@ -27,29 +27,29 @@ class Init extends React.Component {
     async componentDidMount() {
         // Gets the Person IRI, Returns Null if there is not Person 
         let personIRI = await getPersonIRI()
+        // console.log(personIRI)
 
         // Gets the KeyPairs, Returns Null if there is no Key Pairs
         let keyPairs = await readMyCerts()
-        console.log(keyPairs)
+        // console.log(keyPairs)
         // Gets the WalletId, Returns Null if there is no Key Pairs
         let walletID = await getWalletID()
 
-        if (personIRI.value == null) {
-            let newUser = await createNewUser()
-            personIRI = newUser
+        if (personIRI == null) {
+            personIRI = await createNewUser()
         }
 
         if (keyPairs == null) {
-            let newKeyPair = await createNewRSAKeys(personIRI.value, "Self-Cert", personIRI.value) // Need to make this passphrase more secure 
+            let newKeyPair = await createNewRSAKeys(personIRI, "Self-Cert", personIRI) // Need to make this passphrase more secure 
             keyPairs = newKeyPair
         }
 
         if (walletID == null) {
-            let newWallet = await createNewWallet(personIRI.value)
+            let newWallet = await createNewWallet(personIRI)
             walletID = newWallet.value
         }
 
-        this.setState({ personIRI: personIRI.value, keyPairs: keyPairs, walletID: walletID })
+        this.setState({ personIRI: personIRI, keyPairs: keyPairs, walletID: walletID })
     }
 
 

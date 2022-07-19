@@ -61,7 +61,7 @@ async function createWallet(person: string, callback: ({ success: boolean, data:
         }).catch((error) => {
             callback({
                 success: false,
-                data: error
+                data: { "value": null }
             })
         })
     } catch (error) {

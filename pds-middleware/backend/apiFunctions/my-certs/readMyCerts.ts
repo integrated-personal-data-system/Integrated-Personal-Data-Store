@@ -99,26 +99,19 @@ export function readMyCerts(callback: ({ success: boolean, data: string }) => vo
         body: allCertsQuery
     }).then(res => res.text()).then(data => {
         let jsonResults = JSON.parse(data)
-        console.log(jsonResults)
         if (jsonResults.results.bindings[0] != undefined) {
             let keyPairArray = []
-            console.log(jsonResults.results.bindings[0])
             for (let keyPairs of jsonResults.results.bindings) {
-                let ParseKeyPairObj = {
-                    person: keyPairs["Person"].value,
-                    keyPairName: keyPairs["KeyPairName"].value,
-                }
-                keyPairArray.push(ParseKeyPairObj)
+                keyPairArray.push(keyPairs["KeyPairName"].value)
             }
-
             callback({
                 success: true,
-                data: keyPairArray
+                data: { "value": keyPairArray }
             })
         } else {
             callback({
                 success: true,
-                data: []
+                data: { "value": [] }
             })
         }
 
@@ -126,7 +119,7 @@ export function readMyCerts(callback: ({ success: boolean, data: string }) => vo
         console.log(error)
         callback({
             success: false,
-            data: error
+            data: { "value": "Could Not Read Data" }
         })
     })
 }

@@ -9,9 +9,11 @@ async function createNewUser(callback) {
     })
 
     let data = await res.json()
-    return data
-
-
+    if (data.value != null) {
+        return data.value
+    } else {
+        return ""
+    }
 }
 
 export default createNewUser

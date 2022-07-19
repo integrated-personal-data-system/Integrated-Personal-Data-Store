@@ -8,13 +8,14 @@ async function getWalletID() {
 
     })
 
-    let resData = await res.json()
-    if (resData.data.length === 0) {
-        return null
+    let data = await res.json()
+
+    if (data.value !== null) {
+        return data.value
     } else {
-        return resData.data
+        return ""
     }
-    return resData.data
+
 }
 
 export default getWalletID

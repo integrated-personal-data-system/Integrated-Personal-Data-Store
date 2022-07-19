@@ -7,10 +7,11 @@ async function readMyCerts() {
     })
 
     let data = await res.json()
-    if (data.data.length === 0) {
-        return null
+
+    if (data.value != null) {
+        return data.value
     } else {
-        return data.data
+        return ""
     }
 }
 

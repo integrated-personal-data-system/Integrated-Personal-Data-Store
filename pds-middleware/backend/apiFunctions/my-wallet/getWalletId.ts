@@ -42,10 +42,9 @@ async function getWalletId(callback: ({ success: boolean, data: string }) => voi
         for (let result of jsonResults.results.bindings) {
             walletArray.push(result.DigitalWalletId.value)
         }
-        console.log(walletArray)
         callback({
             success: true,
-            data: walletArray
+            data: { "value": walletArray }
         })
 
     }).catch((error) => {
