@@ -11,6 +11,7 @@ import createNewUser from "../api-functions/my-data/createNewUser";
 import createNewRSAKeys from "../api-functions/my-creds/createNewRSAKey";
 import getWalletID from "../api-functions/my-wallet/getWalletID";
 import createNewWallet from "../api-functions/my-wallet/createWallet"
+import Alert from "react-bootstrap/Alert"
 import { Link } from "react-router-dom"
 
 
@@ -31,7 +32,7 @@ class Init extends React.Component {
 
         // Gets the KeyPairs, Returns Null if there is no Key Pairs
         let keyPairs = await readMyCerts()
-        // console.log(keyPairs)
+
         // Gets the WalletId, Returns Null if there is no Key Pairs
         let walletID = await getWalletID()
 
@@ -67,17 +68,22 @@ class Init extends React.Component {
                 </>)
         } else {
             return (
-                <>
-
-                    <p> Person IRI: {this.state.personIRI}</p>
-                    <p> Keypair ID: {this.state.keyPairs}</p>
-                    <p> Wallet ID: {this.state.walletID}</p>
-
-                    <Link to={{
-                        pathname: "/wallet",
-                    }} className="btn btn-primary">Go To Wallet</Link>
-
-                </>
+                <Row style={{ margin: "1rem" }}>
+                    <Col>
+                        <Alert key={this.state.personIRI} variant='info'>
+                            Person IRI: {this.state.personIRI}
+                        </Alert>
+                        <Alert key={this.state.keyPairs} variant='info'>
+                            Keypair ID: {this.state.keyPairs}
+                        </Alert>
+                        <Alert key={this.state.walletID} variant='info'>
+                            Wallet ID: {this.state.walletID}
+                        </Alert>
+                        <Link to={{
+                            pathname: "/wallet",
+                        }} className="btn btn-warning">Go To Wallet</Link>
+                    </Col>
+                </Row>
             )
         }
     }
@@ -104,12 +110,7 @@ class Init extends React.Component {
                                 <h1> Powering On Wallet</h1>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col>
-                                {this.loadingWallet()}
-                            </Col>
-                        </Row>
-
+                        {this.loadingWallet()}
                     </Container>
                 </Container>
             </div >

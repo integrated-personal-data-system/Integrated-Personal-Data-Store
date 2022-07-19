@@ -47,12 +47,23 @@ class App extends React.Component {
      * @CR
      */
     async componentDidMount() {
+
         let personIRI = await getPersonIRI()
         let myDataArray = await readMyData()
         let myCertsArray = await readMyCerts()
         let mappedAttributesArray = await readMappedAttributes()
         let wallets = await getWalletID()
 
+
+
+
+
+        // YOOOOOOOOOOO CASEY COME BACK HERE
+        console.log(wallets)
+        console.log(personIRI)
+        console.log(myDataArray)
+        console.log(mappedAttributesArray)
+        console.log(myCertsArray)
 
         if (personIRI.value != "") {
             this.setState({ mydata: myDataArray, person: personIRI.value, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
