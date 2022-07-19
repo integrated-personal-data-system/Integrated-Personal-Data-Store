@@ -1,0 +1,43 @@
+import fetch from "node-fetch"
+
+
+const myDataQuery = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+select ?Person where{
+  ?Person a cco:Person . 
+}`
+
+
+function getPersonIRI(callback: ({ success: boolean, data: string }) => void) {
+    fetch('http://iamtestingbed.com:3030/MyData/sparql', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/sparql-query',
+            'Accept': 'application/json'
+        },
+        body: myDataQuery
+    }).then(res => res.text()).then(data => {
+        let jsonResults = JSON.parse(data)
+        if (jsonResults.results.bindings[0] != undefined) {
+            console.log(jsonResults.results.bindings[0])
+            callback({
+                success: true,
+                data: jsonResults.results.bindings[0].Person
+            })
+        } else {
+            callback({
+                success: true,
+                data: { "value": null }
+            })
+        }
+
+
+    }).catch((error) => {
+        callback({
+            success: false,
+            data: { "value": null }
+        })
+    })
+}
+
+export default getPersonIRI

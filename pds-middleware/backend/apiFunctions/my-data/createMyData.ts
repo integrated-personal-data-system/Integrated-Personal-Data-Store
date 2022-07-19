@@ -42,25 +42,25 @@ function createMyData(person: string, attribute: string, value: string, cert: st
         let query = createUpdateQuery(result.data)
         let vaildatedQuery = validateUpdateQuery(query)
         if (vaildatedQuery != "") {
-            fetch('http://iamtestingbed.com:3030/MyData', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/sparql-update',
-                    "Accept": "*/*"
+            // fetch('http://iamtestingbed.com:3030/MyData', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/sparql-update',
+            //         "Accept": "*/*"
 
-                },
-                body: query
-            }).then(res => res).then(data => {
-                callback({
-                    success: true,
-                    data: data
-                })
-            }).catch((error) => {
-                callback({
-                    success: false,
-                    data: error
-                })
-            })
+            //     },
+            //     body: query
+            // }).then(res => res).then(data => {
+            //     callback({
+            //         success: true,
+            //         data: data
+            //     })
+            // }).catch((error) => {
+            //     callback({
+            //         success: false,
+            //         data: error
+            //     })
+            // })
         } else {
             callback({
                 success: false,

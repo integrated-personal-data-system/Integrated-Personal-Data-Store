@@ -68,7 +68,9 @@ export function readCertByName(certName: string, callback: ({ success: boolean, 
         body: query
     }).then(res => res.text()).then(data => {
         let jsonResults = JSON.parse(data)
+
         if (jsonResults.results.bindings[0] != undefined) {
+            console.log(jsonResults.results.bindings[0])
             callback({
                 success: true,
                 data: jsonResults.results.bindings[0]
@@ -99,6 +101,7 @@ export function readMyCerts(callback: ({ success: boolean, data: string }) => vo
         body: allCertsQuery
     }).then(res => res.text()).then(data => {
         let jsonResults = JSON.parse(data)
+        console.log(jsonResults)
         let keyPairArray = []
         for (let keyPairs of jsonResults.results.bindings) {
             let ParseKeyPairObj = {

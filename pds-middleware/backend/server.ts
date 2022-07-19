@@ -1,12 +1,13 @@
 import express, { Express, Handler, Request, Response } from "express";
-import readMyData from "./serverFunctions/my-data/readMyData";
-import { readMyCerts } from "./serverFunctions/my-certs/readMyCerts"
+import readMyData from "./apiFunctions/my-data/readMyData";
+import { readMyCerts } from "./apiFunctions/my-certs/readMyCerts"
 import bodyParser from 'body-parser'
-import createMyData from "./serverFunctions/my-data/createMyData";
-import deleteMyData from "./serverFunctions/my-data/deleteMyData";
-import createRSAKeyPair from "./serverFunctions/my-certs/rsaKeyGen";
-import { updateMyData } from "./serverFunctions/my-data/updateMyData";
-import createNewUser from "./serverFunctions/my-data/createNewUser";
+import createMyData from "./apiFunctions/my-data/createMyData";
+import deleteMyData from "./apiFunctions/my-data/deleteMyData";
+import createRSAKeyPair from "./apiFunctions/my-certs/rsaKeyGen";
+import { updateMyData } from "./apiFunctions/my-data/updateMyData";
+import createNewUser from "./apiFunctions/my-data/createNewUser";
+import getPersonIRI from "./apiFunctions/my-data/getPersonIRI";
 import { current_mapping, production } from './serverConfig'
 import { createLogger, format, transports } from 'winston'
 import { createNewCredentials, createWallet } from "./wallet"
@@ -30,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, "../frontend", "build")));
 app.use(express.static("public"));
 
-app.get('*', (req, res) => {
+app.get('/wallet', (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "build", "index.html"));
 });
 
@@ -79,7 +80,7 @@ if (production) {
 // Credentials Endpoints
 /////////////////////////////////
 
-app.post('/createWalletKeyPair', (request: Request<string, any>, response: Response) => {
+app.post('/api/createWalletKeyPair', (request: Request<string, any>, response: Response) => {
     try {
         logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         createRSAKeyPair(request.body.person, request.body.keyPairName, request.body.passphrase, (result) => {
@@ -96,7 +97,7 @@ app.post('/createWalletKeyPair', (request: Request<string, any>, response: Respo
 
 })
 
-app.get('/readMyCerts', (request: Request, response: Response) => {
+app.get('/api/readMyCerts', (request: Request, response: Response) => {
     try {
         logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         readMyCerts((result) => {
@@ -125,15 +126,16 @@ interface createMyDataBody {
     value: string
 }
 
-app.post('/createNewUser', (request: Request<string, createMyDataBody>, response: Response) => {
+
+app.get('/api/getPersonIRI', (request: Request<string, createMyDataBody>, response: Response) => {
     try {
-        logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-        createNewUser((result) => {
+        logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders);
+        getPersonIRI((result) => {
             if (result.success) {
                 response.status(200).send(result.data)
             } else {
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send("Could not create person")
+                response.status(500).send("Failed to Read Data")
             }
         })
     } catch (error) {
@@ -142,7 +144,24 @@ app.post('/createNewUser', (request: Request<string, createMyDataBody>, response
 
 })
 
-app.post('/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
+app.post('/api/createNewUser', (request: Request<string, createMyDataBody>, response: Response) => {
+    try {
+        logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        createNewUser((result) => {
+            if (result.success) {
+                response.status(200).send(result.data)
+            } else {
+                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                response.status(500).send(result.data)
+            }
+        })
+    } catch (error) {
+        logger.error(error);
+    }
+
+})
+
+app.post('/api/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
     try {
         logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         let data = request.body
@@ -160,7 +179,7 @@ app.post('/createMyData', (request: Request<string, createMyDataBody>, response:
 
 })
 
-app.get('/readMappedAttributes', (request: Request, response: Response) => {
+app.get('/api/readMappedAttributes', (request: Request, response: Response) => {
     try {
         logger.info("URL:" + request.url + " | METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         response.status(200).send({ attrList: current_mapping })
@@ -171,7 +190,7 @@ app.get('/readMappedAttributes', (request: Request, response: Response) => {
 })
 
 
-app.get('/readMyData', (request: Request, response: Response) => {
+app.get('/api/readMyData', (request: Request, response: Response) => {
     try {
         logger.info("URL:" + request.url + "  |  METHOD:" + request.method + "  |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         readMyData((result) => {
@@ -189,7 +208,7 @@ app.get('/readMyData', (request: Request, response: Response) => {
 })
 
 
-app.post('/updateMyData', (request: Request<string, createMyDataBody>, response: Response) => {
+app.post('/api/updateMyData', (request: Request<string, createMyDataBody>, response: Response) => {
     try {
         logger.info("URL:" + request.url + "  |  METHOD:" + request.method + "  |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         let data = request.body
@@ -208,7 +227,7 @@ app.post('/updateMyData', (request: Request<string, createMyDataBody>, response:
 })
 
 
-app.post('/deleteMyData', (request: Request<string, createMyDataBody>, response: Response,) => {
+app.post('/api//deleteMyData', (request: Request<string, createMyDataBody>, response: Response,) => {
     try {
         logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         let data = request.body

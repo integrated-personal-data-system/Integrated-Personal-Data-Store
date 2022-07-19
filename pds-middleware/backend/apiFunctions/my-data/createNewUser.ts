@@ -47,26 +47,26 @@ function createNewUser(callback: ({ success: boolean, data: string }) => void) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/sparql-update',
-                "Accept": "*/*"
+                'Accept': 'application/json'
 
             },
             body: query
         }).then(res => res).then(data => {
-
             callback({
                 success: true,
-                data: personGuid
+                data: { "value": personGuid }
             })
         }).catch((error) => {
+            console.log(error)
             callback({
                 success: false,
-                data: error
+                data: { "value": null }
             })
         })
     } else {
         callback({
             success: false,
-            data: "The Query did not validate"
+            data: { "value": null }
         })
     }
 }

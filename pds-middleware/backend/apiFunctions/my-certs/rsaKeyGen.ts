@@ -52,7 +52,7 @@ function uploadRSAKeys(person: string, keyPairName: string, publicKey: string, e
         `
 
         let validatedQuery = validateUpdateQuery(query)
-
+        console.log(validatedQuery)
 
         if (validatedQuery != "") {
             fetch('http://iamtestingbed.com:3030/MyData', {
@@ -98,29 +98,6 @@ function createRSAKeyPair(person: string, keyPairName: string, passphrase: strin
 
         let sparqlReadyPrivateKey = privateKey.replace(/[\n]/g, "")
         let sparqlReadyPublicKey = publicKey.replace(/[\n]/g, "")
-
-
-
-        // let two = cleanPrivateKey.replace("-----BEGIN PRIVATE KEY-----", "-----BEGIN PRIVATE KEY-----\n")
-        // let three = two.replace("-----END PRIVATE KEY-----", "\n-----END PRIVATE KEY-----")
-
-        // // let privateKeyTest = createPrivateKey(three)
-        // // console.log(privateKeyTest)
-        // // const sign = createSign('SHA256');
-        // // sign.update('some data to sign');
-        // // sign.end();
-        // // const signature = sign.sign(privateKey, "hex");
-        // // console.log(signature)
-
-        // // const verify = createVerify('SHA256');
-        // // verify.update('some data to sign');
-        // // verify.end();
-        // // console.log(verify.verify(publicKey, signature, "hex"));
-
-        // // let pubkicKeyTest = createPublicKey(publicKey)
-
-        // // console.log(privateKeyTest)
-        // // console.log(pubkicKeyTest)
 
         uploadRSAKeys(person, keyPairName, sparqlReadyPublicKey, sparqlReadyPrivateKey)
 
