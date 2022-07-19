@@ -4,7 +4,7 @@ import { readMyCerts } from "./apiFunctions/my-certs/readMyCerts"
 import bodyParser from 'body-parser'
 import createMyData from "./apiFunctions/my-data/createMyData";
 import deleteMyData from "./apiFunctions/my-data/deleteMyData";
-import createRSAKeyPair from "./apiFunctions/my-certs/rsaKeyGen";
+import createRSAKeyPair from "./apiFunctions/my-certs/createRSAKeyPair";
 import { updateMyData } from "./apiFunctions/my-data/updateMyData";
 import createNewUser from "./apiFunctions/my-data/createNewUser";
 import getPersonIRI from "./apiFunctions/my-data/getPersonIRI";
@@ -94,7 +94,6 @@ app.post('/api/createWalletKeyPair', (request: Request<string, any>, response: R
     } catch (error) {
         logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
     }
-
 })
 
 app.get('/api/readMyCerts', (request: Request, response: Response) => {
