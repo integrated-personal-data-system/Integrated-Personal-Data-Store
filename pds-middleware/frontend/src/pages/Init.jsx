@@ -9,6 +9,8 @@ import readMyCerts from "../api-functions/my-creds/readMyCerts";
 import getPersonIRI from "../api-functions/my-data/getPersonIRI";
 import createNewUser from "../api-functions/my-data/createNewUser";
 import createNewRSAKeys from "../api-functions/my-creds/createNewRSAKey";
+import getWalletID from "../api-functions/my-wallet/getWalletID";
+import createNewWallet from "../api-functions/my-wallet/createWallet"
 import { Link } from "react-router-dom"
 
 
@@ -17,7 +19,7 @@ class Init extends React.Component {
         super(props);
         this.state = {
             personIRI: "",
-            walletId: "",
+            walletID: "",
             keyPairs: ""
         }
         this.loadingWallet = this.loadingWallet.bind(this)
@@ -29,6 +31,9 @@ class Init extends React.Component {
         // Gets the KeyPairs, Returns Null if there is no Key Pairs
         let keyPairs = await readMyCerts()
 
+        // Gets the WalletId, Returns Null if there is no Key Pairs
+        let walletID = await getWalletID()
+        console.log(walletID)
 
         if (personIRI.value == null) {
             let newUser = await createNewUser()
@@ -40,13 +45,17 @@ class Init extends React.Component {
             keyPairs = newKeyPair
         }
 
+        if (walletID == null) {
+            let newWallet = await createNewWallet(personIRI.value)
+            walletID = newWallet.value
+        }
 
-        this.setState({ personIRI: personIRI.value, keyPairs: keyPairs })
+        this.setState({ personIRI: personIRI.value, keyPairs: keyPairs[0].keyPairName, walletID: walletID })
     }
 
 
     loadingWallet() {
-        if (this.state.personIRI == "") {
+        if (this.state.personIRI === "") {
             return (
                 <>
                     <Spinner animation="grow" variant="primary" />
@@ -63,7 +72,7 @@ class Init extends React.Component {
 
                     <p> Person IRI: {this.state.personIRI}</p>
                     <p> Keypair ID: {this.state.keyPairs}</p>
-                    <p> Wallet ID: {this.state.walletIdI}</p>
+                    <p> Wallet ID: {this.state.walletID}</p>
 
                     <Link to={{
                         pathname: "/wallet",

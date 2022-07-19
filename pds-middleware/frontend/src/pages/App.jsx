@@ -50,10 +50,7 @@ class App extends React.Component {
         let myCertsArray = await readMyCerts()
         let mappedAttributesArray = await readMappedAttributes()
 
-        console.log(personIRI.value)
-        console.log(myDataArray)
-        console.log(myCertsArray)
-        console.log(mappedAttributesArray)
+
         if (personIRI.value != "") {
             this.setState({ mydata: myDataArray, person: personIRI.value, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
         } else {
