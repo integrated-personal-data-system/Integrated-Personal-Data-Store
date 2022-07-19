@@ -6,7 +6,7 @@ import {
     Route,
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import App from "./pages/App";
+import App from "./pages/App.jsx";
 import Init from "./pages/Init.jsx"
 
 

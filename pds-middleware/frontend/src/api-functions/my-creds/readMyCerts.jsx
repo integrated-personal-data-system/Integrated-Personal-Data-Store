@@ -1,5 +1,5 @@
 async function readMyCerts() {
-    const res = await fetch('/readMyCerts', {
+    const res = await fetch('/api/readMyCerts', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

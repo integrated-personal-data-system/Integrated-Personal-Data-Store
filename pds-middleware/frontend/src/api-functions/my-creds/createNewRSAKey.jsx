@@ -1,21 +1,21 @@
-function createNewRSAKeys(person, keyPairName, passphrase) {
+async function createNewRSAKeys(person, keyPairName, passphrase) {
     let data = {
         "person": person,
-        "keyPairName": keyPairName.replace(/\s/g, ''), 
+        "keyPairName": keyPairName.replace(/\s/g, ''),
         "passphrase": passphrase
     }
-    fetch('/createWalletKeyPair', {
+
+    const res = await fetch('/api/createWalletKeyPair', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
-    }).then(res => res.text()).then(data => {
-        console.log(data)
-    }).catch((error) => {
-        console.log(error)
     })
+
+    let resData = await res.json()
+    return resData
 }
 
-export default  createNewRSAKeys
+export default createNewRSAKeys

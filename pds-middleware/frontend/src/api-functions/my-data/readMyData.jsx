@@ -1,12 +1,14 @@
 async function readMyData() {
-    const res = await fetch('/readMyData', {
+    const res = await fetch('/api/readMyData', {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application / json'
         },
     })
 
     let data = await res.json()
+
     let parsedReults = []
 
     if (data.length !== 0) {
@@ -29,7 +31,7 @@ async function readMyData() {
             })
         }
     }
-
+    // console.log(parsedReults)
     return parsedReults
 }
 

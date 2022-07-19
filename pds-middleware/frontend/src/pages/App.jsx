@@ -12,6 +12,7 @@ import readMyData from "../api-functions/my-data/readMyData";
 import readMyCerts from "../api-functions/my-creds/readMyCerts"
 import createNewUser from "../api-functions/my-data/createNewUser";
 import readMappedAttributes from "../api-functions/my-data/readMappedAttributes"
+import getPersonIRI from "../api-functions/my-data/getPersonIRI"
 
 import CreateNewKeyPairForm from "../components/data-forms/CreateNewKeyPairForm"
 
@@ -19,7 +20,6 @@ import CreateNewKeyPairForm from "../components/data-forms/CreateNewKeyPairForm"
 class App extends React.Component {
     constructor(props) {
         super(props);
-
 
         this.state = {
             showing: "",
@@ -45,25 +45,18 @@ class App extends React.Component {
      * @CR
      */
     async componentDidMount() {
+        let personIRI = await getPersonIRI()
         let myDataArray = await readMyData()
         let myCertsArray = await readMyCerts()
         let mappedAttributesArray = await readMappedAttributes()
-        let person = ""
-        for (let item of myDataArray) {
-            if (Object.keys(item)[0] === "Person") {
-                person = item.Person
-            }
-        }
-        if (person != "") {
-            this.setState({ mydata: myDataArray, person: person, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
-        } else {
-            createNewUser((result) => {
-                if (result.success) {
-                    this.setState({ mydata: myDataArray, person: result.person, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
-                }
-            })
-        }
 
+        console.log(personIRI)
+        if (personIRI.value != "") {
+            this.setState({ mydata: myDataArray, person: personIRI.value, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
+        } else {
+
+
+        }
 
     }
 
@@ -193,7 +186,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <div className="App" >
+            <>
                 <Navbar expand="lg" bg="primary" variant="dark" >
                     <Container className="navbar-top">
                         <Navbar.Brand href="#home">My Data</Navbar.Brand>
@@ -217,7 +210,7 @@ class App extends React.Component {
                     </Container>
                     {this.renderDataOrCreds()}
                 </Container>
-            </div >
+            </ >
         );
     }
 }

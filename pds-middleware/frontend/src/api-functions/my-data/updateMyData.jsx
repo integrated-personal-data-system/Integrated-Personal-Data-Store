@@ -8,7 +8,7 @@ function updateMyData(person, attribute, newValue, oldDataValue, callback) {
     }
 
 
-    fetch('/updateMyData', {
+    fetch('/api/updateMyData', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

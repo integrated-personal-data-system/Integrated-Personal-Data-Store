@@ -7,7 +7,7 @@ function createMyData(person, attribute, value, cert, callback) {
         "cert": cert,
     }
 
-    fetch('/createMyData', {
+    fetch('/api/createMyData', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

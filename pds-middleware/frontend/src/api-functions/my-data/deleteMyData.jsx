@@ -6,7 +6,7 @@ function deleteMyData(person, attribute, value, callback) {
         "value": value
     }
 
-    fetch('/deleteMyData', {
+    fetch('/api/deleteMyData', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

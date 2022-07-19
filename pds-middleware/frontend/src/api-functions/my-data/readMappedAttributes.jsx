@@ -1,5 +1,5 @@
 async function readMappedAttributes() {
-    const res = await fetch('/readMappedAttributes', {
+    const res = await fetch('/api/readMappedAttributes', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

@@ -1,18 +1,17 @@
-function createNewUser(callback) {
-    fetch('/createNewUser', {
+async function createNewUser(callback) {
+
+    const res = await fetch('/api/createNewUser', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-    }).then(res => res.text()).then(data => {
-        callback({
-            success: true,
-            person: data
-        })
-    }).catch((error) => {
-        console.log(error)
     })
+
+    let data = await res.json()
+    return data
+
+
 }
 
 export default createNewUser
