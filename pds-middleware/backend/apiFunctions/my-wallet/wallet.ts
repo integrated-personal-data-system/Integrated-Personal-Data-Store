@@ -31,20 +31,6 @@ export const walletClient = new WalletServiceClient(
 );
 
 
-export async function createWallet() {
-    let wallet = await walletClient.createWallet({
-        ownerName: process.env.WALLET_OWNER,
-        walletId: "Cdt1cAcLhMCCeq6G7Zlj9XZyijfzNHU6n"
-    });
-    // await walletClient.deleteWallet("Cdt1cAcLhMCCeq6G7Zlj9XZyijfzNHU6n");
-    let wallets = await walletClient.listWallets();
-
-
-    return wallets
-
-}
-
-
 
 export async function createNewCredentials() {
     let credential = credentialsClient

@@ -10,7 +10,9 @@ import createNewUser from "./apiFunctions/my-data/createNewUser";
 import getPersonIRI from "./apiFunctions/my-data/getPersonIRI";
 import { current_mapping, production } from './serverConfig'
 import { createLogger, format, transports } from 'winston'
-import { createNewCredentials, createWallet } from "./wallet"
+import createWallet from "./apiFunctions/my-wallet/createWallet";
+import getWalletId from "./apiFunctions/my-wallet/getWalletId"
+import { walletClient } from "./apiFunctions/my-wallet/wallet";
 import 'dotenv/config'
 
 
@@ -79,6 +81,43 @@ if (production) {
 //////////////////////////////////
 // Credentials Endpoints
 /////////////////////////////////
+
+
+app.post('/api/createWallet', (request: Request<string, any>, response: Response) => {
+    try {
+
+        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        createWallet(request.body.person, (result) => {
+            if (result.success) {
+                response.status(200).send({ data: result.data })
+            } else {
+                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                response.status(500).send({ data: result.data })
+            }
+        })
+    } catch (error) {
+
+    }
+})
+
+
+
+
+app.get('/api/getWalletId', async (request: Request<string, any>, response: Response) => {
+    try {
+        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        await getWalletId((result) => {
+            if (result.success) {
+                response.status(200).send({ data: result.data })
+            } else {
+                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                response.status(500).send({ data: result.data })
+            }
+        })
+    } catch (error) {
+
+    }
+})
 
 app.post('/api/createWalletKeyPair', (request: Request<string, any>, response: Response) => {
     try {
@@ -243,6 +282,20 @@ app.post('/api/deleteMyData', (request: Request<string, createMyDataBody>, respo
         logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
     }
 
+})
+
+
+//////////////////////////////////
+// Dev Endpoints
+/////////////////////////////////
+
+
+app.post('/dev/DeleteCloudWallet', async (request: Request<string, any>, response: Response) => {
+    let wallets = await walletClient.listWallets();
+    for (let wallet of wallets) {
+        await walletClient.deleteWallet(wallet.walletId);
+    }
+    response.status(200).send("Successfully Deleted Wallets")
 })
 
 
