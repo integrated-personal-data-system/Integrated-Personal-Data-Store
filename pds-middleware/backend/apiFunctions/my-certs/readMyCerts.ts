@@ -59,7 +59,7 @@ function createCertQuery(certName) {
 
 export function readCertByName(certName: string, callback: ({ success: boolean, data: string }) => void) {
     let query = createCertQuery(certName)
-    fetch('http://iamtestingbed.com:3030/MyData/sparql', {
+    fetch(`http://${process.env.API_LOCATION}:3030/MyData/sparql`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/sparql-query',

@@ -37,7 +37,7 @@ function uploadRSAKeys(person: string, keyPairName: string, publicKey: string, e
         `
         let validatedQuery = validateQuery(query)
         if (validatedQuery != "") {
-            fetch('http://iamtestingbed.com:3030/MyData', {
+            fetch(`http://${process.env.API_LOCATION}:3030/MyData`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/sparql-update',

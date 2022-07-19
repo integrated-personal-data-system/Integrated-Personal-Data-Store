@@ -297,7 +297,7 @@ UNION
 
 
 function readMyData(callback: ({ success: boolean, data: string }) => void) {
-  fetch('http://iamtestingbed.com:3030/MyData/sparql', {
+  fetch(`http://${process.env.API_LOCATION}:3030/MyData/sparql`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/sparql-query',

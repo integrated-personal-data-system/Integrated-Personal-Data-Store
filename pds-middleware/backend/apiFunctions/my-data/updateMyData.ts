@@ -23,7 +23,7 @@ export function updateMyData(person: string, attribute: string, newDataValue: st
     let validatedQuery = validateUpdateQuery(query)
 
     if (validatedQuery != "") {
-        fetch('http://iamtestingbed.com:3030/MyData', {
+        fetch(`http://${process.env.API_LOCATION}:3030/MyData`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/sparql-update',

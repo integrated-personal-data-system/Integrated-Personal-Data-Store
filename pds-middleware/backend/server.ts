@@ -104,7 +104,7 @@ app.get('/api/readMyCerts', (request: Request, response: Response) => {
                 response.status(200).send(result.data)
             } else {
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send(result.data)
+                response.status(500).send({ data: "Failed to Read Keys" })
             }
         })
     } catch (error) {
@@ -133,8 +133,9 @@ app.get('/api/getPersonIRI', (request: Request<string, createMyDataBody>, respon
             if (result.success) {
                 response.status(200).send(result.data)
             } else {
+                console.log(result.data)
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send("Failed to Read Data")
+                response.status(500).send({ data: "Failed to Read Person IRI" })
             }
         })
     } catch (error) {
@@ -197,7 +198,7 @@ app.get('/api/readMyData', (request: Request, response: Response) => {
                 response.status(200).send(result.data)
             } else {
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send("Failed to Read Data")
+                response.status(500).send({ data: "Failed to Read Data" })
             }
         })
     } catch (error) {
