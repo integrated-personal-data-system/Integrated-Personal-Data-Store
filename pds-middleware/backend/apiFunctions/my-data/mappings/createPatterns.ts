@@ -512,6 +512,7 @@ function pds_weight(person: string, weight: string, signature: string, cert: str
 
 export function mappingFuction(person: string, attribute: string, value: string, cert: string, callback: ({ success: boolean, data: string }) => void) {
   try {
+
     let attributeClean = attribute.toLocaleLowerCase()
     readCertByName(cert, (result) => {
       let addTop = result.data.PrivateKey.value.replace("-----BEGIN PRIVATE KEY-----", "-----BEGIN PRIVATE KEY-----\n")
@@ -527,7 +528,6 @@ export function mappingFuction(person: string, attribute: string, value: string,
       switch (attributeClean) {
         case "firstname": {
           let triples = pds_firstname(person, value, signature, cert)
-          console.log(triples)
           return callback({
             success: true,
             data: triples

@@ -3,56 +3,55 @@ import fetch from "node-fetch"
 const allCertsQuery = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
 PREFIX obo: <http://purl.obolibrary.org/obo/>
 
-select ?Person ?KeyPair ?PublicKey ?PrivateKey where{
+select ?Person ?KeyPairName where{
  	?Person a cco:Person;
           cco:agent_in ?ActOfOwnerShip. 
   
- 	?ActOfOwnerShip a cco:ActOfOwnership ;
-  		obo:RO_0000057 ?RSAKeyPair. 
+  ?ActOfOwnerShip a cco:ActOfOwnership;
+            cco:has_object ?RSAKeyPairIRI .
   
-  	?RSAKeyPair a cco:RSAKeyPair ;
-               cco:designated_by  ?KeyPairDesc ;
-               obo:RO_0000057 ?PublicKeyIBA;
-               obo:RO_0000057 ?PrivateKeyIBA. 
+  ?RSAKeyPairIRI a cco:RSAKeyPair ;
+                cco:designated_by ?RSAKeyPairDESC . 
+
   
-  ?KeyPairDesc a cco:DesignativeName;
-               <http://purl.obolibrary.org/obo/RO_0010001> ?KeyPairDescIBE.
-  
-  ?KeyPairDescIBE cco:has_text_value ?KeyPair . 
-  
-    ?PublicKeyIBA a cco:RSAPublicKey;
-               cco:has_text_value ?PublicKey.
-  
-  ?PrivateKeyIBA a cco:RSAPrivateKey;
-               cco:has_text_value ?PrivateKey.
+  ?RSAKeyPairDESC a cco:DesignativeName;
+                  obo:RO_0010001  ?RSAKeyPairDESCIBE . 
+            
+  ?RSAKeyPairDESCIBE cco:has_text_value ?KeyPairName
+           
 }`
 
 function createCertQuery(certName) {
     let query = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
     PREFIX obo: <http://purl.obolibrary.org/obo/>
-
-    select ?Person ?KeyPair ?PublicKey ?PrivateKey where{
+    
+    select ?KeyPairName ?PrivateKey ?PublicKey where{
          ?Person a cco:Person;
               cco:agent_in ?ActOfOwnerShip. 
       
-         ?ActOfOwnerShip a cco:ActOfOwnership ;
-              obo:RO_0000057 ?RSAKeyPair. 
+      ?ActOfOwnerShip a cco:ActOfOwnership;
+                cco:has_object ?RSAKeyPairIRI .
       
-          ?RSAKeyPair a cco:RSAKeyPair ;
-                   cco:designated_by  ?KeyPairDesc ;
-                   obo:RO_0000057 ?PublicKeyIBA;
-                   obo:RO_0000057 ?PrivateKeyIBA. 
+      ?RSAKeyPairIRI a cco:RSAKeyPair ;
+                     cco:has_object ?PrivateKeyIRI ; 
+                     cco:has_object ?PublicKeyIRI ; 
+                    cco:designated_by ?RSAKeyPairDESC . 
+    
       
-      ?KeyPairDesc a cco:DesignativeName;
-                   <http://purl.obolibrary.org/obo/RO_0010001> ?KeyPairDescIBE.
+      ?PrivateKeyIRI a cco:RSAPrivateKey ; 
+            cco:has_text_value ?PrivateKey .
       
-      ?KeyPairDescIBE cco:has_text_value "${certName.replace(/\s/g, '')}" . 
+      ?PublicKeyIRI a cco:RSAPublicKey;
+                   cco:has_text_value ?PublicKey .
       
-        ?PublicKeyIBA a cco:RSAPublicKey;
-                   cco:has_text_value ?PublicKey.
       
-      ?PrivateKeyIBA a cco:RSAPrivateKey;
-                   cco:has_text_value ?PrivateKey.
+      ?RSAKeyPairDESC a cco:DesignativeName;
+                      obo:RO_0010001  ?RSAKeyPairDESCIBE . 
+                
+      ?RSAKeyPairDESCIBE cco:has_text_value "${certName.replace(/\s/g, '')}" .
+               
+      
+         
     }`
     return query
 }
@@ -68,9 +67,7 @@ export function readCertByName(certName: string, callback: ({ success: boolean, 
         body: query
     }).then(res => res.text()).then(data => {
         let jsonResults = JSON.parse(data)
-
         if (jsonResults.results.bindings[0] != undefined) {
-            console.log(jsonResults.results.bindings[0])
             callback({
                 success: true,
                 data: jsonResults.results.bindings[0]
@@ -92,7 +89,7 @@ export function readCertByName(certName: string, callback: ({ success: boolean, 
 }
 
 export function readMyCerts(callback: ({ success: boolean, data: string }) => void) {
-    fetch('http://iamtestingbed.com:3030/MyData/sparql', {
+    fetch(`http://${process.env.API_LOCATION}:3030/MyData/sparql`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/sparql-query',
@@ -101,22 +98,29 @@ export function readMyCerts(callback: ({ success: boolean, data: string }) => vo
         body: allCertsQuery
     }).then(res => res.text()).then(data => {
         let jsonResults = JSON.parse(data)
-        console.log(jsonResults)
-        let keyPairArray = []
-        for (let keyPairs of jsonResults.results.bindings) {
-            let ParseKeyPairObj = {
-                person: keyPairs["Person"].value,
-                keyPairName: keyPairs["KeyPair"].value,
-                publicKey: keyPairs["PublicKey"].value
+        if (jsonResults.results.bindings[0] != undefined) {
+            let keyPairArray = []
+            for (let keyPairs of jsonResults.results.bindings) {
+                let ParseKeyPairObj = {
+                    person: keyPairs["Person"].value,
+                    keyPairName: keyPairs["KeyPairName"].value,
+                }
+                keyPairArray.push(ParseKeyPairObj)
             }
-            keyPairArray.push(ParseKeyPairObj)
+
+            callback({
+                success: true,
+                data: keyPairArray
+            })
+        } else {
+            callback({
+                success: true,
+                data: []
+            })
         }
 
-        callback({
-            success: true,
-            data: keyPairArray
-        })
     }).catch((error) => {
+        console.log(error)
         callback({
             success: false,
             data: error

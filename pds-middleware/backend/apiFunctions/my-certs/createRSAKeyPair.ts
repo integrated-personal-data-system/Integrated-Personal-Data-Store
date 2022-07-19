@@ -47,7 +47,7 @@ function uploadRSAKeys(person: string, keyPairName: string, publicKey: string, e
             }).then(res => res).then(data => {
                 callback({
                     success: true,
-                    data: "Uploaded Key Pair"
+                    data: `cco:RSAKeyPair_${keyPairName}`
                 })
             }).catch((error) => {
                 console.log(error)

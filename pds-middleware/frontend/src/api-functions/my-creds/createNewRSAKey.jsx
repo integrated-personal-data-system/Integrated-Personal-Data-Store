@@ -15,7 +15,7 @@ async function createNewRSAKeys(person, keyPairName, passphrase) {
     })
 
     let resData = await res.json()
-    return resData
+    return resData.data
 }
 
 export default createNewRSAKeys

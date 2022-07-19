@@ -19,7 +19,6 @@ function getPersonIRI(callback: ({ success: boolean, data: string }) => void) {
     }).then(res => res.text()).then(data => {
         let jsonResults = JSON.parse(data)
         if (jsonResults.results.bindings[0] != undefined) {
-            console.log(jsonResults.results.bindings[0])
             callback({
                 success: true,
                 data: jsonResults.results.bindings[0].Person

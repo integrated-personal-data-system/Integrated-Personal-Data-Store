@@ -23,24 +23,25 @@ class Init extends React.Component {
         this.loadingWallet = this.loadingWallet.bind(this)
     }
     async componentDidMount() {
+        // Gets the Person IRI, Returns Null if there is not Person 
         let personIRI = await getPersonIRI()
-        let certs = await readMyCerts()
+
+        // Gets the KeyPairs, Returns Null if there is no Key Pairs
+        let keyPairs = await readMyCerts()
+
 
         if (personIRI.value == null) {
             let newUser = await createNewUser()
             personIRI = newUser
         }
 
-        this.setState({ personIRI: personIRI.value })
-        // if (certs.length == 0) {
-        //     console.log(this.state)
-        //     let keyPairs = await createNewRSAKeys(this.state.personIRI, "Self-Cert", personIRI) // Need to make this passphrase more secure 
-        //     this.setState({ keyPairs: keyPairs })
-        // } else {
-        //     this.setState({ keyPairs: certs })
-        // }
+        if (keyPairs == null) {
+            let newKeyPair = await createNewRSAKeys(personIRI.value, "Self-Cert", personIRI.value) // Need to make this passphrase more secure 
+            keyPairs = newKeyPair
+        }
 
 
+        this.setState({ personIRI: personIRI.value, keyPairs: keyPairs })
     }
 
 
@@ -61,6 +62,7 @@ class Init extends React.Component {
                 <>
 
                     <p> Person IRI: {this.state.personIRI}</p>
+                    <p> Keypair ID: {this.state.keyPairs}</p>
                     <p> Wallet ID: {this.state.walletIdI}</p>
 
                     <Link to={{

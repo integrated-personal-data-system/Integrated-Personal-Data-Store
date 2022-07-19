@@ -85,10 +85,10 @@ app.post('/api/createWalletKeyPair', (request: Request<string, any>, response: R
         logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         createRSAKeyPair(request.body.person, request.body.keyPairName, request.body.passphrase, (result) => {
             if (result.success) {
-                response.status(200).send(result.data)
+                response.status(200).send({ data: result.data })
             } else {
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send(result.data)
+                response.status(500).send({ data: result.data })
             }
         })
     } catch (error) {
@@ -101,7 +101,7 @@ app.get('/api/readMyCerts', (request: Request, response: Response) => {
         logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         readMyCerts((result) => {
             if (result.success) {
-                response.status(200).send(result.data)
+                response.status(200).send({ data: result.data })
             } else {
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
                 response.status(500).send({ data: "Failed to Read Keys" })
@@ -227,7 +227,7 @@ app.post('/api/updateMyData', (request: Request<string, createMyDataBody>, respo
 })
 
 
-app.post('/api//deleteMyData', (request: Request<string, createMyDataBody>, response: Response,) => {
+app.post('/api/deleteMyData', (request: Request<string, createMyDataBody>, response: Response,) => {
     try {
         logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
         let data = request.body

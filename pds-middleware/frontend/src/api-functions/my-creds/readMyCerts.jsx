@@ -7,7 +7,11 @@ async function readMyCerts() {
     })
 
     let data = await res.json()
-    return data
+    if (data.data.length === 0) {
+        return null
+    } else {
+        return data.data
+    }
 }
 
 export default readMyCerts
