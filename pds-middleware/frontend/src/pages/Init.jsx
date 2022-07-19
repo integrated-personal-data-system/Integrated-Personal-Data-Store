@@ -24,14 +24,13 @@ class Init extends React.Component {
     }
     async componentDidMount() {
         let personIRI = await getPersonIRI()
-
-        // let certs = await readMyCerts()
+        let certs = await readMyCerts()
 
         if (personIRI.value == null) {
             let newUser = await createNewUser()
-
+            personIRI = newUser
         }
-        console.log(personIRI)
+
         this.setState({ personIRI: personIRI.value })
         // if (certs.length == 0) {
         //     console.log(this.state)

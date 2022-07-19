@@ -1,26 +1,11 @@
 import { generateKeyPairSync, createPrivateKey, createPublicKey, createSign, createVerify } from "crypto"
 import fetch from "node-fetch"
-import { Parser, Generator } from "sparqljs"
+import validateQuery from "../queries/validateQuery"
 
-function validateUpdateQuery(query: string) {
+
+
+function uploadRSAKeys(person: string, keyPairName: string, publicKey: string, encryptedPrivateKey: string, callback: ({ success: boolean, data: string }) => void) {
     try {
-        if (query == "") {
-            return "Query is empty"
-        }
-        let parser = new Parser()
-        var parsedQuery = parser.parse(query)
-        var generator = new Generator()
-        return generator.stringify(parsedQuery)
-    } catch (error) {
-        console.log("Your query has a syntax error")
-        return ""
-
-    }
-}
-
-function uploadRSAKeys(person: string, keyPairName: string, publicKey: string, encryptedPrivateKey: string) {
-    try {
-
         let query = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
         PREFIX obo: <http://purl.obolibrary.org/obo/>
             
@@ -50,10 +35,7 @@ function uploadRSAKeys(person: string, keyPairName: string, publicKey: string, e
             cco:has_text_value "${encryptedPrivateKey}". 
         }
         `
-
-        let validatedQuery = validateUpdateQuery(query)
-        console.log(validatedQuery)
-
+        let validatedQuery = validateQuery(query)
         if (validatedQuery != "") {
             fetch('http://iamtestingbed.com:3030/MyData', {
                 method: 'POST',
@@ -63,11 +45,16 @@ function uploadRSAKeys(person: string, keyPairName: string, publicKey: string, e
                 },
                 body: validatedQuery
             }).then(res => res).then(data => {
-                console.log("uploaded Key Pair")
-                return true
+                callback({
+                    success: true,
+                    data: "Uploaded Key Pair"
+                })
             }).catch((error) => {
-                console.log(console.log(error))
-                return false
+                console.log(error)
+                callback({
+                    success: false,
+                    data: "Did Not Upload Key Pair"
+                })
             })
         }
 
@@ -99,8 +86,7 @@ function createRSAKeyPair(person: string, keyPairName: string, passphrase: strin
         let sparqlReadyPrivateKey = privateKey.replace(/[\n]/g, "")
         let sparqlReadyPublicKey = publicKey.replace(/[\n]/g, "")
 
-        uploadRSAKeys(person, keyPairName, sparqlReadyPublicKey, sparqlReadyPrivateKey)
-
+        uploadRSAKeys(person, keyPairName, sparqlReadyPublicKey, sparqlReadyPrivateKey, callback)
 
     } catch (error) {
         console.log(error)
