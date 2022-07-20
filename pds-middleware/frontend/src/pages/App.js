@@ -126,15 +126,13 @@ class App extends React.Component {
                                     this.setState({ toggleAddData: false })
                                 }
                             }}
-                                variant="success"
-                                style={{ margin: ".5rem" }}>Add Data +</Button>
+                                style={{ margin: ".5rem" , backgroundColor: "#8C27IE" }}>Add Data +</Button>
                             <Button onClick={async () => {
                                 this.setState({ mydata: [] })
                                 let myDataArray = await readMyData()
                                 this.setState({ mydata: myDataArray })
                             }}
-                                variant="warning"
-                                style={{ margin: ".5rem" }}>Refresh</Button>
+                                style={{ margin: ".5rem", backgroundColor: "#ABA194"}}>Refresh</Button>
 
 
                             <CreateNewDataForm person={this.state.person} toggleAddData={this.state.toggleAddData} certs={this.state.mycerts} attributes={this.state.mappedAttributes} refreshData={this.refreshData}></CreateNewDataForm>
@@ -193,7 +191,7 @@ class App extends React.Component {
     render() {
         return (
             <div className="App" >
-                <Navbar expand="lg" bg="primary" variant="dark" >
+                <Navbar expand="lg" style={{backgroundColor: "#D9F7FA"}} >
                     <Container className="navbar-top">
                         <Navbar.Brand href="#home">My Data</Navbar.Brand>
                         <Navbar.Toggle />
