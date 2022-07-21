@@ -14,13 +14,18 @@ import createNewUser from "../api-functions/my-data/createNewUser";
 import getWalletID from "../api-functions/my-wallet/getWalletID";
 import readMappedAttributes from "../api-functions/my-data/readMappedAttributes"
 import getPersonIRI from "../api-functions/my-data/getPersonIRI"
+import { Navigate } from "react-router-dom"
 
 import CreateNewKeyPairForm from "../components/data-forms/CreateNewKeyPairForm"
+
 
 
 class App extends React.Component {
     constructor(props) {
         super(props);
+        let personIRI = sessionStorage.getItem('personIRI')
+        let wallets = JSON.parse(sessionStorage.getItem('wallets'))
+        let myCertsArray = JSON.parse(sessionStorage.getItem('keyPairs'))
 
         this.state = {
             showing: "",
@@ -28,17 +33,18 @@ class App extends React.Component {
             creds: "secondary",
             toggleAddData: false,
             toggleAddKeyPair: false,
-            person: "",
+            person: personIRI,
             mydata: [],
-            mycerts: [],
+            mycerts: myCertsArray,
             mappedAttributes: [],
-            wallets: []
+            wallets: wallets
         }
 
         this.renderCerts = this.renderCerts.bind(this)
         this.renderPersonalData = this.renderPersonalData.bind(this)
         this.renderDataOrCreds = this.renderDataOrCreds.bind(this)
         this.refreshData = this.refreshData.bind(this)
+        this.isStateSet = this.isStateSet.bind(this)
     }
 
     /**
@@ -47,26 +53,19 @@ class App extends React.Component {
      * @CR
      */
     async componentDidMount() {
-        // Get all this data from session storage 
-        // IF the session storage does not exist => navigate back to inti page
-        // let personIRI = await getPersonIRI()
         let myDataArray = await readMyData()
-        // let myCertsArray = await readMyCerts()
         let mappedAttributesArray = await readMappedAttributes()
-        // let wallets = await getWalletID()
-
-        let personIRI = sessionStorage.getItem('personIRI')
-        let wallets = JSON.parse(sessionStorage.getItem('wallets'))
-        let myCertsArray = JSON.parse(sessionStorage.getItem('keyPairs'))
-
-
-        if (personIRI !== "" && wallets !== "") {
-            this.setState({ mydata: myDataArray, person: personIRI, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
-        } else {
-
-        }
-
+        this.setState({ mydata: myDataArray, mappedAttributes: mappedAttributesArray })
     }
+
+    isStateSet() {
+        if (this.state.person === null) {
+            return < Navigate to="/" />
+        } else {
+            return ""
+        }
+    }
+
 
     async refreshData() {
         this.setState({ mydata: [] })
@@ -202,6 +201,7 @@ class App extends React.Component {
     render() {
         return (
             <>
+                {this.isStateSet()}
                 <Navbar expand="lg" bg="primary" variant="dark" >
                     <Container className="navbar-top">
                         <Navbar.Brand href="#home">My Data</Navbar.Brand>
