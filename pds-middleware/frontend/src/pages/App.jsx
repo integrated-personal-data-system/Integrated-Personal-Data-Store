@@ -11,7 +11,7 @@ import readMyData from "../api-functions/my-data/readMyData";
 import readMyCerts from "../api-functions/my-creds/readMyCerts"
 import readMappedAttributes from "../api-functions/my-data/readMappedAttributes"
 import { Navigate } from "react-router-dom"
-import CreateNewKeyPairForm from "../components/data-forms/CreateNewKeyPairForm"
+import AcceptCredentialForm from "../components/data-forms/AcceptCredentialForm"
 import getVerifiableCredentials from "../api-functions/my-wallet/getVerifiableCredentials"
 
 
@@ -22,27 +22,26 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         let personIRI = sessionStorage.getItem('personIRI')
-        let wallets = JSON.parse(sessionStorage.getItem('wallets'))
-        let myCertsArray = JSON.parse(sessionStorage.getItem('keyPairs'))
+        let walletId = JSON.parse(sessionStorage.getItem('walletId'))
 
         this.state = {
             showing: "",
             myData: "secondary",
-            creds: "secondary",
+            credentials: "secondary",
             toggleAddData: false,
             toggleAddKeyPair: false,
             person: personIRI,
             mydata: [],
-            mycerts: myCertsArray,
             mappedAttributes: [],
-            wallets: wallets
+            walletId: walletId[0],
+            credentialsInWallet: []
         }
 
-        this.renderCerts = this.renderCerts.bind(this)
         this.renderPersonalData = this.renderPersonalData.bind(this)
-        this.renderDataOrCreds = this.renderDataOrCreds.bind(this)
+        this.renderHandler = this.renderHandler.bind(this)
         this.refreshData = this.refreshData.bind(this)
         this.isStateSet = this.isStateSet.bind(this)
+        this.renderCredentials = this.renderCredentials.bind(this)
     }
 
     /**
@@ -53,14 +52,12 @@ class App extends React.Component {
     async componentDidMount() {
         let myDataArray = await readMyData()
         let mappedAttributesArray = await readMappedAttributes()
-        let verifiableCredentials = await getVerifiableCredentials(this.state.wallets[0])
-
-        console.log(myDataArray)
-        this.setState({ mydata: myDataArray, mappedAttributes: mappedAttributesArray })
+        let credentialsInWallet = await getVerifiableCredentials(this.state.walletId)
+        this.setState({ mydata: myDataArray, mappedAttributes: mappedAttributesArray, credentialsInWallet: credentialsInWallet })
     }
 
     isStateSet() {
-        if (this.state.person === null) {
+        if (this.state.person === null || this.state.walletId == null) {
             return < Navigate to="/" />
         } else {
             return ""
@@ -101,12 +98,14 @@ class App extends React.Component {
      * Renders all the elements in this.state.Cert as Cert Data Cards
      * @CR
      */
-    renderCerts() {
+    renderCredentials() {
         let certInformation = []
-        for (let cert of this.state.mycerts) {
-            certInformation.push(<CertDataCard key={cert.keyPairName} header={cert.keyPairName} ></CertDataCard>)
+        console.log(this.state.credentialsInWallet)
+        for (let credential of this.state.credentialsInWallet) {
+            console.log(credential.values)
+            // certInformation.push(<CertDataCard key={cert.keyPairName} header={cert.keyPairName} ></CertDataCard>)
         }
-        return certInformation
+        return "YOo"
     }
 
 
@@ -115,7 +114,7 @@ class App extends React.Component {
      * Renders the Data cards or Credentials Cards depending on this.state.showing.
      * @returns My Data or Credentials
      */
-    renderDataOrCreds() {
+    renderHandler() {
         if (this.state.showing === "my-data") {
             return (<Row>
                 <Col>
@@ -155,7 +154,7 @@ class App extends React.Component {
                     </div>
                 </Col>
             </Row >)
-        } else if (this.state.showing === "creds") {
+        } else if (this.state.showing === "credentials") {
             return (<Row>
                 <Col>
                     <div className="data-box">
@@ -168,7 +167,7 @@ class App extends React.Component {
                                 }
                             }}
                                 variant="success"
-                                style={{ margin: ".5rem" }}>Add Key Pair +</Button>
+                                style={{ margin: ".5rem" }}>Accept New Credentials +</Button>
                             <Button onClick={async () => {
                                 this.setState({ mycerts: [] })
                                 let myCertsArray = await readMyCerts()
@@ -178,10 +177,14 @@ class App extends React.Component {
                                 style={{ margin: ".5rem" }}>Refresh</Button>
 
 
-                            <CreateNewKeyPairForm person={this.state.person} toggleAddKeyPair={this.state.toggleAddKeyPair}></CreateNewKeyPairForm>
+                            <AcceptCredentialForm
+                                person={this.state.person}
+                                walletId={this.state.walletId}
+                                toggleAddKeyPair={this.state.toggleAddKeyPair}>
+                            </AcceptCredentialForm>
 
                             <Row >
-                                {this.renderCerts()}
+                                {this.renderCredentials()}
                             </Row>
                         </Container>
                     </div>
@@ -219,12 +222,12 @@ class App extends React.Component {
                     <Container style={{ padding: ".5rem" }}>
                         <Button id="my-data-btn"
                             variant={this.state.myData}
-                            onClick={() => this.setState({ showing: "my-data", myData: "primary", creds: "secondary" })}>My Data</Button>{' '}
+                            onClick={() => this.setState({ showing: "my-data", myData: "primary", credentials: "secondary" })}>My Data</Button>{' '}
                         <Button id="creds-btn"
                             variant={this.state.creds}
-                            onClick={() => this.setState({ showing: "creds", myData: "secondary", creds: "primary" })}>Credentials</Button>{' '}
+                            onClick={() => this.setState({ showing: "credentials", myData: "secondary", credentials: "primary" })}>Verificable Credentials</Button>{' '}
                     </Container>
-                    {this.renderDataOrCreds()}
+                    {this.renderHandler()}
                 </Container>
             </ >
         );

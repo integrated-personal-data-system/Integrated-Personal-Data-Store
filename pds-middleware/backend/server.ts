@@ -96,9 +96,12 @@ app.post('/api/listAllConnections', async (request: Request<string, any>, respon
 })
 
 // Credentials
-app.post('/api/listAllCredentials', async (request: Request<string, any>, response: Response) => {
+app.post('/api/listCredentialsInWallet', async (request: Request<string, any>, response: Response) => {
     try {
         let walletId = request.body.walletId
+        if (walletId == null) {
+            response.status(200).send("Missing Wallet Id")
+        }
         let credentials = await walletClient.listCredentials(walletId);
         response.status(200).send(credentials)
     } catch (error) {

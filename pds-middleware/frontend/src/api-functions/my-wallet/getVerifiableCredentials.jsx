@@ -1,24 +1,23 @@
 async function getVerifiableCrednetials(walletId) {
+    console.log(walletId)
     let uploadData = {
         walletId: walletId
     }
-    const res = await fetch('/api/getVerfiableCredentials', {
+    const res = await fetch('api/listCredentialsInWallet', {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(uploadData)
     })
 
-    let data = await res.json()
-
-    if (data.value !== null) {
-        return data.value
-    } else {
+    if (!res.ok) {
+        alert("Cannot Get VCs")
         return ""
     }
 
+    let data = await res.json()
+    return data
 }
 
 export default getVerifiableCrednetials

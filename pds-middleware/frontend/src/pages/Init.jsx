@@ -8,7 +8,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import readMyCerts from "../api-functions/my-creds/readMyCerts";
 import getPersonIRI from "../api-functions/my-data/getPersonIRI";
 import createNewUser from "../api-functions/my-data/createNewUser";
-import createNewRSAKeys from "../api-functions/my-creds/createNewRSAKey";
+import createNewRSAKeys from "../api-functions/my-wallet/AcceptCredential";
 import getWalletID from "../api-functions/my-wallet/getWalletID";
 import createNewWallet from "../api-functions/my-wallet/createWallet"
 import Alert from "react-bootstrap/Alert"
@@ -20,31 +20,27 @@ class Init extends React.Component {
         super(props);
         this.state = {
             personIRI: "",
-            walletID: "",
+            walletId: "",
             keyPairs: ""
         }
         this.loadingWallet = this.loadingWallet.bind(this)
     }
-    async componentDidMount() {
-        // Gets the Person IRI, Returns Null if there is not Person 
-        let personIRI = await getPersonIRI()
 
-        // Gets the WalletId, Returns Null if there is no Key Pairs
-        let walletID = await getWalletID()
+    async componentDidMount() {
+        let personIRI = await getPersonIRI()
+        let walletId = await getWalletID()
 
         if (personIRI === "") {
             personIRI = await createNewUser()
         }
 
-        if (walletID === "") {
+        if (walletId === "") {
             let newWallet = await createNewWallet(personIRI)
-            walletID = newWallet.value
+            walletId = newWallet.value
         }
-
-
         sessionStorage.setItem('personIRI', personIRI)
-        sessionStorage.setItem('wallets', JSON.stringify(walletID))
-        this.setState({ personIRI: personIRI, walletID: walletID })
+        sessionStorage.setItem('walletId', JSON.stringify(walletId))
+        this.setState({ personIRI: personIRI, walletId: walletId })
     }
 
 
@@ -68,7 +64,7 @@ class Init extends React.Component {
                             Person IRI: {this.state.personIRI}
                         </Alert>
                         <Alert key={this.state.walletID} variant='info'>
-                            Wallet ID: {this.state.walletID}
+                            Wallet ID: {this.state.walletId}
                         </Alert>
                         <Link to={{
                             pathname: "/wallet",
