@@ -29,31 +29,37 @@ async function getWalletId(callback: ({ success: boolean, data: string }) => voi
     for (let wallet of wallets) {
         trinsicWallets.push(wallet.walletId)
     }
-    fetch(`http://${process.env.API_LOCATION}:3030/MyData/sparql`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/sparql-query',
-            'Accept': 'application/json'
-        },
-        body: myDataQuery
-    }).then(res => res.text()).then(data => {
-        let jsonResults = JSON.parse(data)
-        let walletArray = []
-        for (let result of jsonResults.results.bindings) {
-            walletArray.push(result.DigitalWalletId.value)
-        }
-        callback({
-            success: true,
-            data: { "value": walletArray }
-        })
+    console.log(trinsicWallets)
 
-    }).catch((error) => {
-        console.log(error)
-        callback({
-            success: false,
-            data: { "value": null }
-        })
+    callback({
+        success: true,
+        data: { "value": trinsicWallets }
     })
+    // fetch(`http://${process.env.API_LOCATION}:3030/MyData/sparql`, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/sparql-query',
+    //         'Accept': 'application/json'
+    //     },
+    //     body: myDataQuery
+    // }).then(res => res.text()).then(data => {
+    //     let jsonResults = JSON.parse(data)
+    //     let walletArray = []
+    //     for (let result of jsonResults.results.bindings) {
+    //         walletArray.push(result.DigitalWalletId.value)
+    //     }
+    //     callback({
+    //         success: true,
+    //         data: { "value": walletArray }
+    //     })
+
+    // }).catch((error) => {
+    //     console.log(error)
+    //     callback({
+    //         success: false,
+    //         data: { "value": null }
+    //     })
+    // })
 }
 
 export default getWalletId

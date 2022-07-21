@@ -44,7 +44,6 @@ async function createWallet(person: string, callback: ({ success: boolean, data:
         let query = createWalletQuery(person, wallet.walletId)
         console.log(query)
         let vaildatedQuery = validateQuery(query)
-        console.log(vaildatedQuery)
         fetch(`http://${process.env.API_LOCATION}:3030/MyData`, {
             method: 'POST',
             headers: {

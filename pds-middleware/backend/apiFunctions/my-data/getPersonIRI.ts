@@ -18,20 +18,20 @@ function getPersonIRI(callback: ({ success: boolean, data: string }) => void) {
         body: myDataQuery
     }).then(res => res.text()).then(data => {
         let jsonResults = JSON.parse(data)
-        if (jsonResults.results.bindings[0] != undefined) {
+        if (jsonResults.results.bindings.length != 0) {
             callback({
                 success: true,
                 data: { "value": jsonResults.results.bindings[0].Person.value }
             })
         } else {
             callback({
-                success: true,
+                success: false,
                 data: { "value": null }
             })
         }
 
-
     }).catch((error) => {
+        console.log(error)
         callback({
             success: false,
             data: { "value ": "Failed to Read Person IRI" }

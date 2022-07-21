@@ -1,21 +1,19 @@
 async function getWalletID() {
-    const res = await fetch('/api/getWalletId', {
+    const res = await fetch('/api/getWallet', {
         method: 'GET',
         headers: {
-            'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
 
     })
 
-    let data = await res.json()
-
-    if (data.value !== null) {
-        return data.value
-    } else {
+    if (!res.ok) {
+        alert("Cannot Get Wallet")
         return ""
     }
 
+    let data = await res.json()
+    return data
 }
 
 export default getWalletID

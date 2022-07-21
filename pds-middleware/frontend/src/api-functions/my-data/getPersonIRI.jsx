@@ -3,16 +3,17 @@ async function getPersonIRI() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application / json'
         },
     })
 
-    let data = await res.json()
-    if (data.value != null) {
-        return data.value
-    } else {
+    if (!res.ok) {
+        alert("Cannot Read Person IRI")
         return ""
     }
+
+    let data = await res.json()
+    return data.value
+
 }
 
 export default getPersonIRI

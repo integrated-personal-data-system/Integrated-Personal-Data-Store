@@ -30,21 +30,3 @@ export const walletClient = new WalletServiceClient(
     { noRetryPolicy: true }
 );
 
-
-
-export async function createNewCredentials() {
-    let credential = credentialsClient
-    // let connection = await credentialsClient.getConnection(connectionId);
-    // let definitionId = "FirstName" // Use a definition id from your definitions
-    // let connectionId = "Testbed"; // Can be null | <connection identifier>
-    // let automaticIssuance = false;
-    // let credentialValues = {
-    //     "FirstName": "Jane",
-
-    // };
-    // let credential = await credentialsClient.createCredential({
-    //     definitionId: definitionId,
-    //     credentialValues: credentialValues
-    // });
-    return credential
-}

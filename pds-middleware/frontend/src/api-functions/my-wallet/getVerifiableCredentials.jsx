@@ -1,17 +1,18 @@
-async function createWallet(personIRI) {
+async function getVerifiableCrednetials(walletId) {
     let uploadData = {
-        person: personIRI
+        walletId: walletId
     }
-
-    const res = await fetch('/api/createWallet', {
+    const res = await fetch('/api/getVerfiableCredentials', {
         method: 'POST',
         headers: {
+            'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(uploadData)
     })
 
     let data = await res.json()
+
     if (data.value !== null) {
         return data.value
     } else {
@@ -20,4 +21,4 @@ async function createWallet(personIRI) {
 
 }
 
-export default createWallet
+export default getVerifiableCrednetials

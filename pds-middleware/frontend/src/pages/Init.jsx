@@ -28,32 +28,23 @@ class Init extends React.Component {
     async componentDidMount() {
         // Gets the Person IRI, Returns Null if there is not Person 
         let personIRI = await getPersonIRI()
-        // console.log(personIRI)
-
-        // Gets the KeyPairs, Returns Null if there is no Key Pairs
-        let keyPairs = await readMyCerts()
 
         // Gets the WalletId, Returns Null if there is no Key Pairs
         let walletID = await getWalletID()
 
-        if (personIRI == null) {
+        if (personIRI === "") {
             personIRI = await createNewUser()
         }
 
-        if (keyPairs == null) {
-            let newKeyPair = await createNewRSAKeys(personIRI, "Self-Cert", personIRI) // Need to make this passphrase more secure 
-            keyPairs = newKeyPair
-        }
-
-        if (walletID == null) {
+        if (walletID === "") {
             let newWallet = await createNewWallet(personIRI)
             walletID = newWallet.value
         }
 
+
         sessionStorage.setItem('personIRI', personIRI)
-        sessionStorage.setItem('keyPairs', JSON.stringify(keyPairs))
         sessionStorage.setItem('wallets', JSON.stringify(walletID))
-        this.setState({ personIRI: personIRI, keyPairs: keyPairs, walletID: walletID })
+        this.setState({ personIRI: personIRI, walletID: walletID })
     }
 
 
@@ -75,9 +66,6 @@ class Init extends React.Component {
                     <Col>
                         <Alert key={this.state.personIRI} variant='info'>
                             Person IRI: {this.state.personIRI}
-                        </Alert>
-                        <Alert key={this.state.keyPairs} variant='info'>
-                            Keypairs: {this.state.keyPairs}
                         </Alert>
                         <Alert key={this.state.walletID} variant='info'>
                             Wallet ID: {this.state.walletID}

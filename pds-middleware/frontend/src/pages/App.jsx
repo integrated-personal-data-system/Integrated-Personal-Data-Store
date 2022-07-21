@@ -1,7 +1,6 @@
 import React from "react";
 import Container from "react-bootstrap/Container"
 import Navbar from "react-bootstrap/Navbar"
-import '../css/App.css'
 import PersonalDataCard from "../components/data-cards/PersonalDataCard";
 import CertDataCard from "../components/data-cards/CertDataCard";
 import Row from "react-bootstrap/Row"
@@ -10,14 +9,13 @@ import Button from "react-bootstrap/Button"
 import CreateNewDataForm from "../components/data-forms/CreateNewDataForm";
 import readMyData from "../api-functions/my-data/readMyData";
 import readMyCerts from "../api-functions/my-creds/readMyCerts"
-import createNewUser from "../api-functions/my-data/createNewUser";
-import getWalletID from "../api-functions/my-wallet/getWalletID";
 import readMappedAttributes from "../api-functions/my-data/readMappedAttributes"
-import getPersonIRI from "../api-functions/my-data/getPersonIRI"
 import { Navigate } from "react-router-dom"
-
 import CreateNewKeyPairForm from "../components/data-forms/CreateNewKeyPairForm"
+import getVerifiableCredentials from "../api-functions/my-wallet/getVerifiableCredentials"
 
+
+import '../css/App.css'
 
 
 class App extends React.Component {
@@ -55,6 +53,9 @@ class App extends React.Component {
     async componentDidMount() {
         let myDataArray = await readMyData()
         let mappedAttributesArray = await readMappedAttributes()
+        let verifiableCredentials = await getVerifiableCredentials(this.state.wallets[0])
+
+        console.log(myDataArray)
         this.setState({ mydata: myDataArray, mappedAttributes: mappedAttributesArray })
     }
 
