@@ -50,6 +50,9 @@ class Init extends React.Component {
             walletID = newWallet.value
         }
 
+        sessionStorage.setItem('personIRI', personIRI)
+        sessionStorage.setItem('keyPairs', JSON.stringify(keyPairs))
+        sessionStorage.setItem('wallets', JSON.stringify(walletID))
         this.setState({ personIRI: personIRI, keyPairs: keyPairs, walletID: walletID })
     }
 
@@ -74,7 +77,7 @@ class Init extends React.Component {
                             Person IRI: {this.state.personIRI}
                         </Alert>
                         <Alert key={this.state.keyPairs} variant='info'>
-                            Keypair ID: {this.state.keyPairs}
+                            Keypairs: {this.state.keyPairs}
                         </Alert>
                         <Alert key={this.state.walletID} variant='info'>
                             Wallet ID: {this.state.walletID}

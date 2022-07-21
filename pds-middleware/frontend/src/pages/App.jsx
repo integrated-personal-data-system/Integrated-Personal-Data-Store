@@ -47,28 +47,22 @@ class App extends React.Component {
      * @CR
      */
     async componentDidMount() {
-
-        let personIRI = await getPersonIRI()
+        // Get all this data from session storage 
+        // IF the session storage does not exist => navigate back to inti page
+        // let personIRI = await getPersonIRI()
         let myDataArray = await readMyData()
-        let myCertsArray = await readMyCerts()
+        // let myCertsArray = await readMyCerts()
         let mappedAttributesArray = await readMappedAttributes()
-        let wallets = await getWalletID()
+        // let wallets = await getWalletID()
+
+        let personIRI = sessionStorage.getItem('personIRI')
+        let wallets = JSON.parse(sessionStorage.getItem('wallets'))
+        let myCertsArray = JSON.parse(sessionStorage.getItem('keyPairs'))
 
 
-
-
-
-        // YOOOOOOOOOOO CASEY COME BACK HERE
-        console.log(wallets)
-        console.log(personIRI)
-        console.log(myDataArray)
-        console.log(mappedAttributesArray)
-        console.log(myCertsArray)
-
-        if (personIRI.value != "") {
-            this.setState({ mydata: myDataArray, person: personIRI.value, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
+        if (personIRI !== "" && wallets !== "") {
+            this.setState({ mydata: myDataArray, person: personIRI, mycerts: myCertsArray, mappedAttributes: mappedAttributesArray })
         } else {
-
 
         }
 
@@ -145,7 +139,14 @@ class App extends React.Component {
                                 style={{ margin: ".5rem" }}>Refresh</Button>
 
 
-                            <CreateNewDataForm person={this.state.person} toggleAddData={this.state.toggleAddData} certs={this.state.mycerts} attributes={this.state.mappedAttributes} refreshData={this.refreshData}></CreateNewDataForm>
+                            <CreateNewDataForm
+                                person={this.state.person}
+                                toggleAddData={this.state.toggleAddData}
+                                certs={this.state.mycerts}
+                                attributes={this.state.mappedAttributes}
+                                refreshData={this.refreshData}>
+
+                            </CreateNewDataForm>
 
                             <Row >
                                 {this.renderPersonalData()}

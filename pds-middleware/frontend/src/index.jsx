@@ -18,7 +18,7 @@ root.render(
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<Init />} />
-            <Route path="/wallet" element={<App />} />
+            <Route path="wallet" element={<App />} />
         </Routes>
     </BrowserRouter >
 );

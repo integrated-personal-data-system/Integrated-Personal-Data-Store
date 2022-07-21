@@ -34,14 +34,16 @@ class CreateNewDataForm extends React.Component {
     getCertList() {
         let certOptions = []
         certOptions.push(<option>Select A Cert</option>)
+        console.log(this.props.certs)
         for (let cert of this.props.certs) {
-            certOptions.push(<option value={cert.keyPairName}>{cert.keyPairName}</option>)
+            certOptions.push(<option value={cert}>{cert}</option>)
         }
         return certOptions
     }
 
     async handleSubmit() {
-        if (this.state.attribute != "Select An Attribute" && this.state.value != "" && this.state.cert != "Select A Cert") {
+        if (this.state.attribute !== "Select An Attribute" && this.state.value !== "" && this.state.cert !== "Select A Cert") {
+
             createMyData(this.props.person, this.state.attribute, this.state.value, this.state.cert, (data) => {
                 this.props.refreshData()
             })
