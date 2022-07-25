@@ -3,28 +3,20 @@ import fetch from "node-fetch"
 
 const myDataQuery = `PREFIX cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>
 PREFIX obo: <http://purl.obolibrary.org/obo/>
-SELECT * WHERE
-{ 
+SELECT * WHERE { 
 {
-  SELECT ?Person ?FirstName ?Signature ?keyPairName WHERE 
-      {
-          ?Person a cco:Person ;
-            cco:designated_by ?PersonFullName; .  
-          ?PersonFullName a cco:PersonFullName ;
-            <http://purl.obolibrary.org/obo/BFO_0000051> ?PersonGivenName .
-          ?PersonGivenName a cco:PersonGivenName ;
-            <http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
-          ?PersonGivenNameIBE cco:has_text_value ?FirstName; 
-            obo:RO_0000056 ?RSASignature. 
-          ?RSASignature a cco:RSASignature ; 
-            obo:RO_0000056 ?keyPair; 
-            cco:has_text_value ?Signature . 
-          ?keyPair a cco:RSAKeyPair; 
-            cco:designated_by ?keyPairDesc . 
-          ?keyPairDesc obo:RO_0010001 ?keyPairDescIBE.
-          ?keyPairDescIBE cco:has_text_value ?keyPairName . 
-      }
-   
+    SELECT ?PersonGivenNameIRI ?FirstName ?VerifiableCredential WHERE {
+		?Person a cco:Person ;
+				cco:designated_by ?PersonFullName; .  
+		?PersonFullName a cco:PersonFullName ;
+						<http://purl.obolibrary.org/obo/BFO_0000051> ?PersonGivenNameIRI .
+		?PersonGivenNameIRI a cco:PersonGivenName ;
+						<http://purl.obolibrary.org/obo/RO_0010001>  ?PersonGivenNameIBE . 
+		?PersonGivenNameIBE cco:has_text_value ?FirstName;
+							obo:BFO_0000050 ?VerifiableCredentialIRI. 
+		?VerifiableCredentialIRI cco:designated_by ?VerifiableCredential_desc . 
+		?VerifiableCredential_desc cco:has_text_value ?VerifiableCredential .   
+	}
 }
 UNION
 {
@@ -297,25 +289,25 @@ UNION
 
 
 function readMyData(callback: ({ success: boolean, data: string }) => void) {
-  fetch(`http://${process.env.API_LOCATION}:3030/MyData/sparql`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/sparql-query',
-      'Accept': 'application/json'
-    },
-    body: myDataQuery
-  }).then(res => res.text()).then(data => {
-    let jsonResults = JSON.parse(data)
-    callback({
-      success: true,
-      data: jsonResults.results.bindings
-    })
-  }).catch((error) => {
-    callback({
-      success: false,
-      data: error
-    })
-  })
+	fetch(`http://${process.env.API_LOCATION}:3030/MyData/sparql`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/sparql-query',
+			'Accept': 'application/json'
+		},
+		body: myDataQuery
+	}).then(res => res.text()).then(data => {
+		let jsonResults = JSON.parse(data)
+		callback({
+			success: true,
+			data: jsonResults.results.bindings
+		})
+	}).catch((error) => {
+		callback({
+			success: false,
+			data: error
+		})
+	})
 }
 
 export default readMyData 

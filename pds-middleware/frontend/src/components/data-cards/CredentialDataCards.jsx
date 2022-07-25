@@ -48,6 +48,9 @@ function ShowCredModal(props) {
                     </ListGroup>
                 </Modal.Body>
                 <Modal.Footer>
+                    <Button variant="primary" onClick={handleClose}>
+                        Offer Credential
+                    </Button>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>

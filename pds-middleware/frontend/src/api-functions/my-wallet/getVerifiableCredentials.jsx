@@ -1,5 +1,4 @@
 async function getVerifiableCrednetials(walletId) {
-    console.log(walletId)
     let uploadData = {
         walletId: walletId
     }

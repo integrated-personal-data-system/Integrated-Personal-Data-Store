@@ -1,8 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
-import { readCertByName } from "../../my-certs/readMyCerts"
-import { createPrivateKey, createSign } from "crypto"
 
-function pds_firstname(person: string, firstname: string, signature: string, cert: string) {
+function pds_firstname(person: string, firstname: string) {
   var firstname_uuid, triples;
 
   try {
@@ -20,12 +18,7 @@ function pds_firstname(person: string, firstname: string, signature: string, cer
                 obo:RO_0010001 cco:InformationBearingEntity_PersonGivenName_${firstname_uuid} .
             
             cco:InformationBearingEntity_PersonGivenName_${firstname_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${firstNameIRI}> ; 
                 cco:has_text_value "${firstname}".
-
-             <http://www.cubrc.org/Data/RSASignature-${cert}-${firstNameIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -34,7 +27,7 @@ function pds_firstname(person: string, firstname: string, signature: string, cer
   }
 }
 
-function pds_email(person: string, email: string, signature: string, cert: string) {
+function pds_email(person: string, email: string) {
   var email_uuid, triples;
 
   try {
@@ -58,13 +51,8 @@ function pds_email(person: string, email: string, signature: string, cert: strin
                 obo:RO_0010001 cco:InformationBearingEntity_EmailAddress_${email_uuid} .
             
             cco:InformationBearingEntity_EmailAddress_${email_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${emailIRI}> ; 
-                cco:has_text_value "${email}".
-
-              <http://www.cubrc.org/Data/RSASignature-${cert}-${emailIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
-            
+                cco:has_text_value "${email}"
+           
   `;
       return triples;
     }
@@ -73,7 +61,7 @@ function pds_email(person: string, email: string, signature: string, cert: strin
   }
 }
 
-function pds_lastname(person: string, lastname: string, signature: string, cert: string) {
+function pds_lastname(person: string, lastname: string) {
   var lastname_uuid, triples;
 
   try {
@@ -91,12 +79,7 @@ function pds_lastname(person: string, lastname: string, signature: string, cert:
                 obo:RO_0010001 cco:InformationBearingEntity_PersonFamilyName_${lastname_uuid} .
             
             cco:InformationBearingEntity_PersonFamilyName_${lastname_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${lastnameIRI}> ;
                 cco:has_text_value "${lastname}".
-
-              <http://www.cubrc.org/Data/RSASignature-${cert}-${lastnameIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
   `;
       return triples;
     }
@@ -105,7 +88,7 @@ function pds_lastname(person: string, lastname: string, signature: string, cert:
   }
 }
 
-function pds_birthday(person: string, birthday: string, signature: string, cert: string) {
+function pds_birthday(person: string, birthday: string) {
   var birthday_uuid, triples;
 
   try {
@@ -126,12 +109,7 @@ function pds_birthday(person: string, birthday: string, signature: string, cert:
                 obo:RO_0010001 cco:InformationBearingEntity_DataIdentifier_${birthday_uuid} .
             
             cco:InformationBearingEntity_DataIdentifier_${birthday_uuid} a cco:InformationBearingEntity ;
-              obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${cleanBirthday}>  ; 
               cco:has_text_value "${birthday}".
-
-                <http://www.cubrc.org/Data/RSASignature-${cert}-${cleanBirthday}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
 
   `;
       return triples;
@@ -141,7 +119,7 @@ function pds_birthday(person: string, birthday: string, signature: string, cert:
   }
 }
 
-function pds_mailingstreet(person: string, mailingstreet: string, signature: string, cert: string) {
+function pds_mailingstreet(person: string, mailingstreet: string) {
   var mailingstreet_uuid, triples;
 
   try {
@@ -162,12 +140,7 @@ function pds_mailingstreet(person: string, mailingstreet: string, signature: str
                 obo:RO_0010001 cco:InformationBearingEntity_StreetAdress_${mailingstreet_uuid} .
             
             cco:InformationBearingEntity_StreetAdress_${mailingstreet_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstreetIRI}> ;
                 cco:has_text_value "${mailingstreet}".
-
-            <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstreetIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -176,7 +149,7 @@ function pds_mailingstreet(person: string, mailingstreet: string, signature: str
   }
 }
 
-function pds_mailingcity(person: string, mailingcity: string, signature: string, cert: string) {
+function pds_mailingcity(person: string, mailingcity: string) {
   var mailingcity_uuid, triples;
 
   try {
@@ -200,12 +173,7 @@ function pds_mailingcity(person: string, mailingcity: string, signature: string,
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingcity_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingcity_uuid} a cco:InformationBearingEntity ;
-            obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcityIRI}> ; 
                 cco:has_text_value "${mailingcity}".
-
-            <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcityIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -214,7 +182,7 @@ function pds_mailingcity(person: string, mailingcity: string, signature: string,
   }
 }
 
-function pds_mailingstate(person: string, mailingstate: string, signature: string, cert: string) {
+function pds_mailingstate(person: string, mailingstate: string) {
   var mailingstate_uuid, triples;
 
   try {
@@ -241,12 +209,7 @@ function pds_mailingstate(person: string, mailingstate: string, signature: strin
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingstate_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingstate_uuid} a cco:InformationBearingEntity ;
-            obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstateIRI}>; 
             cco:has_text_value "${mailingstate}".
-
-              <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingstateIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -255,7 +218,7 @@ function pds_mailingstate(person: string, mailingstate: string, signature: strin
   }
 }
 
-function pds_mailingpostcode(person: string, mailingpostcode: string, signature: string, cert: string) {
+function pds_mailingpostcode(person: string, mailingpostcode: string) {
   var mailingpostcode_uuid, triples;
 
   try {
@@ -279,12 +242,7 @@ function pds_mailingpostcode(person: string, mailingpostcode: string, signature:
                 obo:RO_0010001 cco:InformationBearingEntity_PostalCode_${mailingpostcode_uuid} .
             
             cco:InformationBearingEntity_PostalCode_${mailingpostcode_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingpostcodeIRI}> ;
                 cco:has_text_value "${mailingpostcode}".
-
-                <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingpostcodeIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -293,7 +251,7 @@ function pds_mailingpostcode(person: string, mailingpostcode: string, signature:
   }
 }
 
-function pds_mailingcountry(person: string, mailingcountry: string, signature: string, cert) {
+function pds_mailingcountry(person: string, mailingcountry: string,) {
   var mailingcountry_uuid, mailingstate_uuid, triples;
 
   try {
@@ -324,12 +282,7 @@ function pds_mailingcountry(person: string, mailingcountry: string, signature: s
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingcountry_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingcountry_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcountryIRI}> ; 
                 cco:has_text_value "${mailingcountry}".
-
-                <http://www.cubrc.org/Data/RSASignature-${cert}-${mailingcountryIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -338,7 +291,7 @@ function pds_mailingcountry(person: string, mailingcountry: string, signature: s
   }
 }
 
-function pds_homephonenumber(person: string, homephonenumber: string, signature: string, cert: string) {
+function pds_homephonenumber(person: string, homephonenumber: string) {
   var homephonenumber_uuid, triples;
 
   try {
@@ -362,12 +315,7 @@ function pds_homephonenumber(person: string, homephonenumber: string, signature:
                 obo:RO_0010001 cco:InformationBearingEntity_TelephoneNumber_${homephonenumber_uuid} .
             
             cco:InformationBearingEntity_TelephoneNumber_${homephonenumber_uuid} a cco:InformationBearingEntity ;
-                obo:RO_0000056  <http://www.cubrc.org/Data/RSASignature-${cert}-${homephonenumberIRI}> ;
                 cco:has_text_value "${homephonenumber}".
-
-                <http://www.cubrc.org/Data/RSASignature-${cert}-${homephonenumberIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -376,7 +324,7 @@ function pds_homephonenumber(person: string, homephonenumber: string, signature:
   }
 }
 
-function pds_mobilephonenumber(person: string, mobilephonenumber: string, signature: string, cert: string) {
+function pds_mobilephonenumber(person: string, mobilephonenumber: string) {
   var mobilephonenumber_uuid, triples;
 
   try {
@@ -400,12 +348,7 @@ function pds_mobilephonenumber(person: string, mobilephonenumber: string, signat
                 obo:RO_0010001 cco:InformationBearingEntity_TelephoneNumber_${mobilephonenumber_uuid} .
             
             cco:InformationBearingEntity_TelephoneNumber_${mobilephonenumber_uuid} a cco:InformationBearingEntity ;
-            obo:RO_0000056  <http://www.cubrc.org/Data/RSASignature-${cert}-${mobilephonenumberIRI}> ; 
                 cco:has_text_value "${mobilephonenumber}".
-
-            <http://www.cubrc.org/Data/RSASignature-${cert}-${mobilephonenumberIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -414,7 +357,7 @@ function pds_mobilephonenumber(person: string, mobilephonenumber: string, signat
   }
 }
 
-function pds_employername(person: string, employername: string, signature: string, cert: string) {
+function pds_employername(person: string, employername: string) {
   var employername_uuid, triples;
 
   try {
@@ -435,12 +378,7 @@ function pds_employername(person: string, employername: string, signature: strin
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${employername_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${employername_uuid} a cco:InformationBearingEntity ;
-              obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${employernameIRI}>  ; 
               cco:has_text_value "${employername}".
-
-                <http://www.cubrc.org/Data/RSASignature-${cert}-${employernameIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -449,7 +387,7 @@ function pds_employername(person: string, employername: string, signature: strin
   }
 }
 
-function pds_employeetitle(person: string, employeetitle: string, signature: string, cert: string) {
+function pds_employeetitle(person: string, employeetitle: string) {
   var employeetitle_uuid, triples;
 
   try {
@@ -467,12 +405,7 @@ function pds_employeetitle(person: string, employeetitle: string, signature: str
                 obo:RO_0010001 cco:InformationBearingEntity_NominalMeasurementInformationContentEntity_${employeetitle_uuid} .
             
             cco:InformationBearingEntity_NominalMeasurementInformationContentEntity_${employeetitle_uuid} a cco:InformationBearingEntity ;
-              obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${employeetitleIRI}> ; 
               cco:has_text_value "${employeetitle}".
-
-              <http://www.cubrc.org/Data/RSASignature-${cert}-${employeetitleIRI}> a cco:RSASignature ; 
-                obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-                cco:has_text_value "${signature}" .
             `;
       return triples;
     }
@@ -481,7 +414,7 @@ function pds_employeetitle(person: string, employeetitle: string, signature: str
   }
 }
 
-function pds_weight(person: string, weight: string, signature: string, cert: string) {
+function pds_weight(person: string, weight: string) {
   try {
     let personWeight_uuid = uuidv4();
     let weightIRI = weight.replace(/\s/g, "")
@@ -496,12 +429,7 @@ function pds_weight(person: string, weight: string, signature: string, cert: str
      obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/${personWeight_uuid}-Quality-Weight-MeasuredIBE> . 
 
   <http://www.ontologyrepository.com/CommonCoreOntologies/${personWeight_uuid}-Quality-Weight-MeasuredIBE>  a cco:InformationBearingEntity ; 
-      obo:RO_0000056 <http://www.cubrc.org/Data/RSASignature-${cert}-${weightIRI}> ;
       cco:has_text_value "${weight}" . 
-
-  <http://www.cubrc.org/Data/RSASignature-${cert}-${weightIRI}> a cco:RSASignature ; 
-      obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/RSAKeyPair_${cert}>;
-      cco:has_text_value "${signature}" . 
 `
     return triples
   } catch (error) {
@@ -514,137 +442,112 @@ export function mappingFuction(person: string, attribute: string, value: string,
   try {
 
     let attributeClean = attribute.toLocaleLowerCase()
-    readCertByName(cert, (result) => {
-      let addTop = result.data.PrivateKey.value.replace("-----BEGIN PRIVATE KEY-----", "-----BEGIN PRIVATE KEY-----\n")
-      let addButtom = addTop.replace("-----END PRIVATE KEY-----", "\n-----END PRIVATE KEY-----")
-
-      let privateKey = createPrivateKey(addButtom)
-      const sign = createSign('SHA256');
-      sign.update(value);
-      sign.end();
-      const signature = sign.sign(privateKey, "hex");
-
-
-      switch (attributeClean) {
-        case "firstname": {
-          let triples = pds_firstname(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "email": {
-          let triples = pds_email(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "lastname": {
-          let triples = pds_lastname(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "birthday": {
-          let triples = pds_birthday(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "mailingstreet": {
-          let triples = pds_mailingstreet(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "mailingcity": {
-          let triples = pds_mailingcity(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "mailingstate": {
-          let triples = pds_mailingstate(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "mailingpostcode": {
-          let triples = pds_mailingpostcode(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "mailingcountry": {
-          let triples = pds_mailingcountry(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "homephonenumber": {
-          let triples = pds_homephonenumber(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "mobilephonenumber": {
-          let triples = pds_mobilephonenumber(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "employername": {
-          let triples = pds_employername(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "employeetitle": {
-          let triples = pds_employeetitle(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        case "weight": {
-          let triples = pds_weight(person, value, signature, cert)
-          return callback({
-            success: true,
-            data: triples
-          })
-        }
-        default: {
-          return callback({
-            success: false,
-            data: "triples"
-          })
-        }
+    switch (attributeClean) {
+      case "firstname": {
+        let triples = pds_firstname(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
       }
-
-      // // const verify = createVerify('SHA256');
-      // // verify.update('some data to sign');
-      // // verify.end();
-      // // console.log(verify.verify(publicKey, signature, "hex"));
-
-      // // let pubkicKeyTest = createPublicKey(publicKey)
-
-      // // console.log(privateKeyTest)
-      // // console.log(pubkicKeyTest)
-
-
-    })
-
+      case "email": {
+        let triples = pds_email(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "lastname": {
+        let triples = pds_lastname(person, value,)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "birthday": {
+        let triples = pds_birthday(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "mailingstreet": {
+        let triples = pds_mailingstreet(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "mailingcity": {
+        let triples = pds_mailingcity(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "mailingstate": {
+        let triples = pds_mailingstate(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "mailingpostcode": {
+        let triples = pds_mailingpostcode(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "mailingcountry": {
+        let triples = pds_mailingcountry(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "homephonenumber": {
+        let triples = pds_homephonenumber(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "mobilephonenumber": {
+        let triples = pds_mobilephonenumber(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "employername": {
+        let triples = pds_employername(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "employeetitle": {
+        let triples = pds_employeetitle(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      case "weight": {
+        let triples = pds_weight(person, value)
+        return callback({
+          success: true,
+          data: triples
+        })
+      }
+      default: {
+        return callback({
+          success: false,
+          data: "triples"
+        })
+      }
+    }
   } catch (error) {
     console.log(error)
   }

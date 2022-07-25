@@ -11,6 +11,6 @@ const current_mapping = ["firstname", "weight", "email", "lastname", "birthday",
 
 // If True - run the server over https
 // If false - run the server over http
-const production = true
+const production = false
 
 export { current_mapping, production } 

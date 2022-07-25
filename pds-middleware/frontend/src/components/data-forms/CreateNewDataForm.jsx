@@ -12,41 +12,66 @@ class CreateNewDataForm extends React.Component {
         super(props)
 
         this.state = {
-            attribute: "",
+            selectedCredential: "",
+            selectedAttr: "",
             value: "",
             cert: ""
         }
+
         this.handleToggle = this.handleToggle.bind(this)
-        this.getCertList = this.getCertList.bind(this)
-        this.getAttributeList = this.getAttributeList.bind(this)
+        this.getCredentialList = this.getCredentialList.bind(this)
+        this.getAttributesFromCredential = this.getAttributesFromCredential.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.getValueFromAttribute = this.getValueFromAttribute.bind(this)
     }
 
-    getAttributeList() {
-        let attrOptions = []
-        attrOptions.push(<option>Select An Attribute</option>)
-        for (let attribute of this.props.attributes) {
-            attrOptions.push(<option value={attribute}>{attribute}</option>)
+    getCredentialList() {
+        let credentails = []
+        credentails.push(<option>Select A Credential</option>)
+        for (let credential of this.props.credentials) {
+            credentails.push(<option value={credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)}>{credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)}</option>)
         }
-        return attrOptions
+        return credentails
     }
 
-    getCertList() {
-        let certOptions = []
-        certOptions.push(<option>Select A Cert</option>)
-        console.log(this.props.certs)
-        for (let cert of this.props.certs) {
-            certOptions.push(<option value={cert}>{cert}</option>)
+    getAttributesFromCredential() {
+        let attributeList = []
+        let attributeOptions = []
+        if (this.state.selectedCredential !== "") {
+            for (let credential of this.props.credentials) {
+                if (credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)[0] === this.state.selectedCredential) {
+                    attributeList = credential.values
+                }
+            }
         }
-        return certOptions
+        attributeOptions.push(<option>Select An Attribute</option>)
+        for (let attribute in attributeList) {
+            attributeOptions.push(<option value={attribute}>{attribute}</option>)
+        }
+        return attributeOptions
+    }
+
+    getValueFromAttribute() {
+        let value = ""
+        if (this.state.selectedCredential !== "" && this.state.selectedAttr !== "") {
+            for (let credential of this.props.credentials) {
+                if (credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)[0] === this.state.selectedCredential) {
+                    value = credential.values[this.state.selectedAttr]
+                }
+            }
+        }
+        return value
     }
 
     async handleSubmit() {
-        if (this.state.attribute !== "Select An Attribute" && this.state.value !== "" && this.state.cert !== "Select A Cert") {
+        console.log(this.state.selectedCredential)
+        console.log(this.state.selectedAttr)
+        console.log(this.state.value)
+        if (this.state.selectedCredential !== "" && this.state.selectedAttr !== "" && this.state.value !== "") {
 
-            createMyData(this.props.person, this.state.attribute, this.state.value, this.state.cert, (data) => {
-                this.props.refreshData()
-            })
+            // createMyData(this.props.person, this.state.attribute, this.state.value, this.state.cert, (data) => {
+            //     this.props.refreshData()
+            // })
 
         } else {
             alert("Fill out all the fields")
@@ -59,25 +84,24 @@ class CreateNewDataForm extends React.Component {
             return <Container style={{ padding: "1rem", margin: "1rem", backgroundColor: "white", borderRadius: ".5rem" }}>
                 <Form>
                     <Form.Group className="mb-3" controlId="formBasicText">
-                        <Form.Label>My Data Attribute</Form.Label>
-                        <Form.Select onChange={(event) => this.setState({ attribute: event.target.value })} aria-label="Select An Attribute">
-                            {this.getAttributeList()}
+                        <Form.Label>Select a Credential to Map</Form.Label>
+                        <Form.Select onChange={(event) => this.setState({ selectedCredential: event.target.value })} aria-label="Select An Attribute">
+                            {this.getCredentialList()}
                         </Form.Select>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicText">
+                        <Form.Label>Attribute</Form.Label><Form.Select onChange={(event) => this.setState({
+                            selectedAttr: event.target.value,
+                        })} aria-label="Select An Attribute">
+                            {this.getAttributesFromCredential()}
+                        </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
                         <Form.Label>Value</Form.Label>
-                        <Form.Control type="text" placeholder="Value" onChange={(event) => this.setState({ value: event.target.value })} />
+                        <Form.Control placeholder={this.getValueFromAttribute()} disabled />
                     </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="formBasicText">
-                        <Form.Label>Certificate</Form.Label>
-                        <Form.Select onChange={(event) => this.setState({ cert: event.target.value })} aria-label="Select A Cert">
-                            {this.getCertList()}
-                        </Form.Select>
-                    </Form.Group>
-
-
                     <Button variant="primary" onClick={() => this.handleSubmit()} >
                         Save
                     </Button>

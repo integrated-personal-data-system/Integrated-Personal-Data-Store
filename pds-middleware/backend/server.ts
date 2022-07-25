@@ -1,10 +1,8 @@
 import express, { Express, Handler, Request, Response } from "express";
 import readMyData from "./apiFunctions/my-data/readMyData";
-import { readMyCerts } from "./apiFunctions/my-certs/readMyCerts"
 import bodyParser from 'body-parser'
 import createMyData from "./apiFunctions/my-data/createMyData";
 import deleteMyData from "./apiFunctions/my-data/deleteMyData";
-import createRSAKeyPair from "./apiFunctions/my-certs/createRSAKeyPair";
 import { updateMyData } from "./apiFunctions/my-data/updateMyData";
 import createNewUser from "./apiFunctions/my-data/createNewUser";
 import getPersonIRI from "./apiFunctions/my-data/getPersonIRI";
@@ -224,58 +222,6 @@ app.get('/api/getWallet', async (request: Request<string, any>, response: Respon
         response.status(400).send("Could Not List Cloud Wallets")
     }
 })
-
-
-//////////////////////////////////
-// My Credentials 
-/////////////////////////////////
-
-app.put('/api/createWalletKeyPair', (request: Request<string, any>, response: Response) => {
-    try {
-        let data = request.body
-        if (data.person == undefined) {
-            response.status(400).send("Missing Person IRI")
-        }
-
-        if (data.keyPairName == undefined) {
-            response.status(400).send("Missing keyPairName")
-        }
-
-        if (data.passphrase == undefined) {
-            response.status(400).send("Missing passphrase")
-        }
-
-        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-        createRSAKeyPair(request.body.person, request.body.keyPairName, request.body.passphrase, (result) => {
-            if (result.success) {
-                response.status(200).send({ data: result.data })
-            } else {
-                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send({ data: result.data })
-            }
-        })
-    } catch (error) {
-        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
-    }
-})
-
-app.get('/api/readMyCerts', (request: Request, response: Response) => {
-    try {
-        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-        readMyCerts((result) => {
-            if (result.success) {
-                response.status(200).send(result.data)
-            } else {
-                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send(result.data)
-            }
-        })
-    } catch (error) {
-        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
-    }
-
-})
-
 
 //////////////////////////////////
 // My Data Endpoints

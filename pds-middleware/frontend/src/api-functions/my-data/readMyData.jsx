@@ -3,35 +3,41 @@ async function readMyData() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application / json'
         },
     })
 
     let data = await res.json()
+    let parsedReults = {}
 
-    let parsedReults = []
-
-    if (data.length !== 0) {
-        parsedReults.push({ "Person": data[0].Person.value })
-        for (let result of data) {
-            let dataHeader = ""
-            for (let attribute in result) {
-                if (attribute != "Person" && attribute != "keyPairName" && attribute != "Signature") {
-                    dataHeader = attribute
-                }
+    for (let result of data) {
+        let uriData = ""
+        let verifiableCredential = ""
+        let data = ""
+        let header = ""
+        for (let attribute in result) {
+            if (result[attribute].type === "uri") {
+                uriData = result[attribute].value
+            } else if (attribute === "VerifiableCredential") {
+                verifiableCredential = result[attribute].value
+            } else {
+                header = attribute
+                data = result[attribute].value
             }
-            parsedReults.push({
-                data: {
-                    attribute: dataHeader,
-                    value: result[dataHeader].value
-                },
-                signature: result.Signature.value,
-                keyPairName: result.keyPairName.value
+        }
+        let myData = {
+            [uriData]: {
+                attribute: data,
+                header: header,
+                verifiableCredentials: [verifiableCredential]
+            }
+        }
+        if (parsedReults[uriData] === undefined) {
+            Object.assign(parsedReults, myData)
 
-            })
+        } else {
+            parsedReults[uriData].verifiableCredentials.push(verifiableCredential)
         }
     }
-    // console.log(parsedReults)
     return parsedReults
 }
 

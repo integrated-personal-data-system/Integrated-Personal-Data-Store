@@ -35,9 +35,6 @@ function UpdateModal(props) {
         })
     }
 
-
-
-
     return (
         <>
             <Button variant="primary" style={{ float: "right" }} onClick={handleShow}>
@@ -126,12 +123,31 @@ class PersonalDataCard extends React.Component {
         super(props)
 
         this.handleDelete = this.handleDelete.bind(this)
+        this.renderCredentials = this.renderCredentials.bind(this)
     }
 
     handleDelete() {
         deleteMyData(this.props.person, this.props.header, this.props.value, () => {
             this.props.refreshData()
         })
+    }
+
+    renderCredentials() {
+        let credentails = []
+        console.log(this.props.credentials)
+        for (let credential of this.props.credentials) {
+            credentails.push(<Stack direction="horizontal" gap={1}>
+                <Image
+                    fluid={true}
+                    src={lock}
+                    style={{ height: "1rem" }}
+                ></Image>
+                <Card.Subtitle className="text-muted">
+                    {credential}
+                </Card.Subtitle>
+            </Stack>)
+        }
+        return credentails
     }
 
     render() {
@@ -144,8 +160,8 @@ class PersonalDataCard extends React.Component {
 
                             <Card.Body>
                                 <Card.Title>{this.props.value}</Card.Title>
-
-                                <ShowSignature keyPairName={this.props.keyPairName} signature={this.props.signature}></ ShowSignature>
+                                {this.renderCredentials()}
+                                {/* <ShowSignature keyPairName={this.props.keyPairName} signature={this.props.signature}></ ShowSignature> */}
                                 <Container style={{ marginTop: "1rem" }}>
                                     <Button variant="danger" style={{ float: "left" }} onClick={() => this.handleDelete()} >
                                         Delete

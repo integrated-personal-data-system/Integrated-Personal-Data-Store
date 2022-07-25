@@ -8,7 +8,6 @@ import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import CreateNewDataForm from "../components/data-forms/CreateNewDataForm.jsx";
 import readMyData from "../api-functions/my-data/readMyData.jsx";
-import readMyCerts from "../api-functions/my-creds/readMyCerts.jsx"
 import readMappedAttributes from "../api-functions/my-data/readMappedAttributes.jsx"
 import { Navigate } from "react-router-dom"
 import AcceptCredentialForm from "../components/data-forms/AcceptCredentialForm.jsx"
@@ -78,16 +77,15 @@ class App extends React.Component {
      */
     renderPersonalData() {
         let personalInformation = []
-        for (let item of this.state.mydata) {
+        for (let item in this.state.mydata) {
             if (Object.keys(item)[0] !== "Person") {
                 personalInformation.push(
                     <PersonalDataCard
-                        key={item.data.attribute + item.data.value}
-                        person={this.state.person}
-                        header={item.data.attribute}
-                        value={item.data.value}
-                        keyPairName={item.keyPairName}
-                        signature={item.signature}
+                        key={item}
+                        // person={this.state.person}
+                        header={this.state.mydata[item].header}
+                        value={this.state.mydata[item].attribute}
+                        credentials={this.state.mydata[item].verifiableCredentials}
                         refreshData={this.refreshData}>
                     </PersonalDataCard>)
             }
@@ -179,13 +177,6 @@ class App extends React.Component {
                             }}
                                 variant="success"
                                 style={{ margin: ".5rem" }}>Accept New Credentials +</Button>
-                            <Button onClick={async () => {
-                                this.setState({ mycerts: [] })
-                                let myCertsArray = await readMyCerts()
-                                this.setState({ mycerts: myCertsArray })
-                            }}
-                                variant="warning"
-                                style={{ margin: ".5rem" }}>Refresh</Button>
 
 
                             <AcceptCredentialForm
