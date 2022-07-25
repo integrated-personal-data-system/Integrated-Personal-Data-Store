@@ -5,12 +5,12 @@ import '../css/App.css'
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Spinner from 'react-bootstrap/Spinner';
-import readMyCerts from "../api-functions/my-creds/readMyCerts";
-import getPersonIRI from "../api-functions/my-data/getPersonIRI";
-import createNewUser from "../api-functions/my-data/createNewUser";
-import createNewRSAKeys from "../api-functions/my-wallet/AcceptCredential";
-import getWalletID from "../api-functions/my-wallet/getWalletID";
-import createNewWallet from "../api-functions/my-wallet/createWallet"
+import readMyCerts from "../api-functions/my-creds/readMyCerts.jsx";
+import getPersonIRI from "../api-functions/my-data/getPersonIRI.jsx";
+import createNewUser from "../api-functions/my-data/createNewUser.jsx";
+import createNewRSAKeys from "../api-functions/my-wallet/AcceptCredential.jsx";
+import getWalletID from "../api-functions/my-wallet/getWalletId.jsx";
+import createNewWallet from "../api-functions/my-wallet/createWallet.jsx"
 import Alert from "react-bootstrap/Alert"
 import { Link } from "react-router-dom"
 

@@ -6,13 +6,13 @@ import CredentialDataCard from "../components/data-cards/CredentialDataCards";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
-import CreateNewDataForm from "../components/data-forms/CreateNewDataForm";
-import readMyData from "../api-functions/my-data/readMyData";
-import readMyCerts from "../api-functions/my-creds/readMyCerts"
-import readMappedAttributes from "../api-functions/my-data/readMappedAttributes"
+import CreateNewDataForm from "../components/data-forms/CreateNewDataForm.jsx";
+import readMyData from "../api-functions/my-data/readMyData.jsx";
+import readMyCerts from "../api-functions/my-creds/readMyCerts.jsx"
+import readMappedAttributes from "../api-functions/my-data/readMappedAttributes.jsx"
 import { Navigate } from "react-router-dom"
-import AcceptCredentialForm from "../components/data-forms/AcceptCredentialForm"
-import getVerifiableCredentials from "../api-functions/my-wallet/getVerifiableCredentials"
+import AcceptCredentialForm from "../components/data-forms/AcceptCredentialForm.jsx"
+import getVerifiableCredentials from "../api-functions/my-wallet/getVerifiableCredentials.jsx"
 import Alert from "react-bootstrap/Alert"
 
 
