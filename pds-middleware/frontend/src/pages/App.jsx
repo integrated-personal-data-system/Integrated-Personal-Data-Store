@@ -1,16 +1,16 @@
 import React from "react";
 import Container from "react-bootstrap/Container"
 import Navbar from "react-bootstrap/Navbar"
-import PersonalDataCard from "../components/data-cards/PersonalDataCard";
-import CredentialDataCard from "../components/data-cards/CredentialDataCards";
+import PersonalDataCard from "../components/cards/PersonalDataCard";
+import CredentialDataCard from "../components/cards/CredentialDataCards";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
-import CreateNewDataForm from "../components/data-forms/CreateNewDataForm.jsx";
+import CreateNewDataForm from "../components/forms/CreateNewDataForm.jsx";
 import readMyData from "../api-functions/my-data/readMyData.jsx";
 import readMappedAttributes from "../api-functions/my-data/readMappedAttributes.jsx"
 import { Navigate } from "react-router-dom"
-import AcceptCredentialForm from "../components/data-forms/AcceptCredentialForm.jsx"
+import AcceptCredentialForm from "../components/forms/AcceptCredentialForm.jsx"
 import getVerifiableCredentials from "../api-functions/my-wallet/getVerifiableCredentials.jsx"
 import Alert from "react-bootstrap/Alert"
 
