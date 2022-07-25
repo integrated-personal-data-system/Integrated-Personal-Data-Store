@@ -12,7 +12,7 @@ import { current_mapping, production } from './serverConfig'
 import { createLogger, format, transports } from 'winston'
 import createWallet from "./apiFunctions/my-wallet/createWallet";
 import getWalletId from "./apiFunctions/my-wallet/getWalletId"
-import { walletClient } from "./apiFunctions/my-wallet/wallet";
+import { walletClient, credentialsClient } from "./apiFunctions/my-wallet/wallet";
 import getVerifiableCredentials from "./apiFunctions/my-wallet/getVerifiableCrendentials";
 import 'dotenv/config'
 
@@ -100,13 +100,52 @@ app.post('/api/listCredentialsInWallet', async (request: Request<string, any>, r
     try {
         let walletId = request.body.walletId
         if (walletId == null) {
-            response.status(200).send("Missing Wallet Id")
+            response.status(400).send("Missing Wallet Id")
+        } else {
+            let credentials = await walletClient.listCredentials(walletId);
+            response.status(200).send(credentials)
         }
-        let credentials = await walletClient.listCredentials(walletId);
-        response.status(200).send(credentials)
     } catch (error) {
         console.log(error)
         response.status(400).send("Could Not List Credentials")
+    }
+})
+
+
+app.post('/api/getCredentialInWallet', async (request: Request<string, any>, response: Response) => {
+    try {
+        let walletId = request.body.walletId
+        let credentialId = request.body.credentialId
+        if (walletId == null) {
+            response.status(400).send("Missing Wallet Id")
+        } else if (credentialId == null) {
+            response.status(400).send("Missing Credential ID")
+        }
+        else {
+            let credential = await walletClient.getCredential(walletId, credentialId);
+            response.status(200).send(credential)
+        }
+    } catch (error) {
+        console.log(error)
+        response.status(400).send("Could Not List Credentials")
+    }
+})
+
+app.post('/api/deleteCredential', async (request: Request<string, any>, response: Response) => {
+    try {
+        let walletId = request.body.walletId
+        let credentialId = request.body.credentialId
+        if (walletId == null) {
+            response.status(400).send("Missing Wallet Id")
+        } else if (credentialId == null) {
+            response.status(400).send("Missing Credential ID")
+        } else {
+            walletClient.deleteCredential(walletId, credentialId);
+            response.status(200).send("Delete Credential: " + credentialId)
+        }
+    } catch (error) {
+        console.log(error)
+        response.status(400).send("Could Not Delete Credentail")
     }
 })
 
@@ -143,6 +182,7 @@ app.put('/api/createWallet', async (request: Request<string, any>, response: Res
         console.log(error)
     }
 })
+
 
 app.delete('/api/DeleteCloudWallet', async (request: Request<string, any>, response: Response) => {
     try {

@@ -2,7 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container"
 import Navbar from "react-bootstrap/Navbar"
 import PersonalDataCard from "../components/data-cards/PersonalDataCard";
-import CertDataCard from "../components/data-cards/CertDataCard";
+import CredentialDataCard from "../components/data-cards/CredentialDataCards";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
@@ -13,6 +13,7 @@ import readMappedAttributes from "../api-functions/my-data/readMappedAttributes"
 import { Navigate } from "react-router-dom"
 import AcceptCredentialForm from "../components/data-forms/AcceptCredentialForm"
 import getVerifiableCredentials from "../api-functions/my-wallet/getVerifiableCredentials"
+import Alert from "react-bootstrap/Alert"
 
 
 import '../css/App.css'
@@ -99,13 +100,21 @@ class App extends React.Component {
      * @CR
      */
     renderCredentials() {
-        let certInformation = []
-        console.log(this.state.credentialsInWallet)
+        let credentials = []
         for (let credential of this.state.credentialsInWallet) {
-            console.log(credential.values)
-            // certInformation.push(<CertDataCard key={cert.keyPairName} header={cert.keyPairName} ></CertDataCard>)
+            let parsedSchema = credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)
+            credentials.push(<CredentialDataCard
+                key={credential.credentialId}
+                header={credential.schemaId}
+                credentials={credential.values}
+                credentialId={credential.credentialId}
+                state={credential.state}
+                schemaId={parsedSchema[0]}
+                issuedAtDate={credential.issuedAtUtc}
+                acceptedAtDate={credential.acceptedAtUtc}
+            ></CredentialDataCard>)
         }
-        return "YOo"
+        return credentials
     }
 
 
@@ -158,6 +167,7 @@ class App extends React.Component {
             return (<Row>
                 <Col>
                     <div className="data-box">
+
                         <Container >
                             <Button onClick={() => {
                                 if (!this.state.toggleAddKeyPair) {
@@ -182,7 +192,6 @@ class App extends React.Component {
                                 walletId={this.state.walletId}
                                 toggleAddKeyPair={this.state.toggleAddKeyPair}>
                             </AcceptCredentialForm>
-
                             <Row >
                                 {this.renderCredentials()}
                             </Row>
@@ -219,13 +228,21 @@ class App extends React.Component {
                     </Container>
                 </Navbar>
                 <Container style={{ padding: "2rem" }} fluid="md">
+                    <Alert key={this.state.person} variant='info'>
+                        Person IRI: {this.state.person}
+                    </Alert>
+                    <Alert key={this.state.walletID} variant='info'>
+                        Wallet ID: {this.state.walletId}
+                    </Alert>
+
                     <Container style={{ padding: ".5rem" }}>
+                        <Button id="creds-btn"
+                            variant={this.state.credentials}
+                            onClick={() => this.setState({ showing: "credentials", myData: "secondary", credentials: "primary" })}>Verificable Credentials</Button>{' '}
                         <Button id="my-data-btn"
                             variant={this.state.myData}
                             onClick={() => this.setState({ showing: "my-data", myData: "primary", credentials: "secondary" })}>My Data</Button>{' '}
-                        <Button id="creds-btn"
-                            variant={this.state.creds}
-                            onClick={() => this.setState({ showing: "credentials", myData: "secondary", credentials: "primary" })}>Verificable Credentials</Button>{' '}
+
                     </Container>
                     {this.renderHandler()}
                 </Container>
