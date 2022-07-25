@@ -1,15 +1,9 @@
 import React, { useState } from "react";
 import Card from "react-bootstrap/Card"
 import Button from "react-bootstrap/Button"
-import deleteMyData from "../../api-functions/my-data/deleteMyData";
 import Modal from "react-bootstrap/Modal"
 import Form from "react-bootstrap/Form"
-import updateMyData from "../../api-functions/my-data/updateMyData";
-import Image from "react-bootstrap/Image"
-import lock from '../../assets/lock.png';
-import Container from "react-bootstrap/Container"
 import Col from "react-bootstrap/Col"
-import Stack from 'react-bootstrap/Stack';
 import ListGroup from 'react-bootstrap/ListGroup';
 import groupIcon from "../../assets/groupIcon.png"
 
@@ -69,9 +63,10 @@ class CredentialDataCard extends React.Component {
             <Col >
                 <Card className="card text-center" border="warning" style={{ width: '15rem', margin: "1rem" }}>
                     <Card.Img variant="top" src={groupIcon} />
-                    <Card.Header>{this.props.schemaId}</Card.Header>
 
                     <Card.Body>
+                        <Card.Title>{this.props.schemaId}</Card.Title>
+                        <Card.Subtitle className="mb-2 text-muted"> Id: {this.props.credentialId}</Card.Subtitle>
                         <Card.Text>
                             <ShowCredModal
                                 credentials={this.props.credentials}

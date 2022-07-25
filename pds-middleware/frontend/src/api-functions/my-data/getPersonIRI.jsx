@@ -6,11 +6,6 @@ async function getPersonIRI() {
         },
     })
 
-    if (!res.ok) {
-        alert("Cannot Read Person IRI")
-        return ""
-    }
-
     let data = await res.json()
     return data.value
 

@@ -150,9 +150,10 @@ class App extends React.Component {
                             <CreateNewDataForm
                                 person={this.state.person}
                                 toggleAddData={this.state.toggleAddData}
-                                certs={this.state.mycerts}
+                                credentials={this.state.credentialsInWallet}
                                 attributes={this.state.mappedAttributes}
-                                refreshData={this.refreshData}>
+                                refreshData={this.refreshData}
+                            >
 
                             </CreateNewDataForm>
 
@@ -238,7 +239,7 @@ class App extends React.Component {
                     <Container style={{ padding: ".5rem" }}>
                         <Button id="creds-btn"
                             variant={this.state.credentials}
-                            onClick={() => this.setState({ showing: "credentials", myData: "secondary", credentials: "primary" })}>Verificable Credentials</Button>{' '}
+                            onClick={() => this.setState({ showing: "credentials", myData: "secondary", credentials: "primary" })}>Verifiable Credentials</Button>{' '}
                         <Button id="my-data-btn"
                             variant={this.state.myData}
                             onClick={() => this.setState({ showing: "my-data", myData: "primary", credentials: "secondary" })}>My Data</Button>{' '}

@@ -30,11 +30,11 @@ class Init extends React.Component {
         let personIRI = await getPersonIRI()
         let walletId = await getWalletID()
 
-        if (personIRI === "") {
+        if (personIRI === null) {
             personIRI = await createNewUser()
         }
 
-        if (walletId === "") {
+        if (walletId === null) {
             let newWallet = await createNewWallet(personIRI)
             walletId = newWallet.value
         }

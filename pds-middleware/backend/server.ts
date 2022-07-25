@@ -296,9 +296,8 @@ app.get('/api/getPersonIRI', (request: Request<string, createMyDataBody>, respon
             if (result.success) {
                 response.status(200).send(result.data)
             } else {
-                console.log(result.data)
                 logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send(result.data)
+                response.status(200).send(result.data)
             }
         })
     } catch (error) {
@@ -319,7 +318,7 @@ app.put('/api/createNewUser', (request: Request<string, createMyDataBody>, respo
                         response.status(200).send(result.data)
                     } else {
                         logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                        response.status(500).send(result.data)
+                        response.status(200).send(result.data)
                     }
                 })
             }
