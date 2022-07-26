@@ -1,6 +1,23 @@
+/**
+ * Server for the Integrated Personal Data Store
+ * July 26, 2022
+ * @CR
+ */
+
+//////////////////////////
+// NPM Imports 
+/////////////////////////
 import express, { Express, Handler, Request, Response } from "express";
-import readMyData from "./endpoints/my-data/readMyData";
 import bodyParser from 'body-parser'
+import 'dotenv/config'
+import path from "path"
+import fs from "fs"
+
+
+//////////////////////////
+// Server Imports 
+/////////////////////////
+import readMyData from "./endpoints/my-data/readMyData";
 import createMyData from "./endpoints/my-data/createMyData";
 import createNewUser from "./endpoints/my-data/createNewUser";
 import getPersonIRI from "./endpoints/my-data/getPersonIRI";
@@ -9,15 +26,7 @@ import { requestLogger, errorLogger, catchErrorLogger } from "./utils/logger";
 import createVerifiableCredentialsTriples from "./endpoints/my-wallet/createVerifiableCredentials"
 import { walletClient } from "./endpoints/my-wallet/wallet";
 
-
-
-import 'dotenv/config'
-import path from "path"
-import fs from "fs"
-
-
 var https = require('https');
-
 const app = express();
 var router = express.Router();
 app.use(bodyParser.json())
@@ -26,13 +35,15 @@ app.use(express.static(path.join(__dirname, "../frontend", "build")));
 app.use(express.static("public"));
 
 
-
 app.get('/wallet', (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "build", "index.html"));
 });
 
 app.use('/', router)
 
+/**
+ * Production Mode Runs the Server over https using the TSL Certificate
+ */
 if (production) {
     let certificate = fs.readFileSync(`${process.env.SSL_CERT}`, 'utf8');
     let privateKey = fs.readFileSync(`${process.env.SSL_PRIVATE_KEY}`, 'utf8');
@@ -382,56 +393,5 @@ app.get('/api/readMyData', (request: Request, response: Response) => {
     }
 
 })
-
-
-
-
-
-
-
-
-
-/**
- *  Deprecated
- *  Since we cannot update the data in a Verifiable Credential, we cannot update the data
- */
-// app.post('/api/updateMyData', (request: Request<string, any>, response: Response) => {
-//     try {
-//         requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
-//         let data = request.body
-//         updateMyData(data.person, data.attribute, data.newDataValue, data.oldDataValue, (result) => {
-//             if (result.success) {
-//                 response.status(200).send("Successfully Updated " + data.attribute)
-//             } else {
-//                 errorLogger(request.url, request.method, result.data)
-//                 response.status(500).send("Could Not Update " + data.attribute)
-//             }
-//         })
-//     } catch (error) {
-//         catchErrorLogger(request.url, request.method, error)
-//     }
-// })
-
-/**
- *  Depracated
- *
- */
-// app.post('/api/deleteMyData', (request: Request<string, any>, response: Response,) => {
-//     try {
-//         requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
-//         let data = request.body
-//         deleteMyData(data.attribute, data.value, (result) => {
-//             if (result.success) {
-//                 response.status(200).send("Successfully Deleted " + data.attribute)
-//             } else {
-//                 errorLogger(request.url, request.method, result.data)
-//                 response.status(500).send("Could Not Delete " + data.attribute)
-//             }
-//         })
-//     } catch (error) {
-//         catchErrorLogger(request.url, request.method, error)
-//     }
-// })
-
 
 
