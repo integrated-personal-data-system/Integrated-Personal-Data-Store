@@ -67,15 +67,15 @@ class CreateNewDataForm extends React.Component {
         console.log(this.state.selectedCredential)
         console.log(this.state.selectedAttr)
         console.log(this.state.value)
-        if (this.state.selectedCredential !== "" && this.state.selectedAttr !== "" && this.state.value !== "") {
+        // if (this.state.selectedCredential !== "" && this.state.selectedAttr !== "" && this.state.value !== "") {
 
-            // createMyData(this.props.person, this.state.attribute, this.state.value, this.state.cert, (data) => {
-            //     this.props.refreshData()
-            // })
+        //     // createMyData(this.props.person, this.state.attribute, this.state.value, this.state.cert, (data) => {
+        //     //     this.props.refreshData()
+        //     // })
 
-        } else {
-            alert("Fill out all the fields")
-        }
+        // } else {
+        //     alert("Fill out all the fields")
+        // }
 
     }
 

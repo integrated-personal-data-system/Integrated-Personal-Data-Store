@@ -36,14 +36,14 @@ INSERT DATA
 
 async function createWallet(person: string, callback: ({ success: boolean, data: string }) => void) {
     try {
-        let wallet = await walletClient.createWallet({
-            ownerName: process.env.WALLET_OWNER,
-            walletId: null
-        });
-
-        let query = createWalletQuery(person, wallet.walletId)
-        console.log(query)
+        // let wallet = await walletClient.createWallet({
+        //     ownerName: process.env.WALLET_OWNER,
+        //     walletId: null
+        // });
+        let query = createWalletQuery("http://www.cubrc.org/Data/Person1_73e320eb-57b1-4bb5-bc2a-b5b85fee61b1_1286172209", "CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj")
+        // let query = createWalletQuery(person, wallet.walletId)
         let vaildatedQuery = validateQuery(query)
+        console.log(vaildatedQuery)
         fetch(`http://${process.env.API_LOCATION}:3030/MyData`, {
             method: 'POST',
             headers: {
@@ -55,7 +55,7 @@ async function createWallet(person: string, callback: ({ success: boolean, data:
         }).then(res => res).then(data => {
             callback({
                 success: true,
-                data: { "value": wallet.walletId }
+                data: { "value": "CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj" }
             })
         }).catch((error) => {
             callback({

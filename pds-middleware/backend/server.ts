@@ -1,59 +1,37 @@
 import express, { Express, Handler, Request, Response } from "express";
-import readMyData from "./apiFunctions/my-data/readMyData";
+import readMyData from "./endpoints/my-data/readMyData";
 import bodyParser from 'body-parser'
-import createMyData from "./apiFunctions/my-data/createMyData";
-import deleteMyData from "./apiFunctions/my-data/deleteMyData";
-import { updateMyData } from "./apiFunctions/my-data/updateMyData";
-import createNewUser from "./apiFunctions/my-data/createNewUser";
-import getPersonIRI from "./apiFunctions/my-data/getPersonIRI";
-import { current_mapping, production } from './serverConfig'
-import { createLogger, format, transports } from 'winston'
-import createWallet from "./apiFunctions/my-wallet/createWallet";
-import getWalletId from "./apiFunctions/my-wallet/getWalletId"
-import { walletClient, credentialsClient } from "./apiFunctions/my-wallet/wallet";
-import getVerifiableCredentials from "./apiFunctions/my-wallet/getVerifiableCrendentials";
+import createMyData from "./endpoints/my-data/createMyData";
+import createNewUser from "./endpoints/my-data/createNewUser";
+import getPersonIRI from "./endpoints/my-data/getPersonIRI";
+import { current_mapping, production } from './utils/serverConfig'
+import { requestLogger, errorLogger, catchErrorLogger } from "./utils/logger";
+import createVerifiableCredentialsTriples from "./endpoints/my-wallet/createVerifiableCredentials"
+import { walletClient } from "./endpoints/my-wallet/wallet";
+
+
+
 import 'dotenv/config'
-
-
 import path from "path"
 import fs from "fs"
 
 
 var https = require('https');
 
-
 const app = express();
 var router = express.Router();
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-
-
-
 app.use(express.static(path.join(__dirname, "../frontend", "build")));
 app.use(express.static("public"));
+
+
 
 app.get('/wallet', (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "build", "index.html"));
 });
 
-const logger = createLogger({
-    transports: [
-        new transports.File({
-            dirname: "logs",
-            filename: "server.log",
-        }),
-    ],
-    format: format.combine(
-        format.timestamp(),
-        format.printf(({ timestamp, level, message }) => {
-            return `[${timestamp}] ${level}: ${message}`;
-        })
-    ),
-});
-
-
 app.use('/', router)
-
 
 if (production) {
     let certificate = fs.readFileSync(`${process.env.SSL_CERT}`, 'utf8');
@@ -66,7 +44,6 @@ if (production) {
     var httpsServer = https.createServer(credentials, app);
 
     httpsServer.listen(443, async () => {
-        logger.info("Started Server");
         console.log(`Aries PDS Middleware software listening on port in Production mode ${443}`);
     });
 } else {
@@ -76,12 +53,16 @@ if (production) {
 }
 
 
-
 //////////////////////////////////
 // My Wallet Enpoint
 /////////////////////////////////
 
-// Connections 
+/**
+ *  Sends a request to the Trinsic API to list all the credentials. 
+ *  @param {string} walletId: The Wallet Id
+ *  Status: Done
+ *  @CR
+ */
 app.post('/api/listAllConnections', async (request: Request<string, any>, response: Response) => {
     try {
         let walletId = request.body.walletId
@@ -89,11 +70,16 @@ app.post('/api/listAllConnections', async (request: Request<string, any>, respon
         response.status(200).send(connections)
     } catch (error) {
         console.log(error)
-        response.status(400).send("Could Not List Credentails")
+        response.status(400).send("Could Not List Credentials")
     }
 })
 
-// Credentials
+/**
+ * Sends a request to Trinisc API to list all the credential in a wallet
+ * @param {string} walletId: The Wallet Id
+ * Status: Done
+ * @CR
+ */
 app.post('/api/listCredentialsInWallet', async (request: Request<string, any>, response: Response) => {
     try {
         let walletId = request.body.walletId
@@ -109,7 +95,13 @@ app.post('/api/listCredentialsInWallet', async (request: Request<string, any>, r
     }
 })
 
-
+/**
+ *  Sends a request to Trinisc API to get a specific credential given a credential Id
+ * @param {string} walletId: The Wallet Id
+ * @param {string} credentialId: The credential Id
+ * Status: Done
+ * @CR
+ */
 app.post('/api/getCredentialInWallet', async (request: Request<string, any>, response: Response) => {
     try {
         let walletId = request.body.walletId
@@ -129,6 +121,14 @@ app.post('/api/getCredentialInWallet', async (request: Request<string, any>, res
     }
 })
 
+
+/**
+ * Sends a request to the Trinsic API to delete a given credential given a credential Id
+ * @param {string} walletId: The Wallet Id
+ * @param {string} credentialId: The credential Id
+ * Status: Done
+ * @CR
+ */
 app.post('/api/deleteCredential', async (request: Request<string, any>, response: Response) => {
     try {
         let walletId = request.body.walletId
@@ -143,34 +143,56 @@ app.post('/api/deleteCredential', async (request: Request<string, any>, response
         }
     } catch (error) {
         console.log(error)
-        response.status(400).send("Could Not Delete Credentail")
+        response.status(400).send("Could Not Delete Credential")
     }
 })
 
+/**
+ * Sends a request to the Trinsic API to delete a given credential given a credential Id
+ * @param {string} walletId: The Wallet Id
+ * @param {string} credentialData: The url for the Credn
+ * Status: Done
+ * @CR
+ */
 app.post('/api/AcceptCredential', async (request: Request<string, any>, response: Response) => {
     try {
         let walletId = request.body.walletId
         let credentialData = request.body.credentialData
+        if (walletId === null) response.status(400).send("Missing WalletId")
+        if (credentialData === null) response.status(400).send("Missing Crendential Data")
+
         let credential = await walletClient.acceptCredential(walletId, credentialData);
-        response.status(200).send(credential)
+        let credentialId = credential.credentialId
+        let credentialName = credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)[0]
+        createVerifiableCredentialsTriples(walletId, credentialName, credentialId, (result) => {
+            if (result) {
+                response.status(200).send("Created Verifiable Credential: " + result.data.value)
+            } else {
+                response.status(200).send("Could not create Verifiable Credential")
+            }
+        })
     } catch (error) {
         console.log(error)
-        response.status(400).send("Could Not Accept Credentail")
+        response.status(400).send("Could Not Accept Credential")
     }
 })
 
-// Wallets 
+/**
+ * Sends a request to the Trinsic Wallet to create a digital Wallet. If there already is a wallet,
+ * sends a response indicating the current wallet
+ * Status: Need to created triples for the wallet
+ * @CR
+ */
 app.put('/api/createWallet', async (request: Request<string, any>, response: Response) => {
     try {
-
-        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
         let wallets = await walletClient.listWallets();
-        console.log(wallets)
         if (wallets.length == 0) {
             let wallet = await walletClient.createWallet({
                 ownerName: process.env.WALLET_OWNER,
                 walletId: null
             });
+
             response.status(200).send(wallet)
         } else {
             response.status(400).send("Wallet Already Created: " + wallets[0].walletId)
@@ -181,7 +203,12 @@ app.put('/api/createWallet', async (request: Request<string, any>, response: Res
     }
 })
 
-
+/**
+ * Sends a request to the Trinsic API to delete a cloud wallet 
+ * @param {string} walletId: The ID for the digital Wallet
+ * Status: Update the triples 
+ * @CR
+ */
 app.delete('/api/DeleteCloudWallet', async (request: Request<string, any>, response: Response) => {
     try {
         let walletId = request.body.walletId
@@ -193,7 +220,11 @@ app.delete('/api/DeleteCloudWallet', async (request: Request<string, any>, respo
     }
 
 })
-
+/**
+ * Sends a request to the Trinsic API to delete ALL cloud wallet 
+ * Status: Update the triples 
+ * @CR
+ */
 app.delete('/api/DeleteAllCloudWallet', async (request: Request<string, any>, response: Response) => {
     try {
         let wallets = await walletClient.listWallets();
@@ -208,9 +239,15 @@ app.delete('/api/DeleteAllCloudWallet', async (request: Request<string, any>, re
 
 })
 
+
+/**
+ * Sends a request to the Trinsic API to get the current wallet
+ * Status: Done
+ * @CR
+ */
 app.get('/api/getWallet', async (request: Request<string, any>, response: Response) => {
     try {
-        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
         let wallets = await walletClient.listWallets();
         let trinsicWallets = []
         for (let wallet of wallets) {
@@ -227,34 +264,37 @@ app.get('/api/getWallet', async (request: Request<string, any>, response: Respon
 // My Data Endpoints
 /////////////////////////////////
 
-interface createMyDataBody {
-    person: string,
-    attribute: string,
-    cert: string,
-    value: string
-}
 
-
-app.get('/api/getPersonIRI', (request: Request<string, createMyDataBody>, response: Response) => {
+/**
+ * Sends a query to the triple store to get the IRI for the Person
+ * Status: Done
+ * @CR
+ */
+app.get('/api/getPersonIRI', (request: Request<string, any>, response: Response) => {
     try {
-        logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders);
+        requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
         getPersonIRI((result) => {
             if (result.success) {
                 response.status(200).send(result.data)
             } else {
-                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                errorLogger(request.url, request.method, result.data)
                 response.status(200).send(result.data)
             }
         })
     } catch (error) {
-        logger.error(error);
+        catchErrorLogger(request.url, request.method, error)
     }
-
 })
 
-app.put('/api/createNewUser', (request: Request<string, createMyDataBody>, response: Response) => {
+/**
+ * Creates a new user in the triple store. If there is already a user, sends the IRI 
+ * of the current person
+ * Status: Done 
+ * @CE 
+ */
+app.put('/api/createNewUser', (request: Request<string, any>, response: Response) => {
     try {
-        logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
         getPersonIRI((result) => {
             if (result.success) {
                 response.status(500).send("User Already Created: " + result.data.value)
@@ -263,120 +303,135 @@ app.put('/api/createNewUser', (request: Request<string, createMyDataBody>, respo
                     if (result.success) {
                         response.status(200).send(result.data)
                     } else {
-                        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                        errorLogger(request.url, request.method, result.data)
                         response.status(200).send(result.data)
                     }
                 })
             }
         })
-
     } catch (error) {
-        logger.error(error);
+        catchErrorLogger(request.url, request.method, error)
     }
-
 })
 
-
-app.put('/api/createMyData', (request: Request<string, createMyDataBody>, response: Response) => {
+/**
+ * Creates triples for the an attribute in the Verifiable Credential and uploads the data into the triple store
+ * @param {string} person: The IRI of the person 
+ * @param {string} attribute: The attribte that you want to create
+ * @param {string} value: The value of the attribute
+ * @param {string} verifiableCredentialId: The id for the Verifiable Credential
+ * Status: In Progress Fix createMyDataFunction and test
+ * @CR
+ */
+app.put('/api/createMyData', (request: Request<string, any>, response: Response) => {
     try {
-        logger.info("URL:" + request.url + " METHOD:" + request.method + " Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
         let data = request.body
-        if (data.person == undefined) {
-            response.status(400).send("Missing Person IRI")
-        }
+        if (data.person == undefined) response.status(400).send("Missing Person IRI")
+        if (data.attribute == undefined) response.status(400).send("Missing Data Attribute")
+        if (data.value == undefined) response.status(400).send("Missing Data Value")
+        if (data.verifiableCredentialId == undefined) response.status(400).send("Missing Verifiable Credential")
 
-        if (data.attribute == undefined) {
-            response.status(400).send("Missing Data Attribute")
-        }
-
-        if (data.value == undefined) {
-            response.status(400).send("Missing Data Value")
-        }
-
-        if (data.cert == undefined) {
-            response.status(400).send("Missing Cert")
-        }
-        createMyData(data.person, data.attribute, data.value, data.cert, (result) => {
+        createMyData(data.person, data.attribute, data.value, data.verifiableCredentialId, (result) => {
             if (result.success) {
                 response.status(200).send("Successfully Uploaded " + data.attribute)
             } else {
-                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                errorLogger(request.url, request.method, result.data)
                 response.status(500).send("Could Not Uploaded " + data.attribute)
             }
         })
     } catch (error) {
-        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
+        catchErrorLogger(request.url, request.method, error)
     }
 
 })
 
+/**
+ * Sends the current attribute that have been mapped in the My Data Ontology
+ * Status: Done 
+ * @Cr
+ */
 app.get('/api/readMappedAttributes', (request: Request, response: Response) => {
     try {
-        logger.info("URL:" + request.url + " | METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
         response.status(200).send({ attrList: current_mapping })
     } catch (error) {
-        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
+        catchErrorLogger(request.url, request.method, error)
     }
-
 })
 
+
+/**
+ * Queries the triple store to get all a person's data 
+ * Status: In Progress Update the read quesries
+ * @CR
+ */
 app.get('/api/readMyData', (request: Request, response: Response) => {
     try {
-        logger.info("URL:" + request.url + "  |  METHOD:" + request.method + "  |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
+        requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
         readMyData((result) => {
             if (result.success) {
                 response.status(200).send(result.data)
             } else {
-                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
+                errorLogger(request.url, request.method, result.data)
                 response.status(500).send({ data: "Failed to Read Data" })
             }
         })
     } catch (error) {
-        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
-    }
-
-})
-
-app.post('/api/updateMyData', (request: Request<string, createMyDataBody>, response: Response) => {
-    try {
-        logger.info("URL:" + request.url + "  |  METHOD:" + request.method + "  |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-        let data = request.body
-        updateMyData(data.person, data.attribute, data.newDataValue, data.oldDataValue, (result) => {
-            if (result.success) {
-                response.status(200).send("Successfully Updated " + data.attribute)
-            } else {
-                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send("Could Not Update " + data.attribute)
-            }
-        })
-    } catch (error) {
-        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
-    }
-
-})
-
-app.post('/api/deleteMyData', (request: Request<string, createMyDataBody>, response: Response,) => {
-    try {
-        logger.info("URL:" + request.url + " |  METHOD:" + request.method + " |  Headers:" + request.rawHeaders + " |  BODY: " + JSON.stringify(request.body));
-        let data = request.body
-        deleteMyData(data.attribute, data.value, (result) => {
-            if (result.success) {
-                response.status(200).send("Successfully Deleted " + data.attribute)
-            } else {
-                logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + result.data);
-                response.status(500).send("Could Not Delete " + data.attribute)
-            }
-        })
-    } catch (error) {
-        logger.error("URL:" + request.url + " |  METHOD:" + request.method + " | Error:" + error);
+        catchErrorLogger(request.url, request.method, error)
     }
 
 })
 
 
-//////////////////////////////////
-// Dev Endpoints
-/////////////////////////////////
+
+
+
+
+
+
+
+/**
+ *  Deprecated
+ *  Since we cannot update the data in a Verifiable Credential, we cannot update the data
+ */
+// app.post('/api/updateMyData', (request: Request<string, any>, response: Response) => {
+//     try {
+//         requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
+//         let data = request.body
+//         updateMyData(data.person, data.attribute, data.newDataValue, data.oldDataValue, (result) => {
+//             if (result.success) {
+//                 response.status(200).send("Successfully Updated " + data.attribute)
+//             } else {
+//                 errorLogger(request.url, request.method, result.data)
+//                 response.status(500).send("Could Not Update " + data.attribute)
+//             }
+//         })
+//     } catch (error) {
+//         catchErrorLogger(request.url, request.method, error)
+//     }
+// })
+
+/**
+ *  Depracated
+ *
+ */
+// app.post('/api/deleteMyData', (request: Request<string, any>, response: Response,) => {
+//     try {
+//         requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
+//         let data = request.body
+//         deleteMyData(data.attribute, data.value, (result) => {
+//             if (result.success) {
+//                 response.status(200).send("Successfully Deleted " + data.attribute)
+//             } else {
+//                 errorLogger(request.url, request.method, result.data)
+//                 response.status(500).send("Could Not Delete " + data.attribute)
+//             }
+//         })
+//     } catch (error) {
+//         catchErrorLogger(request.url, request.method, error)
+//     }
+// })
 
 
 

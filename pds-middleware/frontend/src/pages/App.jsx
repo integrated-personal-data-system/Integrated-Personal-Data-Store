@@ -56,6 +56,7 @@ class App extends React.Component {
         this.setState({ mydata: myDataArray, mappedAttributes: mappedAttributesArray, credentialsInWallet: credentialsInWallet })
     }
 
+
     isStateSet() {
         if (this.state.person === null || this.state.walletId == null) {
             return < Navigate to="/" />

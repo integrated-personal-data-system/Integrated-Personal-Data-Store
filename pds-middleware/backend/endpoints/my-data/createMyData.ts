@@ -7,9 +7,7 @@ import { Parser, Generator } from "sparqljs"
 
 function validateUpdateQuery(query: string) {
     try {
-        if (query == "") {
-            return "Query is empty"
-        }
+        if (query == "") return "Query is empty"
         let parser = new Parser()
         var parsedQuery = parser.parse(query)
         var generator = new Generator()
@@ -17,7 +15,6 @@ function validateUpdateQuery(query: string) {
     } catch (error) {
         console.log("Your query has a syntax error")
         return ""
-
     }
 }
 
@@ -29,16 +26,15 @@ PREFIX obo: <http://purl.obolibrary.org/obo/>
 INSERT DATA
 { 
 ${triples}
-}
-        `
+}`
         return updateQuery
     } catch (error) {
         console.log("Could not create update query")
     }
 }
 
-function createMyData(person: string, attribute: string, value: string, cert: string, callback: ({ success: boolean, data: string }) => void) {
-    mappingFuction(person, attribute, value, cert, (result) => {
+function createMyData(person: string, attribute: string, value: string, verifiableCredentialId: string, callback: ({ success: boolean, data: string }) => void) {
+    mappingFuction(person, attribute, value, verifiableCredentialId, (result) => {
         let query = createUpdateQuery(result.data)
         let vaildatedQuery = validateUpdateQuery(query)
         if (vaildatedQuery != "") {

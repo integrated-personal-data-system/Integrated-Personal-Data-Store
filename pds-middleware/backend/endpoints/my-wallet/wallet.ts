@@ -18,12 +18,6 @@ export const credentialsClient = new CredentialsServiceClient(
 );
 
 
-// Provider API
-// const providerClient = new ProviderServiceClient(
-//     new ProviderCredentials(providerKey),
-//     { noRetryPolicy: true }
-// );
-
 // Wallet API
 export const walletClient = new WalletServiceClient(
     new Credentials(process.env.TRINSIC_WALLET_API_KEY),

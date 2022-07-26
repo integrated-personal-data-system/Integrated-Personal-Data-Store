@@ -438,7 +438,7 @@ function pds_weight(person: string, weight: string) {
 }
 
 
-export function mappingFuction(person: string, attribute: string, value: string, cert: string, callback: ({ success: boolean, data: string }) => void) {
+export function mappingFuction(person: string, attribute: string, value: string, verifiableCredentialId: string, callback: ({ success: boolean, data: string }) => void) {
   try {
 
     let attributeClean = attribute.toLocaleLowerCase()
