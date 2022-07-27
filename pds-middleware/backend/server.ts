@@ -25,6 +25,7 @@ import { current_mapping, production } from './utils/serverConfig'
 import { requestLogger, errorLogger, catchErrorLogger } from "./utils/logger";
 import createVerifiableCredentialsTriples from "./endpoints/my-wallet/createVerifiableCredentials"
 import { walletClient } from "./endpoints/my-wallet/wallet";
+import createWalletTriples from "./endpoints/my-wallet/createWallet";
 
 var https = require('https');
 const app = express();
@@ -191,23 +192,36 @@ app.post('/api/AcceptCredential', async (request: Request<string, any>, response
 /**
  * Sends a request to the Trinsic Wallet to create a digital Wallet. If there already is a wallet,
  * sends a response indicating the current wallet
- * Status: Need to created triples for the wallet
+ * Status: Done
  * @CR
  */
 app.put('/api/createWallet', async (request: Request<string, any>, response: Response) => {
     try {
-        requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
-        let wallets = await walletClient.listWallets();
-        if (wallets.length == 0) {
-            let wallet = await walletClient.createWallet({
-                ownerName: process.env.WALLET_OWNER,
-                walletId: null
-            });
-
-            response.status(200).send(wallet)
+        let personIRI = request.body.personIRI
+        if (personIRI === undefined) {
+            response.status(400).send("Missing personIRI")
         } else {
-            response.status(400).send("Wallet Already Created: " + wallets[0].walletId)
+            requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
+            let wallets = await walletClient.listWallets();
+            if (wallets.length == 0) {
+                let wallet = await walletClient.createWallet({
+                    ownerName: process.env.WALLET_OWNER,
+                    walletId: null
+                });
+                console.log(wallet)
+                createWalletTriples(personIRI, wallet.walletId, (result) => {
+                    if (result.success) {
+                        response.status(200).send(result.data)
+                    } else {
+                        response.status(400).send("Could not create the triples for a wallet")
+                    }
+                })
+            } else {
+                response.status(400).send("Wallet Already Created: " + wallets[0].walletId)
+            }
         }
+
+
     } catch (error) {
         response.status(400).send({ value: "Could Not Create Wallet" })
         console.log(error)
@@ -374,7 +388,7 @@ app.get('/api/readMappedAttributes', (request: Request, response: Response) => {
 
 /**
  * Queries the triple store to get all a person's data 
- * Status: In Progress Update the read quesries
+ * Status: Done
  * @CR
  */
 app.get('/api/readMyData', (request: Request, response: Response) => {

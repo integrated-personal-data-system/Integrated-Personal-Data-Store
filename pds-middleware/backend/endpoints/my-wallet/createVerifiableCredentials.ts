@@ -1,4 +1,3 @@
-import { walletClient } from "./wallet"
 import fetch from "node-fetch"
 import validateQuery from "../queries/validateQuery"
 
