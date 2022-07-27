@@ -37,9 +37,12 @@ function UpdateModal(props) {
 
     return (
         <>
-            <Button variant="primary" style={{ float: "right" }} onClick={handleShow}>
-                Edit
-            </Button>
+            <div class="text-center">
+                <Button variant="primary" onClick={handleShow}>
+                    View
+                </Button>
+            </div>
+
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -115,7 +118,6 @@ function ShowSignature(props) {
             </Modal.Footer>
         </Modal>
     </>)
-
 }
 
 class PersonalDataCard extends React.Component {
@@ -136,16 +138,17 @@ class PersonalDataCard extends React.Component {
         let credentails = []
         console.log(this.props.credentials)
         for (let credential of this.props.credentials) {
-            credentails.push(<Stack direction="horizontal" gap={1}>
-                <Image
-                    fluid={true}
-                    src={lock}
-                    style={{ height: "1rem" }}
-                ></Image>
-                <Card.Subtitle className="text-muted">
-                    {credential}
-                </Card.Subtitle>
-            </Stack>)
+            credentails.push(
+                <Stack style={{ marginTop: "1rem" }} direction="horizontal" gap={1}>
+                    <Image
+                        fluid={true}
+                        src={lock}
+                        style={{ height: "1rem" }}
+                    ></Image>
+                    <Card.Subtitle className="text-muted">
+                        {credential}
+                    </Card.Subtitle>
+                </Stack>)
         }
         return credentails
     }
@@ -163,9 +166,9 @@ class PersonalDataCard extends React.Component {
                                 {this.renderCredentials()}
                                 {/* <ShowSignature keyPairName={this.props.keyPairName} signature={this.props.signature}></ ShowSignature> */}
                                 <Container style={{ marginTop: "1rem" }}>
-                                    <Button variant="danger" style={{ float: "left" }} onClick={() => this.handleDelete()} >
+                                    {/* <Button variant="danger" style={{ float: "left" }} onClick={() => this.handleDelete()} >
                                         Delete
-                                    </Button>
+                                    </Button> */}
                                     <UpdateModal person={this.props.person} header={this.props.header} oldValue={this.props.value} refreshData={this.props.refreshData}></UpdateModal>
                                 </Container>
 
