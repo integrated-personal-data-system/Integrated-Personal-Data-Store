@@ -141,7 +141,7 @@ app.post('/api/getCredentialInWallet', async (request: Request<string, any>, res
  * Status: Done
  * @CR
  */
-app.post('/api/deleteCredential', async (request: Request<string, any>, response: Response) => {
+app.delete('/api/deleteCredential', async (request: Request<string, any>, response: Response) => {
     try {
         let walletId = request.body.walletId
         let credentialId = request.body.credentialId

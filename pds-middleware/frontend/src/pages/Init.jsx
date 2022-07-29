@@ -76,7 +76,7 @@ class Init extends React.Component {
     render() {
         return (
             <div className="App" >
-                <Navbar expand="lg" bg="primary" variant="dark" >
+                <Navbar expand="lg" bg="light" variant="dark" >
                     <Container className="navbar-top">
                         <Navbar.Brand href="#home">My Data</Navbar.Brand>
                         <Navbar.Toggle />
