@@ -1,14 +1,12 @@
-function createMyData(person, attribute, value, cert, callback) {
-
+function createMyData(person, attribute, value, verifiableCredentialId, callback) {
     let data = {
         "person": person,
         "attribute": attribute,
         "value": value,
-        "cert": cert,
+        "verifiableCredentialId": verifiableCredentialId,
     }
-
     fetch('/api/createMyData', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
