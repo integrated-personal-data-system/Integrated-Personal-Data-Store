@@ -136,7 +136,6 @@ class PersonalDataCard extends React.Component {
 
     renderCredentials() {
         let credentails = []
-        console.log(this.props.credentials)
         for (let credential of this.props.credentials) {
             credentails.push(
                 <Stack style={{ marginTop: "1rem" }} direction="horizontal" gap={1}>

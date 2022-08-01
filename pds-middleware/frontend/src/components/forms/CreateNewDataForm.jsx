@@ -23,13 +23,15 @@ class CreateNewDataForm extends React.Component {
         this.getAttributesFromCredential = this.getAttributesFromCredential.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.getValueFromAttribute = this.getValueFromAttribute.bind(this)
+        this.selectAttributes = this.selectAttributes.bind(this)
     }
 
     getCredentialList() {
         let credentails = []
         credentails.push(<option>Select A Credential</option>)
         for (let credential of this.props.credentials) {
-            credentails.push(<option value={credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)}>{credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)}</option>)
+            credentails.push(
+                <option value={credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)}>{credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)}</option>)
         }
         return credentails
     }
@@ -51,6 +53,19 @@ class CreateNewDataForm extends React.Component {
         return attributeOptions
     }
 
+    selectAttributes(attribute) {
+        let value = ""
+        for (let credential of this.props.credentials) {
+            if (credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)[0] === this.state.selectedCredential) {
+                value = credential.values[attribute]
+            }
+        }
+        this.setState({
+            selectedAttr: attribute,
+            value: value
+        })
+    }
+
     getValueFromAttribute() {
         let value = ""
         if (this.state.selectedCredential !== "" && this.state.selectedAttr !== "") {
@@ -64,6 +79,7 @@ class CreateNewDataForm extends React.Component {
     }
 
     async handleSubmit() {
+        console.log(this.props.person)
         console.log(this.state.selectedCredential)
         console.log(this.state.selectedAttr)
         console.log(this.state.value)
@@ -91,16 +107,15 @@ class CreateNewDataForm extends React.Component {
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicText">
-                        <Form.Label>Attribute</Form.Label><Form.Select onChange={(event) => this.setState({
-                            selectedAttr: event.target.value,
-                        })} aria-label="Select An Attribute">
+                        <Form.Label>Attribute</Form.Label><Form.Select onChange={(event) => this.selectAttributes(event.target.value)}
+                            aria-label="Select An Attribute">
                             {this.getAttributesFromCredential()}
                         </Form.Select>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>Value</Form.Label>
-                        <Form.Control placeholder={this.getValueFromAttribute()} disabled />
+                        <Form.Control placeholder={this.state.value} disabled />
                     </Form.Group>
                     <Button variant="primary" onClick={() => this.handleSubmit()} >
                         Save
