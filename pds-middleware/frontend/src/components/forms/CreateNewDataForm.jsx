@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/esm/Container";
 import createMyData from "../../api-functions/my-data/createMyData";
+import readMappedAttributes from "../../api-functions/my-data/readMappedAttributes";
 
 
 
@@ -11,10 +12,13 @@ class CreateNewDataForm extends React.Component {
     constructor(props) {
         super(props)
 
+
         this.state = {
+            mappedAttributes: [],
             selectedCredentialName: "",
             selectedCredentialId: "",
             selectedAttr: "",
+            selectedMappedAttr: "",
             value: "",
         }
 
@@ -23,8 +27,13 @@ class CreateNewDataForm extends React.Component {
         this.getAttributesFromCredential = this.getAttributesFromCredential.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.selectAttributes = this.selectAttributes.bind(this)
+        this.getMappedAttributeList = this.getMappedAttributeList.bind(this)
     }
 
+    async componentDidMount() {
+        let mappedAttributes = await readMappedAttributes()
+        this.setState({ mappedAttributes: mappedAttributes })
+    }
     /**
      * Creates the drop down menu for the Credentails to map
      * 
@@ -38,6 +47,15 @@ class CreateNewDataForm extends React.Component {
                 <option value={credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)}>{credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)}</option>)
         }
         return credentails
+    }
+
+    getMappedAttributeList() {
+        let mappedAttributes = []
+        mappedAttributes.push(<option>Select A Mapped Attribute</option>)
+        for (let attr of this.state.mappedAttributes) {
+            mappedAttributes.push(<option value={attr}>{attr}</option>)
+        }
+        return mappedAttributes
     }
 
     /**
@@ -90,9 +108,8 @@ class CreateNewDataForm extends React.Component {
      * Once the form is filled out, call the createMyData Function to send the selected data to the server.
      */
     async handleSubmit() {
-        if (this.state.selectedCredentialId !== "" && this.state.selectedAttr !== "" && this.state.value !== "") {
-
-            createMyData(this.props.person, this.state.selectedAttr, this.state.value, this.state.selectedCredentialId, (data) => {
+        if (this.state.selectedCredentialId !== "" && this.state.selectedMappedAttr !== "" && this.state.value !== "") {
+            createMyData(this.props.person, this.state.selectedMappedAttr, this.state.value, this.state.selectedCredentialId, (data) => {
                 this.props.refreshData()
             })
 
@@ -118,17 +135,21 @@ class CreateNewDataForm extends React.Component {
                             {this.getCredentialList()}
                         </Form.Select>
                     </Form.Group>
-
                     <Form.Group className="mb-3" controlId="formBasicText">
                         <Form.Label>Attribute</Form.Label><Form.Select onChange={(event) => this.selectAttributes(event.target.value)}
-                            aria-label="Select An Attribute">
+                            aria-label="Select An Attribute to Map">
                             {this.getAttributesFromCredential()}
                         </Form.Select>
                     </Form.Group>
-
                     <Form.Group className="mb-3">
                         <Form.Label>Value</Form.Label>
                         <Form.Control placeholder={this.state.value} disabled />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicText">
+                        <Form.Label>Mapped Attribute</Form.Label><Form.Select onChange={(event) => this.setState({ selectedMappedAttr: event.target.value })}
+                            aria-label="Map to A MyData Attribute ">
+                            {this.getMappedAttributeList()}
+                        </Form.Select>
                     </Form.Group>
                     <Button variant="primary" onClick={() => this.handleSubmit()} >
                         Save

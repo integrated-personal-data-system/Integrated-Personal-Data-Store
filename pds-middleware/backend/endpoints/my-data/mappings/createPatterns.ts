@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from 'uuid'
+import { firstname } from "./createDataMapping"
 
-function pds_firstname(person: string, firstname: string) {
+function pds_firstname(person: string, firstname: string, verfiableCredentialId: string) {
   var firstname_uuid, triples;
 
   try {
     if (firstname !== "") {
       firstname_uuid = uuidv4();
-      let firstNameIRI = firstname.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:designated_by cco:PersonFullName_${firstname_uuid} .
@@ -18,7 +18,13 @@ function pds_firstname(person: string, firstname: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_PersonGivenName_${firstname_uuid} .
             
             cco:InformationBearingEntity_PersonGivenName_${firstname_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${firstname}".
+                cco:has_text_value "${firstname}";
+                obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+
+            cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+
+            cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+              cco:has_text_value "${verfiableCredentialId}" . 
             `;
       return triples;
     }
@@ -27,7 +33,7 @@ function pds_firstname(person: string, firstname: string) {
   }
 }
 
-function pds_email(person: string, email: string) {
+function pds_email(person: string, email: string, verfiableCredentialId: string) {
   var email_uuid, triples;
 
   try {
@@ -51,7 +57,13 @@ function pds_email(person: string, email: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_EmailAddress_${email_uuid} .
             
             cco:InformationBearingEntity_EmailAddress_${email_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${email}"
+                cco:has_text_value "${email}" ;
+                obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+
+            cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+
+            cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+              cco:has_text_value "${verfiableCredentialId}" . 
            
   `;
       return triples;
@@ -61,13 +73,12 @@ function pds_email(person: string, email: string) {
   }
 }
 
-function pds_lastname(person: string, lastname: string) {
+function pds_lastname(person: string, lastname: string, verfiableCredentialId: string) {
   var lastname_uuid, triples;
 
   try {
     if (lastname !== "") {
       lastname_uuid = uuidv4();
-      let lastnameIRI = lastname.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
               cco:designated_by cco:PersonFullName_${lastname_uuid} .
@@ -79,7 +90,13 @@ function pds_lastname(person: string, lastname: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_PersonFamilyName_${lastname_uuid} .
             
             cco:InformationBearingEntity_PersonFamilyName_${lastname_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${lastname}".
+                cco:has_text_value "${lastname}";
+                obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+
+            cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+
+            cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+              cco:has_text_value "${verfiableCredentialId}" . 
   `;
       return triples;
     }
@@ -88,11 +105,10 @@ function pds_lastname(person: string, lastname: string) {
   }
 }
 
-function pds_birthday(person: string, birthday: string) {
+function pds_birthday(person: string, birthday: string, verfiableCredentialId: string) {
   var birthday_uuid, triples;
 
   try {
-    let cleanBirthday = birthday.replace(/\s/g, "")
     if (birthday !== "") {
       birthday_uuid = uuidv4();
       triples = `
@@ -109,7 +125,13 @@ function pds_birthday(person: string, birthday: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_DataIdentifier_${birthday_uuid} .
             
             cco:InformationBearingEntity_DataIdentifier_${birthday_uuid} a cco:InformationBearingEntity ;
-              cco:has_text_value "${birthday}".
+              cco:has_text_value "${birthday}";
+              obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+
+          cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+
+          cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+            cco:has_text_value "${verfiableCredentialId}" . 
 
   `;
       return triples;
@@ -119,13 +141,12 @@ function pds_birthday(person: string, birthday: string) {
   }
 }
 
-function pds_mailingstreet(person: string, mailingstreet: string) {
+function pds_mailingstreet(person: string, mailingstreet: string, verfiableCredentialId: string) {
   var mailingstreet_uuid, triples;
 
   try {
     if (mailingstreet !== "") {
       mailingstreet_uuid = uuidv4();
-      let mailingstreetIRI = mailingstreet.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:agent_in cco:ActOfResiding_${mailingstreet_uuid} .
@@ -140,7 +161,13 @@ function pds_mailingstreet(person: string, mailingstreet: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_StreetAdress_${mailingstreet_uuid} .
             
             cco:InformationBearingEntity_StreetAdress_${mailingstreet_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${mailingstreet}".
+                cco:has_text_value "${mailingstreet}";
+                obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+  
+            cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+  
+            cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+              cco:has_text_value "${verfiableCredentialId}" . 
             `;
       return triples;
     }
@@ -149,7 +176,7 @@ function pds_mailingstreet(person: string, mailingstreet: string) {
   }
 }
 
-function pds_mailingcity(person: string, mailingcity: string) {
+function pds_mailingcity(person: string, mailingcity: string, verfiableCredentialId: string) {
   var mailingcity_uuid, triples;
 
   try {
@@ -173,7 +200,13 @@ function pds_mailingcity(person: string, mailingcity: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingcity_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingcity_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${mailingcity}".
+                cco:has_text_value "${mailingcity}";
+                obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+  
+            cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+  
+            cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+              cco:has_text_value "${verfiableCredentialId}" . 
             `;
       return triples;
     }
@@ -182,7 +215,7 @@ function pds_mailingcity(person: string, mailingcity: string) {
   }
 }
 
-function pds_mailingstate(person: string, mailingstate: string) {
+function pds_mailingstate(person: string, mailingstate: string, verfiableCredentialId: string) {
   var mailingstate_uuid, triples;
 
   try {
@@ -209,7 +242,13 @@ function pds_mailingstate(person: string, mailingstate: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingstate_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingstate_uuid} a cco:InformationBearingEntity ;
-            cco:has_text_value "${mailingstate}".
+            cco:has_text_value "${mailingstate}";
+            obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+
+            cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+
+            cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+              cco:has_text_value "${verfiableCredentialId}" . 
             `;
       return triples;
     }
@@ -218,13 +257,12 @@ function pds_mailingstate(person: string, mailingstate: string) {
   }
 }
 
-function pds_mailingpostcode(person: string, mailingpostcode: string) {
+function pds_mailingpostcode(person: string, mailingpostcode: string, verfiableCredentialId: string) {
   var mailingpostcode_uuid, triples;
 
   try {
     if (mailingpostcode !== "") {
       mailingpostcode_uuid = uuidv4();
-      let mailingpostcodeIRI = mailingpostcode.replace(/\s/g, "")
       triples = `
             <${person}> a cco:Person;
             cco:agent_in cco:ActOfResiding_${mailingpostcode_uuid} .
@@ -242,7 +280,13 @@ function pds_mailingpostcode(person: string, mailingpostcode: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_PostalCode_${mailingpostcode_uuid} .
             
             cco:InformationBearingEntity_PostalCode_${mailingpostcode_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${mailingpostcode}".
+                cco:has_text_value "${mailingpostcode}";
+                obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+    
+                cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+    
+                cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+                  cco:has_text_value "${verfiableCredentialId}" . 
             `;
       return triples;
     }
@@ -251,7 +295,7 @@ function pds_mailingpostcode(person: string, mailingpostcode: string) {
   }
 }
 
-function pds_mailingcountry(person: string, mailingcountry: string,) {
+function pds_mailingcountry(person: string, mailingcountry: string, verfiableCredentialId: string) {
   var mailingcountry_uuid, mailingstate_uuid, triples;
 
   try {
@@ -282,7 +326,13 @@ function pds_mailingcountry(person: string, mailingcountry: string,) {
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${mailingcountry_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${mailingcountry_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${mailingcountry}".
+                cco:has_text_value "${mailingcountry}";
+                obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+    
+                cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+    
+                cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+                  cco:has_text_value "${verfiableCredentialId}" . 
             `;
       return triples;
     }
@@ -291,7 +341,7 @@ function pds_mailingcountry(person: string, mailingcountry: string,) {
   }
 }
 
-function pds_homephonenumber(person: string, homephonenumber: string) {
+function pds_homephonenumber(person: string, homephonenumber: string, verfiableCredentialId: string) {
   var homephonenumber_uuid, triples;
 
   try {
@@ -315,7 +365,13 @@ function pds_homephonenumber(person: string, homephonenumber: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_TelephoneNumber_${homephonenumber_uuid} .
             
             cco:InformationBearingEntity_TelephoneNumber_${homephonenumber_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${homephonenumber}".
+                cco:has_text_value "${homephonenumber}";
+                obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+    
+                cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+    
+                cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+                  cco:has_text_value "${verfiableCredentialId}" . 
             `;
       return triples;
     }
@@ -324,7 +380,7 @@ function pds_homephonenumber(person: string, homephonenumber: string) {
   }
 }
 
-function pds_mobilephonenumber(person: string, mobilephonenumber: string) {
+function pds_mobilephonenumber(person: string, mobilephonenumber: string, verfiableCredentialId: string) {
   var mobilephonenumber_uuid, triples;
 
   try {
@@ -348,7 +404,13 @@ function pds_mobilephonenumber(person: string, mobilephonenumber: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_TelephoneNumber_${mobilephonenumber_uuid} .
             
             cco:InformationBearingEntity_TelephoneNumber_${mobilephonenumber_uuid} a cco:InformationBearingEntity ;
-                cco:has_text_value "${mobilephonenumber}".
+                cco:has_text_value "${mobilephonenumber}";
+                obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+    
+                cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+    
+                cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+                  cco:has_text_value "${verfiableCredentialId}" . 
             `;
       return triples;
     }
@@ -357,7 +419,7 @@ function pds_mobilephonenumber(person: string, mobilephonenumber: string) {
   }
 }
 
-function pds_employername(person: string, employername: string) {
+function pds_employername(person: string, employername: string, verfiableCredentialId: string) {
   var employername_uuid, triples;
 
   try {
@@ -378,7 +440,13 @@ function pds_employername(person: string, employername: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_DesignativeName_${employername_uuid} .
             
             cco:InformationBearingEntity_DesignativeName_${employername_uuid} a cco:InformationBearingEntity ;
-              cco:has_text_value "${employername}".
+              cco:has_text_value "${employername}";
+              obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+  
+              cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+  
+              cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+                cco:has_text_value "${verfiableCredentialId}" . 
             `;
       return triples;
     }
@@ -387,7 +455,7 @@ function pds_employername(person: string, employername: string) {
   }
 }
 
-function pds_employeetitle(person: string, employeetitle: string) {
+function pds_employeetitle(person: string, employeetitle: string, verfiableCredentialId: string) {
   var employeetitle_uuid, triples;
 
   try {
@@ -405,7 +473,13 @@ function pds_employeetitle(person: string, employeetitle: string) {
                 obo:RO_0010001 cco:InformationBearingEntity_NominalMeasurementInformationContentEntity_${employeetitle_uuid} .
             
             cco:InformationBearingEntity_NominalMeasurementInformationContentEntity_${employeetitle_uuid} a cco:InformationBearingEntity ;
-              cco:has_text_value "${employeetitle}".
+              cco:has_text_value "${employeetitle}";
+              obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+  
+              cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+  
+              cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+                cco:has_text_value "${verfiableCredentialId}" .
             `;
       return triples;
     }
@@ -414,7 +488,7 @@ function pds_employeetitle(person: string, employeetitle: string) {
   }
 }
 
-function pds_weight(person: string, weight: string) {
+function pds_weight(person: string, weight: string, verfiableCredentialId: string) {
   try {
     let personWeight_uuid = uuidv4();
     let weightIRI = weight.replace(/\s/g, "")
@@ -429,7 +503,13 @@ function pds_weight(person: string, weight: string) {
      obo:RO_0000056 <http://www.ontologyrepository.com/CommonCoreOntologies/${personWeight_uuid}-Quality-Weight-MeasuredIBE> . 
 
   <http://www.ontologyrepository.com/CommonCoreOntologies/${personWeight_uuid}-Quality-Weight-MeasuredIBE>  a cco:InformationBearingEntity ; 
-      cco:has_text_value "${weight}" . 
+      cco:has_text_value "${weight}" ;
+      obo:BFO_0000050 cco:VerifiableCredential_${verfiableCredentialId} .
+
+      cco:VerifiableCredential_${verfiableCredentialId} cco:designated_by cco:VerifiableCredential_${verfiableCredentialId}_desc . 
+
+      cco:VerifiableCredential_${verfiableCredentialId}_desc a cco:DesignativeName ; 
+        cco:has_text_value "${verfiableCredentialId}" .
 `
     return triples
   } catch (error) {
@@ -440,102 +520,106 @@ function pds_weight(person: string, weight: string) {
 
 export function mappingFuction(person: string, attribute: string, value: string, verifiableCredentialId: string, callback: ({ success: boolean, data: string }) => void) {
   try {
-
     let attributeClean = attribute.toLocaleLowerCase()
+    let guid = encodeURIComponent(attributeClean + value + verifiableCredentialId)
     switch (attributeClean) {
       case "firstname": {
-        let triples = pds_firstname(person, value)
+        let triples = firstname.replace("${person}", person)
+        triples = triples.replace("${value}", value)
+        triples = triples.replace("${verfiableCredentialId}", verifiableCredentialId)
+        triples = triples.replace("${guid}", guid)
+        console.log(triples)
         return callback({
           success: true,
           data: triples
         })
       }
       case "email": {
-        let triples = pds_email(person, value)
+        let triples = pds_email(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "lastname": {
-        let triples = pds_lastname(person, value,)
+        let triples = pds_lastname(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "birthday": {
-        let triples = pds_birthday(person, value)
+        let triples = pds_birthday(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "mailingstreet": {
-        let triples = pds_mailingstreet(person, value)
+        let triples = pds_mailingstreet(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "mailingcity": {
-        let triples = pds_mailingcity(person, value)
+        let triples = pds_mailingcity(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "mailingstate": {
-        let triples = pds_mailingstate(person, value)
+        let triples = pds_mailingstate(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "mailingpostcode": {
-        let triples = pds_mailingpostcode(person, value)
+        let triples = pds_mailingpostcode(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "mailingcountry": {
-        let triples = pds_mailingcountry(person, value)
+        let triples = pds_mailingcountry(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "homephonenumber": {
-        let triples = pds_homephonenumber(person, value)
+        let triples = pds_homephonenumber(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "mobilephonenumber": {
-        let triples = pds_mobilephonenumber(person, value)
+        let triples = pds_mobilephonenumber(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "employername": {
-        let triples = pds_employername(person, value)
+        let triples = pds_employername(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "employeetitle": {
-        let triples = pds_employeetitle(person, value)
+        let triples = pds_employeetitle(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
         })
       }
       case "weight": {
-        let triples = pds_weight(person, value)
+        let triples = pds_weight(person, value, verifiableCredentialId)
         return callback({
           success: true,
           data: triples
@@ -554,4 +638,3 @@ export function mappingFuction(person: string, attribute: string, value: string,
 
 }
 
-mappingFuction
