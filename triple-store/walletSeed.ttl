@@ -1,0 +1,58 @@
+@prefix cco: <http://www.ontologyrepository.com/CommonCoreOntologies/>.
+@prefix obo: <http://purl.obolibrary.org/obo/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xml: <http://www.w3.org/XML/1998/namespace>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+
+cco:Person1_73e320eb-57b1-4bb5-bc2a-b5b85fee61b1_1286172209 a cco:Person ;
+    cco:agent_in cco:ActOfOwnership_DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj.
+
+################ Digial Wallet ###################
+cco:ActOfOwnership_DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj  a cco:ActOfOwnership;
+    obo:RO_0001019 cco:VerifiableCredential_d40e348a-81a0-4f23-9af7-9ef9d4149a51; 
+    obo:RO_0001019 cco:VerifiableCredential_14b7cbdd-d853-404b-acf9-b143a91149b8; 
+    obo:RO_0001019 cco:VerifiableCredential_8deed8e1-9b49-40cd-ab5d-447c3a8c2790;
+    obo:RO_0000057 cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj.
+
+cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj a cco:DigitalWallet;
+    cco:designated_by cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj_Desc.
+
+cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj_Desc a cco:DesignativeName;
+    obo:RO_0010001 cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj_Desc_IBE.
+
+cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj_Desc_IBE a cco:InformationBearingEntity;
+    cco:has_text_value "CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj".
+
+
+################ Verifiable Credentials ###################
+cco:VerifiableCredential_d40e348a-81a0-4f23-9af7-9ef9d4149a51 a cco:VerifiableCredential ; 
+    cco:designated_by cco:VerifiableCredential_d40e348a-81a0-4f23-9af7-9ef9d4149a51_CodeId; 
+    cco:designated_by cco:VerifiableCredential_d40e348a-81a0-4f23-9af7-9ef9d4149a51_Desc. 
+
+cco:VerifiableCredential_d40e348a-81a0-4f23-9af7-9ef9d4149a51_CodeId a cco:CodeIdentifier;
+    cco:has_text_value "d40e348a-81a0-4f23-9af7-9ef9d4149a51" . 
+
+cco:VerifiableCredential_d40e348a-81a0-4f23-9af7-9ef9d4149a51_Desc a cco:DesignativeName;
+    cco:has_text_value "Global Digital Bank Mortgage Application" . 
+
+cco:VerifiableCredential_14b7cbdd-d853-404b-acf9-b143a91149b8 a cco:VerifiableCredential ; 
+    cco:designated_by cco:VerifiableCredential_14b7cbdd-d853-404b-acf9-b143a91149b8_CodeId; 
+    cco:designated_by cco:VerifiableCredential_14b7cbdd-d853-404b-acf9-b143a91149b8_Desc. 
+
+cco:VerifiableCredential_14b7cbdd-d853-404b-acf9-b143a91149b8_CodeId a cco:CodeIdentifier;
+    cco:has_text_value "14b7cbdd-d853-404b-acf9-b143a91149b8" . 
+
+cco:VerifiableCredential_14b7cbdd-d853-404b-acf9-b143a91149b8_Desc a cco:DesignativeName;
+    cco:has_text_value "Collaborators" . 
+
+cco:VerifiableCredential_8deed8e1-9b49-40cd-ab5d-447c3a8c2790 a cco:VerifiableCredential ; 
+    cco:designated_by cco:VerifiableCredential_8deed8e1-9b49-40cd-ab5d-447c3a8c2790_CodeId; 
+    cco:designated_by cco:VerifiableCredential_8deed8e1-9b49-40cd-ab5d-447c3a8c2790_Desc. 
+
+cco:VerifiableCredential_8deed8e1-9b49-40cd-ab5d-447c3a8c2790_CodeId a cco:CodeIdentifier;
+    cco:has_text_value "8deed8e1-9b49-40cd-ab5d-447c3a8c2790" . 
+
+cco:VerifiableCredential_8deed8e1-9b49-40cd-ab5d-447c3a8c2790_Desc a cco:DesignativeName;
+    cco:has_text_value "Employee Verification" .

@@ -91,7 +91,6 @@ class CreateNewDataForm extends React.Component {
         let selectedCredentialId = ""
         for (let credential of this.props.credentials) {
             if (credential.schemaId.match(/(?<=\:[0-9]\:)(.*?)(?=\:)/g)[0] === this.state.selectedCredential) {
-                console.log(credential)
                 selectedCredentialId = credential.credentialId
                 value = credential.values[attribute]
             }
@@ -151,7 +150,7 @@ class CreateNewDataForm extends React.Component {
                             {this.getMappedAttributeList()}
                         </Form.Select>
                     </Form.Group>
-                    <Button variant="primary" onClick={() => this.handleSubmit()} >
+                    <Button variant="primary" type="submit" onClick={() => this.handleSubmit()} >
                         Save
                     </Button>
                 </Form>

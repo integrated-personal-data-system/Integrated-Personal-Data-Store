@@ -356,6 +356,7 @@ app.put('/api/createMyData', (request: Request<string, any>, response: Response)
         if (data.attribute == undefined) response.status(400).send("Missing Data Attribute")
         if (data.value == undefined) response.status(400).send("Missing Data Value")
         if (data.verifiableCredentialId == undefined) response.status(400).send("Missing Verifiable Credential")
+        console.log(data)
         createMyData(data.person, data.attribute, data.value, data.verifiableCredentialId, (result) => {
             if (result.success) {
                 response.status(200).send("Successfully Uploaded " + data.attribute)

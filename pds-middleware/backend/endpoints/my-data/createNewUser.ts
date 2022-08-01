@@ -1,5 +1,4 @@
 import fetch from "node-fetch"
-import { mappingFuction } from "./mappings/createPatterns"
 import { v4 as uuidv4 } from 'uuid'
 
 import { Parser, Generator } from "sparqljs"

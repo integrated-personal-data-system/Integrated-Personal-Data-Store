@@ -6,16 +6,11 @@ let year = date_ob.getFullYear();
 import { v4 as uuid } from "uuid"
 
 
-const current_mapping = ["firstname", "weight", "email", "lastname", "birthday", "mailingstreet", "mailingcity", "mailingstate", "mailingpostcode", "mailingcountry"]
+const current_mapping = ["firstname", "weight", "email", "lastname", "birthday", "mailingstreet", "mailingcity", "mailingstate", "mailingpostcode", "mailingcountry", "mobilephonenumber", "homephonenumber", "employername", "employeetitle"]
 
-const mappings = {
-    "EmailAddress": "email",
-    "FirstName": "firstname",
-    "LastName": "lastname",
-    "BorrowerBirthDate": "birthday"
-}
+
 // If True - run the server over https
 // If false - run the server over http
-const production = true
+const production = false
 
-export { current_mapping, production, mappings } 
+export { current_mapping, production } 

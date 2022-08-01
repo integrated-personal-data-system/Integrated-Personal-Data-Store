@@ -1,15 +1,28 @@
 import fetch from "node-fetch"
 import validateQuery from "../queries/validateQuery"
-import { mappings } from '../../utils/serverConfig'
-import { firstname, email, lastname } from './mappings/createDataMapping'
+import {
+    firstname,
+    email,
+    lastname,
+    birthday,
+    mailingstreet,
+    mailingcity,
+    mailingstate,
+    mailingpostcode,
+    mailingcountry,
+    homephonenumber,
+    mobilephonenumber,
+    employername,
+    employeetitle,
+    weight
+} from './mappings/createDataMapping'
 
 
 function generateTriples(person: string, attribute: string, value: string, verifiableCredentialId: string) {
     try {
-        let attributeClean = mappings[attribute]
-        console.log(attributeClean)
-        let guid = encodeURIComponent(attributeClean + value + verifiableCredentialId)
-        switch (attributeClean) {
+
+        let guid = encodeURIComponent(attribute + value) // Find a better way to make a quid
+        switch (attribute) {
             case "firstname": {
                 let triples = firstname.replace(/{person}/g, person)
                 triples = triples.replace(/{value}/g, value)
@@ -32,75 +45,81 @@ function generateTriples(person: string, attribute: string, value: string, verif
                 return triples
             }
             case "birthday": {
-                // let triples = pds_birthday(person, value, verifiableCredentialId)
-                // return triples
+                let triples = birthday.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             case "mailingstreet": {
-                // let triples = pds_mailingstreet(person, value, verifiableCredentialId)
-                // return triples
+                let triples = mailingstreet.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             case "mailingcity": {
-                // let triples = pds_mailingcity(person, value, verifiableCredentialId)
-                // return callback({
-                //     success: true,
-                //     data: triples
-                // })
+                let triples = mailingcity.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             case "mailingstate": {
-                // let triples = pds_mailingstate(person, value, verifiableCredentialId)
-                // return callback({
-                //     success: true,
-                //     data: triples
-                // })
+                let triples = mailingstate.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             case "mailingpostcode": {
-                // let triples = pds_mailingpostcode(person, value, verifiableCredentialId)
-                // return callback({
-                //     success: true,
-                //     data: triples
-                // })
+                let triples = mailingpostcode.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             case "mailingcountry": {
-                // let triples = pds_mailingcountry(person, value, verifiableCredentialId)
-                // return callback({
-                //     success: true,
-                //     data: triples
-                // })
+                let triples = mailingcountry.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             case "homephonenumber": {
-                // let triples = pds_homephonenumber(person, value, verifiableCredentialId)
-                // return callback({
-                //     success: true,
-                //     data: triples
-                // })
+                let triples = homephonenumber.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             case "mobilephonenumber": {
-                // let triples = pds_mobilephonenumber(person, value, verifiableCredentialId)
-                // return callback({
-                //     success: true,
-                //     data: triples
-                // })
+                let triples = mobilephonenumber.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             case "employername": {
-                // let triples = pds_employername(person, value, verifiableCredentialId)
-                // return callback({
-                //     success: true,
-                //     data: triples
-                // })
+                let triples = employername.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             case "employeetitle": {
-                // let triples = pds_employeetitle(person, value, verifiableCredentialId)
-                // return callback({
-                //     success: true,
-                //     data: triples
-                // })
+                let triples = employeetitle.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             case "weight": {
-                // let triples = pds_weight(person, value, verifiableCredentialId)
-                // return callback({
-                //     success: true,
-                //     data: triples
-                // })
+                let triples = weight.replace(/{person}/g, person)
+                triples = triples.replace(/{value}/g, value)
+                triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+                triples = triples.replace(/{guid}/g, guid)
+                return triples
             }
             default: {
                 return ""
@@ -133,7 +152,7 @@ function createMyData(person: string, attribute: string, value: string, verifiab
     let triples = generateTriples(person, attribute, value, verifiableCredentialId)
     let query = createUpdateQuery(triples)
     let vaildatedQuery = validateQuery(query)
-    console.log(vaildatedQuery)
+    console.log(query)
     if (vaildatedQuery != "") {
         fetch(`http://${process.env.API_LOCATION}:3030/MyData`, {
             method: 'POST',
