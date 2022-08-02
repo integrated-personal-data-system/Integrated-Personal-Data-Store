@@ -6,7 +6,7 @@ let year = date_ob.getFullYear();
 import { v4 as uuid } from "uuid"
 
 
-const current_mapping = ["firstname", "weight", "email", "lastname", "birthday", "mailingstreet", "mailingcity", "mailingstate", "mailingpostcode", "mailingcountry", "mobilephonenumber", "homephonenumber", "employername", "employeetitle"]
+const current_mapping = ["firstname", "homePhoneNumber", "weight", "mobilePhoneNumber", "email", "lastname", "birthday", "mailingstreet", "mailingcity", "mailingstate", "mailingpostcode", "mailingcountry", "mobilephonenumber", "homephonenumber", "employername", "employeetitle"]
 
 
 // If True - run the server over https

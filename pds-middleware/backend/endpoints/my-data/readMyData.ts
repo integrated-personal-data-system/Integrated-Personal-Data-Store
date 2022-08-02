@@ -262,7 +262,102 @@ UNION
 		cco:has_text_value ?VerifiableCredential .
 		
 	}
-}     
+} UNION{
+	SELECT ?Person  ?HomePhoneNumber ?VerifiableCredential WHERE {
+		?Person a cco:Person;
+		cco:user ?LandLine .
+		
+		?LandLine  a cco:LandlineTelephone;
+			obo:RO_0000056 ?StatisOfCommunication.
+			
+		?StatisOfCommunication a  cco:StasisOfTelecommunicationEndpointAssignment;
+			obo:RO_0000057 ?telecomeEndpoint.
+			
+		?telecomeEndpoint a cco:TelecommunicationEndpoint ;
+			cco:designated_by ?telephoneNumber .
+			
+		?telephoneNumber a cco:TelephoneNumber ;
+			obo:RO_0010001 ?telephoneNumberIBE .
+			
+		?telephoneNumberIBE a cco:InformationBearingEntity ;
+			cco:has_text_value ?HomePhoneNumber;
+			obo:BFO_0000050 ?VerifiableCredentialIRI. 
+
+			?VerifiableCredentialIRI cco:designated_by ?VerifiableCredential_desc . 
+		
+			?VerifiableCredential_desc a cco:DesignativeName ; 
+				cco:has_text_value ?VerifiableCredential.
+		}
+}  UNION{
+
+	SELECT ?VerifiableCredential ?TelephoneNumber ?MobilePhoneNumber WHERE {
+		?Person a cco:Person;
+		cco:user ?MobileTelephone .
+		
+		?MobileTelephone a cco:MobileTelephone;
+			obo:RO_0000056 ?StasisOfTelecommunicationEndpointAssignment .
+			
+		?StasisOfTelecommunicationEndpointAssignment a  cco:StasisOfTelecommunicationEndpointAssignment;
+			obo:RO_0000057 ?TelecommunicationEndpoint .
+			
+		?TelecommunicationEndpoint a cco:TelecommunicationEndpoint ;
+			cco:designated_by ?TelephoneNumber.
+			
+		?TelephoneNumber a cco:TelephoneNumber ;
+			obo:RO_0010001 ?TelephoneNumberIBE.
+			
+		?TelephoneNumberIBE a cco:InformationBearingEntity ;
+			cco:has_text_value ?MobilePhoneNumber;
+			obo:BFO_0000050 ?VerifiableCredentialIRI .
+		  
+		   ?VerifiableCredentialIRI cco:designated_by ?VerifiableCredential_desc . 
+						
+								?VerifiableCredential_desc a cco:DesignativeName ; 
+										cco:has_text_value ?VerifiableCredential.
+		}  
+}UNION{
+	SELECT  ?VerifiableCredential ?OrganizationDesignativeName ?EmployerName  WHERE {
+		?Person a cco:Person;
+				obo:RO_0000053 ?OccupationRole .
+	  
+		?OccupationRole a cco:OccupationRole;
+						cco:has_organization_context ?Organization .
+	  
+		?Organization a cco:Organization ;
+					  cco:designated_by ?OrganizationDesignativeName.
+	  
+		?OrganizationDesignativeName a cco:DesignativeName ;
+									 obo:RO_0010001 ?OrganizationDesignativeNameIBE .
+	  
+		?OrganizationDesignativeNameIBE a cco:InformationBearingEntity ;
+										cco:has_text_value ?EmployerName;
+										obo:BFO_0000050 ?VerifiableCredentialIRI .
+	  
+		?VerifiableCredentialIRI cco:designated_by ?VerifiableCredential_desc . 
+	  
+		?VerifiableCredential_desc a cco:DesignativeName ; 
+								   cco:has_text_value ?VerifiableCredential.
+	  } 
+}UNION{
+	SELECT  ?VerifiableCredential ?NominalMeasurementInformationContentEntity ?EmployeeTitle  WHERE {
+		?Person a cco:Person;
+				obo:RO_0000053 ?OccupationRole .
+	  
+		?OccupationRole a cco:OccupationRole;
+						cco:described_by ?NominalMeasurementInformationContentEntity.
+	  
+		?NominalMeasurementInformationContentEntity a cco:NominalMeasurementInformationContentEntity;
+													obo:RO_0010001 ?InformationBearingEntity_NominalMeasurementInformationContentEntity .
+	  
+		?InformationBearingEntity_NominalMeasurementInformationContentEntity a cco:InformationBearingEntity ;
+																			 cco:has_text_value ?EmployeeTitle;
+																			 obo:BFO_0000050 ?VerifiableCredentialIRI .
+	  
+		?VerifiableCredentialIRI cco:designated_by ?VerifiableCredential_desc . 
+		?VerifiableCredential_desc a cco:DesignativeName ; 
+								   cco:has_text_value ?VerifiableCredential.
+	  } 
+}
 }`
 
 
