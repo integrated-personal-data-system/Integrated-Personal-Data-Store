@@ -34,6 +34,7 @@ class CreateNewDataForm extends React.Component {
         let mappedAttributes = await readMappedAttributes()
         this.setState({ mappedAttributes: mappedAttributes })
     }
+
     /**
      * Creates the drop down menu for the Credentails to map
      * 

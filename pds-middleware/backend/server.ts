@@ -12,6 +12,8 @@ import bodyParser from 'body-parser'
 import 'dotenv/config'
 import path from "path"
 import fs from "fs"
+import { mappings } from "./endpoints/my-data/mappings/mappings"
+
 
 
 //////////////////////////
@@ -27,10 +29,12 @@ import createVerifiableCredentialsTriples from "./endpoints/my-wallet/createVeri
 import { walletClient } from "./endpoints/my-wallet/wallet";
 import createWalletTriples from "./endpoints/my-wallet/createWallet";
 
+
 var https = require('https');
 const app = express();
 var router = express.Router();
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, "../frontend", "build")));
 app.use(express.static("public"));
@@ -352,11 +356,11 @@ app.put('/api/createMyData', (request: Request<string, any>, response: Response)
     try {
         requestLogger(request.url, request.method, request.rawHeaders, JSON.stringify(request.body))
         let data = request.body
+
         if (data.person == undefined) response.status(400).send("Missing Person IRI")
         if (data.attribute == undefined) response.status(400).send("Missing Data Attribute")
         if (data.value == undefined) response.status(400).send("Missing Data Value")
         if (data.verifiableCredentialId == undefined) response.status(400).send("Missing Verifiable Credential")
-        console.log(data)
         createMyData(data.person, data.attribute, data.value, data.verifiableCredentialId, (result) => {
             if (result.success) {
                 response.status(200).send("Successfully Uploaded " + data.attribute)
@@ -405,7 +409,36 @@ app.get('/api/readMyData', (request: Request, response: Response) => {
     } catch (error) {
         catchErrorLogger(request.url, request.method, error)
     }
+})
+
+app.post('/dev/readTriples', (request: Request, response: Response) => {
+    try {
+        let attribute = request.body.attribute
+        let readQuery = mappings[attribute].ReadQuery
+        response.status(200).send(readQuery)
+    } catch (error) {
+        console.log(error)
+    }
 
 })
 
+// app.post('/dev/createTriples', (request: Request, response: Response) => {
+//     try {
+//         let person = request.body.person
+//         let attribute = request.body.attribute
+//         let value = request.body.value
+//         let verifiableCredentialId = request.body.verifiableCredentialId
+//         let guid = encodeURIComponent(attribute + value)
 
+//         let createQuery = mappings[attribute].CreateQuery
+
+//         let triples = createQuery.replace(/{person}/g, person)
+//         triples = triples.replace(/{value}/g, value)
+//         triples = triples.replace(/{verfiableCredentialId}/g, verifiableCredentialId)
+//         triples = triples.replace(/{guid}/g, guid)
+//         response.status(200).send(triples)
+//     } catch (error) {
+//         console.log(error)
+//     }
+
+// })

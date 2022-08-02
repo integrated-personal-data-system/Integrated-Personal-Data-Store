@@ -1,24 +1,8 @@
 import fetch from "node-fetch"
 import { v4 as uuidv4 } from 'uuid'
-
+import validateQuery from "../queries/validateQuery"
 import { Parser, Generator } from "sparqljs"
 
-
-function validateUpdateQuery(query: string) {
-    try {
-        if (query == "") {
-            return "Query is empty"
-        }
-        let parser = new Parser()
-        var parsedQuery = parser.parse(query)
-        var generator = new Generator()
-        return generator.stringify(parsedQuery)
-    } catch (error) {
-        console.log("Your query has a syntax error")
-        return ""
-
-    }
-}
 
 function createUpdateQuery(personGuid: string) {
     try {
@@ -27,7 +11,7 @@ PREFIX obo: <http://purl.obolibrary.org/obo/>
        
 INSERT DATA
 { 
-    <${personGuid}> a cco:Person . 
+    ${personGuid} a cco:Person . 
 }
         `
         return updateQuery
@@ -37,9 +21,9 @@ INSERT DATA
 }
 
 function createNewUser(callback: ({ success: boolean, data: string }) => void) {
-    let personGuid = "http://www.cubrc.org/Data/Person1_" + uuidv4();
+    let personGuid = "cco:Person1_" + uuidv4();
     let query = createUpdateQuery(personGuid)
-    let vaildatedQuery = validateUpdateQuery(query)
+    let vaildatedQuery = validateQuery(query)
 
     if (vaildatedQuery != "") {
         fetch(`http://${process.env.API_LOCATION}:3030/MyData`, {
