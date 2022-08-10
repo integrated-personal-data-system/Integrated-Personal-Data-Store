@@ -20,9 +20,6 @@ cco:Person1_73e320eb-57b1-4bb5-bc2a-b5b85fee61b1_1286172209 a cco:Person ;
 
 ################ Digial Wallet ###################
 cco:ActOfOwnership_DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj  a cco:ActOfOwnership;
-    obo:RO_0001019 cco:VerifiableCredential_d40e348a-81a0-4f23-9af7-9ef9d4149a51; 
-    obo:RO_0001019 cco:VerifiableCredential_14b7cbdd-d853-404b-acf9-b143a91149b8; 
-    obo:RO_0001019 cco:VerifiableCredential_8deed8e1-9b49-40cd-ab5d-447c3a8c2790;
     obo:RO_0000057 cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj.
 
 cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj a cco:DigitalWallet;

@@ -71,55 +71,6 @@ function UpdateModal(props) {
 }
 
 
-
-function ShowSignature(props) {
-    const [show, setShow] = useState(false);
-
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    return (<>
-        <Button variant="light" onClick={handleShow}>
-            <Stack direction="horizontal" gap={1}>
-                <Image
-                    fluid={true}
-                    src={lock}
-                    style={{ height: "1rem" }}
-                ></Image>
-                <Card.Subtitle className="text-muted">
-                    {props.keyPairName}
-                </Card.Subtitle>
-            </Stack>
-        </Button>
-
-
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>Signed By {props.keyPairName} </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Container>
-                    <Row>
-                        <Col>
-                            Signature
-                        </Col>
-                        <Col>
-                            <div class="text-justify overflow-scroll">{props.signature}</div>
-                        </Col>
-                    </Row>
-                </Container>
-
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={() => { navigator.clipboard.writeText(props.signature) }}>Copy</Button>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    </>)
-}
-
 class PersonalDataCard extends React.Component {
     constructor(props) {
         super(props)
@@ -135,6 +86,7 @@ class PersonalDataCard extends React.Component {
     }
 
     renderCredentials() {
+        console.log(this.props)
         let credentails = []
         for (let credential of this.props.credentials) {
             credentails.push(

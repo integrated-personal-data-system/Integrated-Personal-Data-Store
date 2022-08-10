@@ -77,8 +77,10 @@ class App extends React.Component {
      * @CR
      */
     renderPersonalData() {
+        console.log(this.state.credentialsInWallet)
         let personalInformation = []
         for (let item in this.state.mydata) {
+            console.log(this.state.mydata[item])
             if (Object.keys(item)[0] !== "Person") {
                 personalInformation.push(
                     <PersonalDataCard
@@ -87,6 +89,7 @@ class App extends React.Component {
                         header={this.state.mydata[item].header}
                         value={this.state.mydata[item].attribute}
                         credentials={this.state.mydata[item].verifiableCredentials}
+                        credentialsInWallet={this.state.credentialsInWallet}
                         refreshData={this.refreshData}>
                     </PersonalDataCard>)
             }
