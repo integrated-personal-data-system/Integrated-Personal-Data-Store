@@ -17,6 +17,8 @@ cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj a cco:DigitalWallet;
     obo:RO_0001019 cco:VerifiableCredential_d40e348a-81a0-4f23-9af7-9ef9d4149a51; 
     obo:RO_0001019 cco:VerifiableCredential_14b7cbdd-d853-404b-acf9-b143a91149b8; 
     obo:RO_0001019 cco:VerifiableCredential_8deed8e1-9b49-40cd-ab5d-447c3a8c2790;
+    obo:RO_0001019 cco:VerifiableCredential_051e7a74-2eb8-45a0-8bf5-d9215b4ad22f;
+    obo:RO_0001019 cco:VerifiableCredential_f4801253-27bc-4d28-90d1-ddd2fffb7529;
     cco:designated_by cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj_Desc.
 
 cco:DigitalWallet_CaNvYFqu2beaZcMVCI6eBpW3bVstlYMEj_Desc a cco:DesignativeName;
@@ -56,3 +58,24 @@ cco:VerifiableCredential_8deed8e1-9b49-40cd-ab5d-447c3a8c2790_CodeId a cco:CodeI
 
 cco:VerifiableCredential_8deed8e1-9b49-40cd-ab5d-447c3a8c2790_Desc a cco:DesignativeName;
     cco:has_text_value "Employee Verification" .
+
+cco:VerifiableCredential_051e7a74-2eb8-45a0-8bf5-d9215b4ad22f a cco:VerifiableCredential ; 
+    cco:designated_by cco:VerifiableCredential_051e7a74-2eb8-45a0-8bf5-d9215b4ad22f_CodeId ; 
+    cco:designated_by cco:VerifiableCredential_051e7a74-2eb8-45a0-8bf5-d9215b4ad22f_Desc . 
+
+cco:VerifiableCredential_051e7a74-2eb8-45a0-8bf5-d9215b4ad22f_CodeId a cco:CodeIdentifier;
+    cco:has_text_value "051e7a74-2eb8-45a0-8bf5-d9215b4ad22f" . 
+
+cco:VerifiableCredential_051e7a74-2eb8-45a0-8bf5-d9215b4ad22f_Desc a cco:DesignativeName;
+    cco:has_text_value "Identity" . 
+
+
+cco:VerifiableCredential_f4801253-27bc-4d28-90d1-ddd2fffb7529 a cco:VerifiableCredential ; 
+    cco:designated_by cco:VerifiableCredential_f4801253-27bc-4d28-90d1-ddd2fffb7529_CodeId ; 
+    cco:designated_by cco:VerifiableCredential_f4801253-27bc-4d28-90d1-ddd2fffb7529_Desc . 
+
+cco:VerifiableCredential_f4801253-27bc-4d28-90d1-ddd2fffb7529_CodeId a cco:CodeIdentifier;
+    cco:has_text_value "f4801253-27bc-4d28-90d1-ddd2fffb7529" . 
+
+cco:VerifiableCredential_f4801253-27bc-4d28-90d1-ddd2fffb7529_Desc a cco:DesignativeName;
+    cco:has_text_value "test" . 

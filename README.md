@@ -52,6 +52,192 @@ Jena fuseki runs a web interface that allows developers to run queries and input
 
 ### Middleware API 
 
+> ### My Wallet Endpoints
+
+1. listAllConnections
+
+```javaScript
+/**
+ *  Sends a request to the Trinsic API to list all the credentials. 
+ *  @param {string} walletId: The Wallet Id
+ *  Status: Done
+ *  @CR
+ */
+app.post('/api/listAllConnections', async (request: Request<string, any>, response: Response)
+```
+
+2. listCredentialsInWallet
+```javaScript
+/**
+ * Sends a request to Trinisc API to list all the credential in a wallet
+ * @param {string} walletId: The Wallet Id
+ * Status: Done
+ * @CR
+ */
+app.post('/api/listCredentialsInWallet', async (request: Request<string, any>, response: Response)
+```
+
+3. getCredentialsInWallet
+```javaScript
+/**
+ *  Sends a request to Trinisc API to get a specific credential given a credential Id
+ * @param {string} walletId: The Wallet Id
+ * @param {string} credentialId: The credential Id
+ * Status: Done
+ * @CR
+ */
+app.post('/api/getCredentialInWallet', async (request: Request<string, any>, response: Response)
+```
+
+4. deleteCredential
+```javaScript
+/**
+ * Sends a request to the Trinsic API to delete a given credential given a credential Id
+ * @param {string} walletId: The Wallet Id
+ * @param {string} credentialId: The credential Id
+ * Status: Done
+ * @CR
+ */
+app.delete('/api/deleteCredential', async (request: Request<string, any>, response: Response)
+```
+
+5. AcceptCredential
+```javaScript
+/**
+ * Sends a request to the Trinsic API to delete a given credential given a credential Id
+ * @param {string} walletId: The Wallet Id
+ * @param {string} credentialData: The url for the Credn
+ * Status: Done
+ * @CR
+ */
+app.post('/api/AcceptCredential', async (request: Request<string, any>, response: Response)
+```
+
+6. createWallet
+```javaScript
+/**
+ * Sends a request to the Trinsic Wallet to create a digital Wallet. If there already is a wallet,
+ * sends a response indicating the current wallet
+ * Status: Done
+ * @CR
+ */
+app.put('/api/createWallet', async (request: Request<string, any>, response: Response)
+```
+7. DeleteCloudWallet
+```javaScript
+/**
+ * Sends a request to the Trinsic API to delete a cloud wallet 
+ * @param {string} walletId: The ID for the digital Wallet
+ * Status: Update the triples 
+ * @CR
+ */
+app.delete('/api/DeleteCloudWallet', async (request: Request<string, any>, response: Response)
+```
+
+8. DeleteAllCloudWallet
+```javaScript
+/**
+ * Sends a request to the Trinsic API to delete ALL cloud wallet 
+ * Status: Update the triples 
+ * @CR
+ */
+app.delete('/api/DeleteAllCloudWallet', async (request: Request<string, any>, response: Response)
+```
+
+9. getWallet
+```javaScript
+/**
+ * Sends a request to the Trinsic API to get the current wallet
+ * Status: Done
+ * @CR
+ */
+app.get('/api/getWallet', async (request: Request<string, any>, response: Response)
+```
+
+> ### My Data Endpoints
+
+1. getPersonIRI
+```javaScript
+/**
+ * Sends a query to the triple store to get the IRI for the Person
+ * Status: Done
+ * @CR
+ */
+app.get('/api/getPersonIRI', (request: Request<string, any>, response: Response)
+```
+
+2. createNewUser
+```javaScript
+/**
+ * Creates a new user in the triple store. If there is already a user, sends the IRI 
+ * of the current person
+ * Status: Done 
+ * @CE 
+ */
+app.put('/api/createNewUser', (request: Request<string, any>, response: Response)
+```
+
+3. createMyData
+```javaScript
+/**
+ * Creates triples for the an attribute in the Verifiable Credential and uploads the data into the triple store
+ * @param {string} person: The IRI of the person 
+ * @param {string} attribute: The attribte that you want to create
+ * @param {string} value: The value of the attribute
+ * @param {string} verifiableCredentialId: The id for the Verifiable Credential
+ * Status: In Progress Fix createMyDataFunction and test
+ * @CR
+ */
+app.put('/api/createMyData', (request: Request<string, any>, response: Response)
+```
+
+4.readMappedAttributes
+```javaScript
+/**
+ * Sends the current attribute that have been mapped in the My Data Ontology
+ * Status: Done 
+ * @Cr
+ */
+app.get('/api/readMappedAttributes', (request: Request, response: Response)
+```
+5. readMyData
+```javaScript
+/**
+ * Queries the triple store to get all a person's data 
+ * Status: Done
+ * @CR
+ */
+app.get('/api/readMyData', (request: Request, response: Response)
+```
+
+6.readTriples
+```javaScript
+/**
+ * Reads triples from triple store
+ * Status: Unknown
+ */
+app.post('/dev/readTriples', (request: Request, response: Response)
+```
+
+7. getOntologyMapping
+```javaScript
+/**
+ * Returns Onotology Mapping
+ * Status: Unknown
+ */
+app.get('/dev/getOntologyMapping', (request: Request, response: Response)
+```
+
+8. createTriples
+```javaScript
+/**
+ * Creates Triples inside triple store
+ * Status: In Process
+ */
+app.post('/dev/createTriples', (request: Request, response: Response)
+```
+
+### Testing Issues
 
 <!-- ## Input format
 The server would receive PUT, POST, and GET requests from the agent. Before anything else, it would check that the agent is authorized to use the data it is trying to access (the details will vary depending on the chain provider; in Sovrin's case, you would use the policy oracle). All requests would have a path parameter with the rdfs:label property of the class they are using to represent the data. The ontology would be either stored locally on the machine with the server or queried from a separate database. 

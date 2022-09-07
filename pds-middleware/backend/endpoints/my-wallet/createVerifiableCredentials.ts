@@ -18,17 +18,17 @@ function createQuery(walletId: string, credentialName: string, credentialId: str
                 
             INSERT DATA
             { 
-                <http://www.cubrc.org/Data/DigitalWallet_${walletId}>  a cco:DigitalWallet ;
-                    obo:RO_0001019 <http://www.cubrc.org/Data/VerifiableCredential_${credentialId}> .
+                cco:DigitalWallet_${walletId} a cco:DigitalWallet ;
+                    obo:RO_0001019 cco:VerifiableCredential_${credentialId} .
 
-                <http://www.cubrc.org/Data/VerifiableCredential_${credentialId}> a cco:VerifiableCredential ; 
-                    cco:designated_by <http://www.cubrc.org/Data/VerifiableCredential_${credentialId}_CodeId> ; 
-                    cco:designated_by <http://www.cubrc.org/Data/VerifiableCredential_${credentialId}_Desc> . 
+                cco:VerifiableCredential_${credentialId} a cco:VerifiableCredential ; 
+                    cco:designated_by cco:VerifiableCredential_${credentialId}_CodeId ; 
+                    cco:designated_by cco:VerifiableCredential_${credentialId}_Desc . 
 
-                <http://www.cubrc.org/Data/VerifiableCredential_${credentialId}_CodeId> a cco:CodeIdentifier;
+                cco:VerifiableCredential_${credentialId}_CodeId a cco:CodeIdentifier;
                     cco:has_text_value "${credentialId}" . 
 
-                <http://www.cubrc.org/Data/VerifiableCredential_${credentialId}_Desc> a cco:DesignativeName;
+                cco:VerifiableCredential_${credentialId}_Desc a cco:DesignativeName;
                     cco:has_text_value "${credentialName}" . 
             }`
         return updateQuery

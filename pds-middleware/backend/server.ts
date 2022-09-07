@@ -12,8 +12,6 @@ import bodyParser from 'body-parser'
 import 'dotenv/config'
 import path from "path"
 import fs from "fs"
-import { mappings } from "./endpoints/my-data/mappings/mappings"
-
 
 
 //////////////////////////
@@ -28,6 +26,7 @@ import { requestLogger, errorLogger, catchErrorLogger } from "./utils/logger";
 import createVerifiableCredentialsTriples from "./endpoints/my-wallet/createVerifiableCredentials"
 import { walletClient } from "./endpoints/my-wallet/wallet";
 import createWalletTriples from "./endpoints/my-wallet/createWallet";
+import { mappings } from "./endpoints/my-data/mappings/mappings"
 
 
 var https = require('https');
@@ -293,7 +292,6 @@ app.get('/api/getWallet', async (request: Request<string, any>, response: Respon
 // My Data Endpoints
 /////////////////////////////////
 
-
 /**
  * Sends a query to the triple store to get the IRI for the Person
  * Status: Done
@@ -419,7 +417,19 @@ app.post('/dev/readTriples', (request: Request, response: Response) => {
     } catch (error) {
         console.log(error)
     }
+})
 
+app.get('/dev/getOntologyMapping', (request: Request, response: Response) => {
+    try {
+        let createMappings = []
+        for (let object in mappings) {
+            let string = mappings[object].CreateQuery.toString()
+            createMappings.push({ [object]: string })
+        }
+        response.status(200).send(createMappings)
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 // app.post('/dev/createTriples', (request: Request, response: Response) => {

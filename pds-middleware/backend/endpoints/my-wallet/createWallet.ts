@@ -18,18 +18,18 @@ function createQuery(personIRI: string, walletId: string) {
                 
             INSERT DATA
             { 
-                <${personIRI}> cco:agent_in <http://www.cubrc.org/Data/ActOfOwnership_DigitalWallet_${walletId}>  .
+                <${personIRI}> cco:agent_in  cco:ActOfOwnership_DigitalWallet_${walletId}   .
                 
-                <http://www.cubrc.org/Data/ActOfOwnership_DigitalWallet_${walletId}>  a cco:ActOfOwnership ; 
-                    obo:RO_0000057 <http://www.cubrc.org/Data/DigitalWallet_${walletId}> . 
+                 cco:ActOfOwnership_DigitalWallet_${walletId}   a cco:ActOfOwnership ; 
+                    obo:RO_0000057  cco:DigitalWallet_${walletId}  . 
 
-                <http://www.cubrc.org/Data/DigitalWallet_${walletId}>  a cco:DigitalWallet ;
-                    cco:designated_by <http://www.cubrc.org/Data/DigitalWallet_${walletId}_Desc> . 
+                 cco:DigitalWallet_${walletId}   a cco:DigitalWallet ;
+                    cco:designated_by  cco:DigitalWallet_${walletId}_Desc  . 
 
-                <http://www.cubrc.org/Data/DigitalWallet_${walletId}_Desc> a cco:DesignativeName;
-                    obo:RO_0010001 <http://www.cubrc.org/Data/DigitalWallet_${walletId}_Desc_IBE> .
+                 cco:DigitalWallet_${walletId}_Desc  a cco:DesignativeName;
+                    obo:RO_0010001  cco:DigitalWallet_${walletId}_Desc_IBE  .
 
-                <http://www.cubrc.org/Data/DigitalWallet_${walletId}_Desc_IBE> a cco:InformationBearingEntity ;
+                 cco:DigitalWallet_${walletId}_Desc_IBE  a cco:InformationBearingEntity ;
                     cco:has_text_value "${walletId}" . 
             }`
         return updateQuery
