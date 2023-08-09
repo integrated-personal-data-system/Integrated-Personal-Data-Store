@@ -1,4 +1,3 @@
-# Note:  This site is being reconstructed from https://github.com/I-AM-project
 
 ## Introduction
 This is an architecture for a database designed to store verifyable credentials and other miscellanious information associated with an Aries agent. It is intended to run on the cloud, and can serve several users while still guaranteeing that only the user can access their data. Data would be stored as an RDF graph using <a href=https://www.w3.org/TR/turtle/>turtle</a>, <a href=https://www.w3.org/TR/rdf-syntax-grammar/>XML</a>, or similar. The data would be standardized using the classes provided in the <a href=https://github.com/I-AM-project/my-data-ontology>My Data Ontology</a>, build on the <a href=https://github.com/CommonCoreOntology/CommonCoreOntologies>Common Core Ontolgy</a>, which is an extension of the <a href=https://github.com/BFO-ontology>Basic Formal Ontology</a>.
